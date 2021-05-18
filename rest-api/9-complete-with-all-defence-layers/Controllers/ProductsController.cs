@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace _3_token_transformation.AddControllers
+namespace _9_complete_with_all_defence_layers
 {
     [Route("/api/products")]
     public class ProductsController : ControllerBase
