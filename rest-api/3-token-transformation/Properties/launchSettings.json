@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "_3_token_tranformation": {
+    "_3_token_transformation": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
