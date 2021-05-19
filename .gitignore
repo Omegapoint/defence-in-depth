@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# File where we normally keep HTTP requests for tests
+requests.http
+
 # User-specific files
 *.rsuser
 *.suo
