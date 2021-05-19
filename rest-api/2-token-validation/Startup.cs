@@ -10,6 +10,8 @@ namespace _2_token_validation
 {
     public class Startup
     {
+        private const string IntrospectionScheme = "introspection";
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -17,19 +19,27 @@ namespace _2_token_validation
                     options.Authority = "https://demo.identityserver.io";
                     options.Audience = "api";
 
-                    // Note that type validation might need to be done differntly depending in token serivce (IdP).
+                    // Note that type validation might differ, depending on token serivce (IdP)
                     options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
 
-                    options.ForwardDefaultSelector = Selector.ForwardReferenceToken("introspection");
+                    options.ForwardDefaultSelector = Selector.ForwardReferenceToken(IntrospectionScheme);
                 })
                 // Add support for reference-tokens, from https://leastprivilege.com/2020/07/06/flexible-access-token-validation-in-asp-net-core/
-                .AddOAuth2Introspection("introspection", options =>
+                .AddOAuth2Introspection(IntrospectionScheme, options =>
                 {
                     options.Authority = "https://demo.identityserver.io";
-                    //TODO: validate aud not needed? IdP should handle this if configured properly... 
-                    //Is this needed for type vaidation? options.TokenTypeHint = "access_token";
                     options.ClientId = "resource1";
                     options.ClientSecret = "secret";
+
+                    // TODO: Check the code for AddOAuth2Introspection if we can do these two:
+
+                    
+                    // Note that type validation might differ, depending on token serivce (IdP)
+                    // options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+
+                    // Please note that validation of audience is done by the IdP:
+                    // https://datatracker.ietf.org/doc/html/rfc7662#section-4
+                    // options.Audience = "api";
                 })
                 // Add support for mTLS, from http://docs.identityserver.io/en/latest/topics/mtls.html
                 .AddCertificate(options =>
@@ -58,6 +68,13 @@ namespace _2_token_validation
             app.UseRouting();
 
             app.UseAuthentication();
+
+            app.UseMiddleware<ConfirmationValidationMiddleware>(new ConfirmationValidationMiddlewareOptions
+            {
+                CertificateSchemeName = CertificateAuthenticationDefaults.AuthenticationScheme,
+                JwtBearerSchemeName = JwtBearerDefaults.AuthenticationScheme
+            });
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
