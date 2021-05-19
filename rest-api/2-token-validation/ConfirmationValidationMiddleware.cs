@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace _9_complete_with_all_defence_layers
+namespace _2_token_validation
 {
     public class ConfirmationValidationMiddlewareOptions
     {
