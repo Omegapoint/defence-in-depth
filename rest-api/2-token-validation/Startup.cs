@@ -1,4 +1,5 @@
-using Microsoft.AspNetCore.Authentication;
+using IdentityModel.AspNetCore.AccessTokenValidation;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -19,10 +20,22 @@ namespace _2_token_validation
                     // Note that type validation might need to be done differntly depending in token serivce (IdP).
                     options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
 
-                    //TODO: Add token binding validation, http://docs.identityserver.io/en/latest/topics/mtls.html
+                    options.ForwardDefaultSelector = Selector.ForwardReferenceToken("introspection");
+                })
+                // Add support for reference-tokens, from https://leastprivilege.com/2020/07/06/flexible-access-token-validation-in-asp-net-core/
+                .AddOAuth2Introspection("introspection", options =>
+                {
+                    options.Authority = "https://demo.identityserver.io";
+                    //TODO: validate aud not needed? IdP should handle this if configured properly... 
+                    //Is this needed for type vaidation? options.TokenTypeHint = "access_token";
+                    options.ClientId = "resource1";
+                    options.ClientSecret = "secret";
+                })
+                // Add support for mTLS, from http://docs.identityserver.io/en/latest/topics/mtls.html
+                .AddCertificate(options =>
+                {
+                    options.AllowedCertificateTypes = CertificateTypes.All;
                 });
-            
-            // TODO: Add introspection, https://leastprivilege.com/2020/07/06/flexible-access-token-validation-in-asp-net-core/
 
             services.AddAuthorization(options =>
             {

@@ -1,4 +1,6 @@
+using IdentityModel.AspNetCore.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -31,7 +33,8 @@ namespace _9_complete_with_all_defence_layers
                 .AddOAuth2Introspection("introspection", options =>
                 {
                     options.Authority = "https://demo.identityserver.io";
-                    //TODO: validate aud needed?
+                    //TODO: validate aud not needed? IdP should handle this if configured properly... 
+                    //Is this needed for type vaidation? options.TokenTypeHint = "access_token"; 
                     options.ClientId = "resource1";
                     options.ClientSecret = "secret";
                 })
