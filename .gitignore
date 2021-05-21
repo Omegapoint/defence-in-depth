@@ -6,6 +6,12 @@
 # File where we normally keep HTTP requests for tests
 requests.http
 
+# VS Code
+.vscode
+
+# macOS
+.DS_Store
+
 # User-specific files
 *.rsuser
 *.suo
