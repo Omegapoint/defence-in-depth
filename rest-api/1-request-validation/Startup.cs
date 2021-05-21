@@ -8,6 +8,7 @@ namespace _1_request_validation
 {
     public class Startup
     {
+        // TODO: We want to use NGINX and set HTTPS redirection and other headers
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationInsightsTelemetry();
@@ -15,15 +16,6 @@ namespace _1_request_validation
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseHttpsRedirection();
-            app.UseHsts();
-
-            var options = new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
-            };
-            app.UseForwardedHeaders(options);
-
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {

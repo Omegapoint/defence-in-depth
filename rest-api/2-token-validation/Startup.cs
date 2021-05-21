@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace _2_token_validation
@@ -65,7 +66,18 @@ namespace _2_token_validation
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // TODO: Explain or remove, this is done in NGINX
+            app.UseHttpsRedirection();
+            app.UseHsts();
+
             app.UseRouting();
+
+            var options = new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+            };
+
+            app.UseForwardedHeaders(options);
 
             app.UseAuthentication();
 
