@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4-operation-validation", "r
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "5-input-data-validation", "rest-api\5-input-data-validation\5-input-data-validation.csproj", "{95E6DE69-C08B-4D37-BDD8-179AC074F87D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "6-data-access-validation", "rest-api\6-data-access-validation\6-data-access-validation.csproj", "{3F852700-1E75-4832-ACBA-C1A17A7CACB7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,6 +104,18 @@ Global
 		{95E6DE69-C08B-4D37-BDD8-179AC074F87D}.Release|x64.Build.0 = Release|Any CPU
 		{95E6DE69-C08B-4D37-BDD8-179AC074F87D}.Release|x86.ActiveCfg = Release|Any CPU
 		{95E6DE69-C08B-4D37-BDD8-179AC074F87D}.Release|x86.Build.0 = Release|Any CPU
+		{3F852700-1E75-4832-ACBA-C1A17A7CACB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F852700-1E75-4832-ACBA-C1A17A7CACB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F852700-1E75-4832-ACBA-C1A17A7CACB7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3F852700-1E75-4832-ACBA-C1A17A7CACB7}.Debug|x64.Build.0 = Debug|Any CPU
+		{3F852700-1E75-4832-ACBA-C1A17A7CACB7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3F852700-1E75-4832-ACBA-C1A17A7CACB7}.Debug|x86.Build.0 = Debug|Any CPU
+		{3F852700-1E75-4832-ACBA-C1A17A7CACB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F852700-1E75-4832-ACBA-C1A17A7CACB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F852700-1E75-4832-ACBA-C1A17A7CACB7}.Release|x64.ActiveCfg = Release|Any CPU
+		{3F852700-1E75-4832-ACBA-C1A17A7CACB7}.Release|x64.Build.0 = Release|Any CPU
+		{3F852700-1E75-4832-ACBA-C1A17A7CACB7}.Release|x86.ActiveCfg = Release|Any CPU
+		{3F852700-1E75-4832-ACBA-C1A17A7CACB7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0C583210-9C44-4AED-BD89-D8534F2D0284} = {D57D144F-EE9F-4C8E-B144-51D9DC47FA5A}
@@ -110,5 +124,6 @@ Global
 		{7CA970B0-CFE9-4F1A-A45B-4674BA547250} = {D57D144F-EE9F-4C8E-B144-51D9DC47FA5A}
 		{EE5722B3-B43E-4A16-AAC9-2B4D7388BC27} = {D57D144F-EE9F-4C8E-B144-51D9DC47FA5A}
 		{95E6DE69-C08B-4D37-BDD8-179AC074F87D} = {D57D144F-EE9F-4C8E-B144-51D9DC47FA5A}
+		{3F852700-1E75-4832-ACBA-C1A17A7CACB7} = {D57D144F-EE9F-4C8E-B144-51D9DC47FA5A}
 	EndGlobalSection
 EndGlobal
