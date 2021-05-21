@@ -16,7 +16,7 @@ namespace _3_token_transformation
             {
                 var identity = new ClaimsIdentity(principal.Identity);
 
-                //TODO: Lookup permissions from in memory config?  
+                //TODO: Lookup permissions from in memory config?
 
                 // This sample will just add hard-coded claims to any authenticated
                 // user, but a real example would of course instead use a local
