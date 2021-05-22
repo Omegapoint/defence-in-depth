@@ -1,3 +1,4 @@
+using Defence.In.Depth.Domain.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,12 +14,13 @@ namespace Defence.In.Depth.AddControllers
         {
             if (!ProductId.IsValidId(id))
             {
-                return BadRequest(); // https://stackoverflow.com/q/3290182/291299
+                return BadRequest();
             }
 
             var productId = new ProductId(id);
+            var productName = new ProductName("my product");
 
-            var product = new Product(productId);
+            var product = new Product(productId, productName);
 
             if (!product.CanRead(User))
             {

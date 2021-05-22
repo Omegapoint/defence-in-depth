@@ -1,7 +1,8 @@
+using Defence.In.Depth.Domain.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Defence.In.Depth.AddControllers
+namespace Defence.In.Depth.Controllers
 {
     [Route("/api/products")]
     public class ProductsController : ControllerBase
@@ -13,12 +14,13 @@ namespace Defence.In.Depth.AddControllers
         {
             if (!ProductId.IsValidId(id))
             {
-                return BadRequest(); // https://stackoverflow.com/q/3290182/291299
+                return BadRequest();
             }
 
             var productId = new ProductId(id);
+            var productName = new ProductName("my product");
 
-            return Ok(new Product(productId));
+            return Ok(new Product(productId, productName));
         }
     }
 }

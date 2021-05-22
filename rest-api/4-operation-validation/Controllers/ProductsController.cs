@@ -11,25 +11,14 @@ namespace Defence.In.Depth.AddControllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public ActionResult<string> GetById(string id)
         {
-            var permissions = new Permissions(User);
+            var canRead = User.HasClaim(c => c.Type == "urn:local:product:read" && c.Value == "true");
 
-            if (!permissions.CanGetProducts)
+            if (!canRead)
             {
                 return Forbid();
             }
 
             return Ok("product");
-
-
-            // Eller vi tror hellre på att köra ännu enklare:  Vi BESTÄMMER detta nu:
-
-
-            var canGetProducts = User.HasClaim(c => c.Type == "urn:local:product:read" && c.Value == "true");
-
-            if (!canGetProducts)
-            {
-                return Forbid();
-            }
         }
     }
 }
