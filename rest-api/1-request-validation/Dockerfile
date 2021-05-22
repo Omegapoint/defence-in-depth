@@ -23,4 +23,4 @@ USER www-data
 ENV ASPNETCORE_URLS=http://+:5000
 
 # Launch dll
-ENTRYPOINT ["dotnet", "1-request-validation.dll"]
+ENTRYPOINT ["dotnet", "RequestValidation.dll"]

@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "_6_data_access_validation": {
+    "Defence.In.Depth": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

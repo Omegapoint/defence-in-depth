@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace _9_complete_with_all_defence_layers
+namespace Defence.In.Depth
 {
     public class Startup
     {

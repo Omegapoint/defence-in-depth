@@ -5,19 +5,19 @@ VisualStudioVersion = 16.6.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "rest-api", "rest-api", "{D57D144F-EE9F-4C8E-B144-51D9DC47FA5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1-request-validation", "rest-api\1-request-validation\1-request-validation.csproj", "{0C583210-9C44-4AED-BD89-D8534F2D0284}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1-request-validation", "rest-api\1-request-validation\RequestValidation.csproj", "{0C583210-9C44-4AED-BD89-D8534F2D0284}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2-token-validation", "rest-api\2-token-validation\2-token-validation.csproj", "{2C4A7B5A-C203-442D-AA0D-67F36A664277}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2-token-validation", "rest-api\2-token-validation\TokenValidation.csproj", "{2C4A7B5A-C203-442D-AA0D-67F36A664277}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3-token-transformation", "rest-api\3-token-transformation\3-token-transformation.csproj", "{B714840A-9DC4-43DA-94AB-C42070F134CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3-token-transformation", "rest-api\3-token-transformation\TokenTransformation.csproj", "{B714840A-9DC4-43DA-94AB-C42070F134CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "9-complete-with-all-defence-layers", "rest-api\9-complete-with-all-defence-layers\9-complete-with-all-defence-layers.csproj", "{7CA970B0-CFE9-4F1A-A45B-4674BA547250}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "9-complete-with-all-defence-layers", "rest-api\9-complete-with-all-defence-layers\CompleteWithAllDefenceLayers.csproj", "{7CA970B0-CFE9-4F1A-A45B-4674BA547250}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4-operation-validation", "rest-api\4-operation-validation\4-operation-validation.csproj", "{EE5722B3-B43E-4A16-AAC9-2B4D7388BC27}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4-operation-validation", "rest-api\4-operation-validation\OperationValidation.csproj", "{EE5722B3-B43E-4A16-AAC9-2B4D7388BC27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "5-input-data-validation", "rest-api\5-input-data-validation\5-input-data-validation.csproj", "{95E6DE69-C08B-4D37-BDD8-179AC074F87D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "5-input-data-validation", "rest-api\5-input-data-validation\InputDataValidation.csproj", "{95E6DE69-C08B-4D37-BDD8-179AC074F87D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "6-data-access-validation", "rest-api\6-data-access-validation\6-data-access-validation.csproj", "{3F852700-1E75-4832-ACBA-C1A17A7CACB7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "6-data-access-validation", "rest-api\6-data-access-validation\DataAccessValidation.csproj", "{3F852700-1E75-4832-ACBA-C1A17A7CACB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

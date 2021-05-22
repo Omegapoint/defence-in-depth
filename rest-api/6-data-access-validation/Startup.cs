@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace _6_data_access_validation
+namespace Defence.In.Depth
 {
     public class Startup
     {

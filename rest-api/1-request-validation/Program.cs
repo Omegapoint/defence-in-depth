@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace _1_request_validation
+namespace Defence.In.Depth
 {
     public class Program
     {

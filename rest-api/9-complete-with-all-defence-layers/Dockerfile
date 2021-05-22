@@ -23,4 +23,4 @@ USER www-data
 ENV ASPNETCORE_URLS=http://+:5000
 
 # Launch dll
-ENTRYPOINT ["dotnet", "9-complete-with-all-defence-layers.dll"]
+ENTRYPOINT ["dotnet", "CompleteWithAllDefenceLayers.dll"]

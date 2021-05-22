@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace _4_operation_validation
+namespace Defence.In.Depth
 {
     public class Program
     {

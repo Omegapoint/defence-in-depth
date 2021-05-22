@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 
-namespace _9_complete_with_all_defence_layers
+namespace Defence.In.Depth
 {
     internal class ClaimsTransformation : IClaimsTransformation
     {

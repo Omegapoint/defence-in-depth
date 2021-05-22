@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>_9_complete_with_all_defence_layers</RootNamespace>
+    <RootNamespace>Defence.In.Depth</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

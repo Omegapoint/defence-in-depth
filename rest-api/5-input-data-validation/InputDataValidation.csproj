@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>_4_operation_validation</RootNamespace>
+    <RootNamespace>Defence.In.Depth</RootNamespace>
   </PropertyGroup>
 
 </Project>

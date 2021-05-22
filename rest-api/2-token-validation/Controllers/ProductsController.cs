@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace _2_token_validation.AddControllers
+namespace Defence.In.Depth.AddControllers
 {
     [Route("/api/products")]
     public class ProductsController : ControllerBase

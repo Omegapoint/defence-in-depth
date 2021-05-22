@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>_5_input_data_validation</RootNamespace>
+    <RootNamespace>Defence.In.Depth</RootNamespace>
   </PropertyGroup>
 
 </Project>

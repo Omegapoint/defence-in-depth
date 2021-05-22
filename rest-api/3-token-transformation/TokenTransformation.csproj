@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>_3_token_transformation</RootNamespace>
+    <RootNamespace>Defence.In.Depth</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 
-namespace _3_token_transformation
+namespace Defence.In.Depth
 {
     internal class ClaimsTransformation : IClaimsTransformation
     {
