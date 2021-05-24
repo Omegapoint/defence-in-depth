@@ -1,3 +1,5 @@
+using Defence.In.Depth.Domain.Services;
+using Defence.In.Depth.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -10,15 +12,23 @@ namespace Defence.In.Depth
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IClaimsTransformation, ClaimsTransformation>();
+            services.AddTransient<IClaimsTransformation, ClaimsTransformation>();
+            services.AddScoped<IPermissionService, PermissionService>();
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IProductRepository, ProductRepository>();
 
+            services.AddHttpContextAccessor();
+    
             services.AddControllers();
 
-            // Note that this is only demo code, token validation is part of demo 2
+            services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
                     options.Authority = "https://demo.identityserver.io";
                     options.Audience = "api";
+
+                    options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
                 });
         }
 

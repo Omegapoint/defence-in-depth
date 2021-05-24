@@ -1,5 +1,5 @@
 # Build .NET application
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build-env
 
 # Setup build space
 WORKDIR /app
@@ -9,7 +9,7 @@ COPY . ./
 RUN dotnet publish --output /app/out --configuration Release ./
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+FROM mcr.microsoft.com/dotnet/aspnet:5.0
 
 # Copy build
 WORKDIR /app

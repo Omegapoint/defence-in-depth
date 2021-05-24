@@ -1,33 +1,36 @@
 using System;
 using System.Linq;
+using Defence.In.Depth.Domain.Exceptions;
 
 namespace Defence.In.Depth.Domain.Model
 {
-    public class ProductId
+    public class MarketId : IDomainPrimitive<string>
     {
-        public ProductId(string id)
+        public MarketId(string countryCode)
         {
-            AssertValidId(id);
+            AssertValidCountryCode(countryCode);
 
-            Value = id;
+            Value = countryCode;
         }
 
         public string Value { get; }
 
-        public static bool IsValidId(string id)
+        public static bool IsValidCountryCode(string name)
         {
-            return !string.IsNullOrEmpty(id) && id.Length < 10 && id.All(char.IsLetterOrDigit);
+            var allowList = new[] { "SE", "NO", "FI" }; // ISO 3166-1 alpha-2 codes
+            
+            return allowList.Contains(name, StringComparer.OrdinalIgnoreCase);
         }
 
-        public static void AssertValidId(string id)
+        public static void AssertValidCountryCode(string countryCode)
         {
-            if (!IsValidId(id))
+            if (!IsValidCountryCode(countryCode))
             {
-                throw new ArgumentException($"Id {id} is not valid.");
+                throw new DomainPrimitiveArgumentException<string>(countryCode);
             }
         }
-
-        public static bool operator ==(ProductId left, ProductId right)
+        
+        public static bool operator ==(MarketId left, MarketId right)
         {
             if (ReferenceEquals(null, left))
             {
@@ -47,7 +50,7 @@ namespace Defence.In.Depth.Domain.Model
             return string.Equals(left.Value, right.Value, StringComparison.Ordinal);
         }
 
-        public static bool operator !=(ProductId left, ProductId right)
+        public static bool operator !=(MarketId left, MarketId right)
         {
             return !(left == right);
         }
@@ -58,7 +61,7 @@ namespace Defence.In.Depth.Domain.Model
                 return false;
             }
 
-            return (ProductId)obj == this; // This works since we also override the == operator.
+            return (MarketId)obj == this; // This works since we also override the == operator.
         }
 
         public override int GetHashCode()

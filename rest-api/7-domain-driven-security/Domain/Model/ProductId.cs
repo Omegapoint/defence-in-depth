@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
+using Defence.In.Depth.Domain.Exceptions;
 
 namespace Defence.In.Depth.Domain.Model
 {
-    public class ProductId
+    public class ProductId : IDomainPrimitive<string>
     {
         public ProductId(string id)
         {
@@ -23,7 +24,7 @@ namespace Defence.In.Depth.Domain.Model
         {
             if (!IsValidId(id))
             {
-                throw new ArgumentException($"Id {id} is not valid.");
+                throw new DomainPrimitiveArgumentException<string>(id);
             }
         }
 

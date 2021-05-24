@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Defence.In.Depth.Controllers
@@ -7,9 +6,7 @@ namespace Defence.In.Depth.Controllers
     public class ProductsController : ControllerBase
     {
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public ActionResult<string> GetById(string id)
+        public ActionResult<string> GetById([FromRoute] string id)
         {
             return Ok("product");
         }

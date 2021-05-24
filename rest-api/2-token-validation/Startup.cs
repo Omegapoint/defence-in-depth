@@ -32,15 +32,6 @@ namespace Defence.In.Depth
                     options.ClientId = "resource1";
                     options.ClientSecret = "secret";
 
-                    // TODO: Check the code for AddOAuth2Introspection if we can do these two:
-
-                    
-                    // Note that type validation might differ, depending on token serivce (IdP)
-                    // options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
-
-                    // Please note that validation of audience is done by the IdP:
-                    // https://datatracker.ietf.org/doc/html/rfc7662#section-4
-                    // options.Audience = "api";
                 })
                 // Add support for mTLS, from http://docs.identityserver.io/en/latest/topics/mtls.html
                 .AddCertificate(options =>
@@ -50,15 +41,13 @@ namespace Defence.In.Depth
 
             services.AddAuthorization(options =>
             {
-                options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                var policy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
                     .Build();
 
-                options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .Build();
+                options.DefaultPolicy = policy;
+                options.FallbackPolicy = policy;
             });
 
             services.AddControllers();
@@ -66,10 +55,6 @@ namespace Defence.In.Depth
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // TODO: Explain or remove, this is done in NGINX
-            app.UseHttpsRedirection();
-            app.UseHsts();
-
             app.UseRouting();
 
             var options = new ForwardedHeadersOptions

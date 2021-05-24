@@ -1,5 +1,4 @@
-//From http://docs.identityserver.io/en/latest/topics/mtls.html
-
+// Source code is basically from http://docs.identityserver.io/en/latest/topics/mtls.html
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Certificate;
@@ -20,45 +19,53 @@ namespace Defence.In.Depth
     // this middleware validate the cnf claim (if present) against the thumbprint of the X.509 client certificate for the current client
     public class ConfirmationValidationMiddleware
     {
-        private readonly RequestDelegate _next;
-        private readonly ConfirmationValidationMiddlewareOptions _options;
+        private readonly RequestDelegate next;
+        private readonly ConfirmationValidationMiddlewareOptions options;
 
         public ConfirmationValidationMiddleware(RequestDelegate next, ConfirmationValidationMiddlewareOptions options = null)
         {
-            _next = next;
-            _options = options ?? new ConfirmationValidationMiddlewareOptions();
+            this.next = next;
+            this.options = options ?? new ConfirmationValidationMiddlewareOptions();
         }
 
-        public async Task Invoke(HttpContext ctx)
+        public async Task Invoke(HttpContext context)
         {
-            if (ctx.User.Identity.IsAuthenticated)
+            if (context.User.Identity?.IsAuthenticated == true)
             {
-                var cnfJson = ctx.User.FindFirst("cnf")?.Value;
-                if (!String.IsNullOrWhiteSpace(cnfJson))
+                var json = context.User.FindFirst("cnf")?.Value;
+
+                if (!string.IsNullOrWhiteSpace(json))
                 {
-                    var certResult = await ctx.AuthenticateAsync(_options.CertificateSchemeName);
-                    if (!certResult.Succeeded)
+                    var authenticateResult = await context.AuthenticateAsync(options.CertificateSchemeName);
+                    
+                    if (!authenticateResult.Succeeded)
                     {
-                        await ctx.ChallengeAsync(_options.CertificateSchemeName);
+                        await context.ChallengeAsync(options.CertificateSchemeName);
                         return;
                     }
 
-                    var certificate = await ctx.Connection.GetClientCertificateAsync();
+                    var certificate = await context.Connection.GetClientCertificateAsync();
+
+                    if (certificate == null)
+                    {
+                        throw new InvalidOperationException("Unable to find client certificate");
+                    }
+                    
                     var thumbprint = Base64UrlTextEncoder.Encode(certificate.GetCertHash(HashAlgorithmName.SHA256));
 
-                    var cnf = JsonDocument.Parse(cnfJson).RootElement;
-                    var sha256 = cnf.GetString("x5t#S256").Trim();
+                    var cnf = JsonDocument.Parse(json).RootElement;
 
-                    if (string.IsNullOrWhiteSpace(sha256) ||
-                        !thumbprint.Equals(sha256, StringComparison.Ordinal))
+                    var sha256 = cnf.GetString("x5t#S256")?.Trim();
+
+                    if (string.IsNullOrWhiteSpace(sha256) || !thumbprint.Equals(sha256, StringComparison.Ordinal))
                     {
-                        await ctx.ChallengeAsync(_options.JwtBearerSchemeName);
+                        await context.ChallengeAsync(options.JwtBearerSchemeName);
                         return;
                     }
                 }
             }
 
-            await _next(ctx);
+            await next(context);
         }
     }
 }

@@ -1,5 +1,4 @@
-using Defence.In.Depth.Domain.Model;
-using Microsoft.AspNetCore.Http;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Defence.In.Depth.Controllers
@@ -8,19 +7,23 @@ namespace Defence.In.Depth.Controllers
     public class ProductsController : ControllerBase
     {
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public ActionResult<string> GetById(string id)
+        public ActionResult<string> GetById([FromRoute] string id)
         {
-            if (!ProductId.IsValidId(id))
+            if (string.IsNullOrEmpty(id) || id.Length > 10 || !id.All(char.IsLetterOrDigit))
             {
-                return BadRequest();
+                return BadRequest("Parameter id is not well formed");
             }
 
-            var productId = new ProductId(id);
-            var productName = new ProductName("my product");
+            var canRead = User.HasClaim(claim => 
+                    claim.Type == "urn:permission:product:read" && 
+                    claim.Value == "true");
 
-            return Ok(new Product(productId, productName));
+            if (!canRead)
+            {
+                return Forbid();
+            }
+
+            return Ok("product");
         }
     }
 }

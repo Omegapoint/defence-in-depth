@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Defence.In.Depth
+namespace Defence.In.Depth.Controllers
 {
     [Route("/api/products")]
     public class ProductsController : ControllerBase

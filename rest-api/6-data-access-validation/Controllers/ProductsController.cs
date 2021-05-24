@@ -1,33 +1,38 @@
-using Defence.In.Depth.Domain.Model;
-using Microsoft.AspNetCore.Http;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Defence.In.Depth.AddControllers
+namespace Defence.In.Depth.Controllers
 {
     [Route("/api/products")]
     public class ProductsController : ControllerBase
     {
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public ActionResult<string> GetById(string id)
+        public ActionResult<string> GetById([FromRoute] string id)
         {
-            if (!ProductId.IsValidId(id))
+            if (string.IsNullOrEmpty(id) || id.Length > 10 || !id.All(char.IsLetterOrDigit))
             {
-                return BadRequest();
+                return BadRequest("Parameter id is not well formed");
             }
 
-            var productId = new ProductId(id);
-            var productName = new ProductName("my product");
+            var canRead = User.HasClaim(claim => 
+                    claim.Type == "urn:permission:product:read" && 
+                    claim.Value == "true");
 
-            var product = new Product(productId, productName);
-
-            if (!product.CanRead(User))
+            if (!canRead)
             {
-                return NotFound();
+                return Forbid();
             }
 
-            return Ok(product);
+            var product = new { Name = "product", Market = "se" };            
+
+            if (User.HasClaim(claim => 
+                    claim.Type == "urn:identity:market" && 
+                    claim.Value == product.Market))
+            {
+                return Ok(product);
+            }
+
+            return NotFound("product");
         }
     }
 }
