@@ -13,11 +13,11 @@ namespace Defence.In.Depth
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IClaimsTransformation, ClaimsTransformation>();
-            services.AddScoped<IPermissionService, PermissionService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IProductRepository, ProductRepository>();
 
             services.AddHttpContextAccessor();
+            services.AddPermissionService();
     
             services.AddControllers();
 
