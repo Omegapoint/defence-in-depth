@@ -14,7 +14,9 @@ namespace Defence.In.Depth
             {
                 var identity = new ClaimsIdentity(principal.Identity);
 
-                // Normally a query against database or service
+                // There is a balance between this class and PermissionService.  As a
+                // general rule of thumb, limit this class to only deal with identity.
+                // Adding a claim for which market a user belongs to might belong here.
                 identity.AddClaim(new Claim("urn:identity:market", "se"));
 
                 return new ClaimsPrincipal(identity);

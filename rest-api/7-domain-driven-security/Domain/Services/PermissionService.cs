@@ -25,9 +25,10 @@ namespace Defence.In.Depth.Domain.Services
             IfScope(principal, "products.read", () => CanReadProducts = true);
             IfScope(principal, "products.write", () => CanWriteProducts = true);
 
-            // This sample will just add hard-coded claims to any authenticated
-            // user, but a real example would use a local database or API to get
-            // information about what market and local permissions to add.
+            // There is a balance between this class and ClaimsTransformation.  In
+            // our case, which market a user belongs to is added in
+            // ClaimsTransformation, but you might find that that kind of code is
+            // better placed here, inside your domain.
             var market = principal.FindFirstValue("urn:identity:market");
             
             MarketId = new MarketId(market);
