@@ -7,16 +7,37 @@ namespace Defence.In.Depth.Domain.Services
 {
     public class PermissionService : IPermissionService
     {
+        public PermissionService(IHttpContextAccessor contextAccessor)
+        {
+            var principal = contextAccessor.HttpContext?.User;
+
+            if (principal == null)
+            {
+                if (contextAccessor.HttpContext == null)
+                {
+                    throw new ArgumentException("HTTP Context is null", nameof(contextAccessor));
+                }
+                
+                throw new ArgumentException("User object is null", nameof(contextAccessor));
+            }
+            
+            // It is important to honor any scope that affect our domain
+            IfScope(principal, "products.read", () => CanReadProducts = true);
+            IfScope(principal, "products.write", () => CanWriteProducts = true);
+
+            // This sample will just add hard-coded claims to any authenticated
+            // user, but a real example would use a local database or API to get
+            // information about what market and local permissions to add.
+            var market = principal.FindFirstValue("urn:identity:market");
+            
+            MarketId = new MarketId(market);
+        }
+        
         public bool CanReadProducts { get; private set; }
 
         public bool CanWriteProducts { get; private set; }
         
         public MarketId MarketId { get; private set; }
-
-        public PermissionService(IHttpContextAccessor contextAccessor)
-        {
-            Initialize(contextAccessor.HttpContext?.User);
-        }
         
         private static void IfScope(ClaimsPrincipal principal, string scope, Action action)
         {
@@ -24,26 +45,6 @@ namespace Defence.In.Depth.Domain.Services
             {
                 action();
             }
-        }
-        
-        private void Initialize(ClaimsPrincipal principal)
-        {
-            if (principal == null)
-            {
-                throw new ArgumentNullException(nameof(principal));
-            }
-            
-            // This sample will just add hard-coded claims to any authenticated
-            // user, but a real example would of course instead use a local
-            // account database to get information about what organization and
-            // local permissions to add.
-
-            // It is important to honor any scope that affect our domain
-            IfScope(principal, "products.read", () => CanReadProducts = true);
-            IfScope(principal, "products.write", () => CanWriteProducts = true);
-
-            var market = principal.FindFirstValue("urn:identity:market");
-            MarketId = new MarketId(market);
         }
     }
 }
