@@ -21,7 +21,7 @@ namespace Defence.In.Depth.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetById([FromRoute] string id)
+        public async Task<ActionResult<ProductDataContract>> GetById([FromRoute] string id)
         {
             if (!ProductId.IsValidId(id))
             {
