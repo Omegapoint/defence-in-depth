@@ -14,7 +14,7 @@ namespace Defence.In.Depth
             }
 
             // The lifetime of the permission service MUST be scoped, i.e. we need a new
-            // instance at every request.  Any other configuration is a security vulnerability.
+            // instance at every client request (connection).
             services.AddScoped<IPermissionService, PermissionService>();
 
             return services;
