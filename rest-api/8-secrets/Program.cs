@@ -17,9 +17,6 @@ namespace Defence.In.Depth
             Microsoft.Extensions.Hosting.Host
                 .CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => webBuilder
-                    // DEMO 8 - Handle secretes using App Configuration and Key Vault
-                    // Note that MSI needs to be set up and secretes needs to refrence key vault
-                    // https://docs.microsoft.com/en-us/azure/app-service/app-service-key-vault-references
                    .ConfigureAppConfiguration((hostingContext, config) =>
                     {
                         var settings = config.Build();
