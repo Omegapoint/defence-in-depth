@@ -1,3 +1,5 @@
+using Defence.In.Depth.Domain.Services;
+using Defence.In.Depth.Infrastructure;
 using IdentityModel.AspNetCore.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Certificate;
@@ -7,11 +9,21 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Text;
+using System.Security.Cryptography.X509Certificates;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Defence.In.Depth
 {
     public class Startup
     {
+        public Startup()
+        {
+            //Demo 3 - We want all claims from the IdP, not filtered or altered by ASP.NET Core
+            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+        }
+        
         public void ConfigureServices(IServiceCollection services)
         {
             // Demo 1 - Log all excpetions, limit the risk of exposing exeption details by removing UseDeveloperExceptionPage()
@@ -33,15 +45,30 @@ namespace Defence.In.Depth
                 .AddOAuth2Introspection("introspection", options =>
                 {
                     options.Authority = "https://demo.identityserver.io";
-                    //TODO: validate aud not needed? IdP should handle this if configured properly... 
-                    //Is this needed for type vaidation? options.TokenTypeHint = "access_token"; 
                     options.ClientId = "resource1";
                     options.ClientSecret = "secret";
-                })
+                    // Note that the client should be configured in such way that introspection is
+                    // restricted to the API audience and access tokens, hence no need validate this.
+                });
+
                 // Add support for mTLS, from http://docs.identityserver.io/en/latest/topics/mtls.html
-                .AddCertificate(options =>
+                services.AddCertificateForwarding(options =>
                 {
-                    options.AllowedCertificateTypes = CertificateTypes.All;
+                    // header name might be different, based on your nginx config
+                    options.CertificateHeader = "X-SSL-CERT";
+
+                    options.HeaderConverter = (headerValue) =>
+                    {
+                        X509Certificate2 clientCertificate = null;
+
+                        if(!string.IsNullOrWhiteSpace(headerValue))
+                        {
+                            var bytes = Encoding.UTF8.GetBytes(Uri.UnescapeDataString(headerValue));
+                            clientCertificate = new X509Certificate2(bytes);
+                        }
+
+                        return clientCertificate;
+                    };
                 });
 
             // Demo 2 - Require Bearer authentication scheme for all requests (including non mvc requests), 
@@ -62,34 +89,48 @@ namespace Defence.In.Depth
             // Demo 3 - Add claims transformation
             services.AddSingleton<IClaimsTransformation, ClaimsTransformation>();
 
+            // Demo 7 - Domain driven security
+            services.AddTransient<IClaimsTransformation, ClaimsTransformation>();
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IProductRepository, ProductRepository>();
+
+            services.AddHttpContextAccessor();
+            services.AddPermissionService();
+
+            services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
             services.AddControllers();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // Demo 1 - Force https, if done in API-gateway (which often terminates TLS) this code could be removed.
-            app.UseHttpsRedirection();
-            app.UseHsts();
+            // Demo 1 - Force https, this is done in the API-gateway.
+            //app.UseHttpsRedirection();
+            //app.UseHsts();
             
-            // Demo 1 - If TLS is terminated before our application then we need to handle forwarded headers
+            // Demo 1 - TLS is terminated before our application and we need to handle forwarded headers
             // in order to support certificate bound tokens later on (Demo 2). Note that we this code should be
             // removed if the API does not have an API-gateway in-front (which terminates TLS) 
-            var options = new ForwardedHeadersOptions
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
-            };
-            app.UseForwardedHeaders(options);
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
+            // Demo 2 - Add mTLS support
+            app.UseCertificateForwarding();
 
             app.UseRouting();
             app.UseAuthentication();
-            
+
             // Demo 2 - Add mTLS certificate token binding support, from http://docs.identityserver.io/en/latest/topics/mtls.html
             app.UseMiddleware<ConfirmationValidationMiddleware>(new ConfirmationValidationMiddlewareOptions
             {
                 CertificateSchemeName = CertificateAuthenticationDefaults.AuthenticationScheme,
                 JwtBearerSchemeName = JwtBearerDefaults.AuthenticationScheme
             });
+
             app.UseAuthorization();
+            
             app.UseEndpoints(endpoints =>
             {
                 // Demo 2 - even if we have the fallback policy it is a good practice to set a explicit policy
