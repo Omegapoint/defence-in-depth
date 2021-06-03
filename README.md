@@ -2,7 +2,7 @@
 
 Source code samples for "Defence in Depth" articles and presentations.
 
-This is an accompanying implementation of a secure REST API in .NET 6
+This is an accompanying implementation of a secure REST API in .NET 5
 that follows the series of articles found at (in Swedish):
 
 https://omegapoint.se/applikationssakerhet-forsvar-pa-djupet-start
