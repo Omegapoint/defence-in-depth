@@ -12,11 +12,18 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Text;
 using System.Security.Cryptography.X509Certificates;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Defence.In.Depth
 {
     public class Startup
     {
+        public Startup()
+        {
+            //Demo 3 - We want all claims from the IdP, not filtered or altered by ASP.NET Core
+            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+        }
+        
         public void ConfigureServices(IServiceCollection services)
         {
             // Demo 1 - Log all excpetions, limit the risk of exposing exeption details by removing UseDeveloperExceptionPage()
