@@ -13,4 +13,5 @@ DEMO:
 9. Complete
 
 TODO:
-- Add infra as code in demo 8, e g with ARM-templates, rename to "Secrets and RRR" 
+- Add infra as code in demo 8, e g with ARM-templates, rename to "Secrets and RRR"
+- .NET 6 API without MVC Controller (when close to release)

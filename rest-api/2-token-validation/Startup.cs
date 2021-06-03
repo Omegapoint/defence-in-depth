@@ -85,7 +85,7 @@ namespace Defence.In.Depth
             app.UseMiddleware<ConfirmationValidationMiddleware>(new ConfirmationValidationMiddlewareOptions
             {
                 CertificateSchemeName = CertificateAuthenticationDefaults.AuthenticationScheme,
-                JwtBearerSchemeName = "token"
+                JwtBearerSchemeName = JwtBearerDefaults.AuthenticationScheme
             });
 
             app.UseAuthorization();

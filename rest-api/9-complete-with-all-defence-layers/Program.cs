@@ -15,6 +15,9 @@ namespace Defence.In.Depth
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Microsoft.Extensions.Hosting.Host
+                // Demo 1 - The default configuration will on Windows, where IIS is availible,
+                // run Kestrel in-process hosted by the IIS with the ASP.NET Core module as a reverse proxy. 
+                // On e g Linux it will be hosted out-of process in Kestrel, and you need a reverse proxy like NGINX in front
                 .CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => webBuilder
                     // DEMO 8 - Handle secretes using App Configuration and Key Vault

@@ -23,7 +23,7 @@ namespace Defence.In.Depth.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDataContract>> GetById([FromRoute] string id)
         {
-            //DENO 4,5,6 and 7 - DDSec pattern
+            //DEMO 4,5,6 and 7 - DDSec pattern
             if (!ProductId.IsValidId(id))
             {
                 return BadRequest("Id is not valid.");
