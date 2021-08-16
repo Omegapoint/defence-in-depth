@@ -1,4 +1,4 @@
-// Source code is basically from http://docs.identityserver.io/en/latest/topics/mtls.html
+// Source code (with minor changes) is from https://docs.identityserver.io/en/latest/topics/mtls.html
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Certificate;

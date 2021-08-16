@@ -51,7 +51,7 @@ namespace Defence.In.Depth
                     // restricted to the API audience and access tokens, hence no need validate this.
                 });
 
-                // Add support for mTLS, from http://docs.identityserver.io/en/latest/topics/mtls.html
+                // Add support for mTLS, from https://docs.identityserver.io/en/latest/topics/mtls.html
                 services.AddCertificateForwarding(options =>
                 {
                     // header name might be different, based on your nginx config
@@ -120,7 +120,7 @@ namespace Defence.In.Depth
             app.UseRouting();
             app.UseAuthentication();
 
-            // Demo 2 - Add mTLS certificate token binding support, from http://docs.identityserver.io/en/latest/topics/mtls.html
+            // Demo 2 - Add mTLS certificate token binding support, from https://docs.identityserver.io/en/latest/topics/mtls.html
             app.UseMiddleware<ConfirmationValidationMiddleware>(new ConfirmationValidationMiddlewareOptions
             {
                 CertificateSchemeName = CertificateAuthenticationDefaults.AuthenticationScheme,

@@ -37,7 +37,7 @@ namespace Defence.In.Depth
 
                 });
                 
-                // Add support for mTLS, from http://docs.identityserver.io/en/latest/topics/mtls.html
+                // Add support for mTLS, from https://docs.identityserver.io/en/latest/topics/mtls.html
                 services.AddCertificateForwarding(options =>
                 {
                     // header name might be different, based on your nginx config
