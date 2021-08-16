@@ -75,15 +75,13 @@ namespace Defence.In.Depth
             // even if no other policy has been configured
             services.AddAuthorization(options =>
             {
-                options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                var policy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
                     .Build();
 
-                options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .Build();
+                options.DefaultPolicy = policy;
+                options.FallbackPolicy = policy;
             });
 
             // Demo 3 - Add claims transformation
