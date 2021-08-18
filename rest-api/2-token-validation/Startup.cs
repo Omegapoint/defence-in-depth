@@ -37,7 +37,9 @@ namespace Defence.In.Depth
 
                 });
                 
-                // Add support for mTLS, from https://docs.identityserver.io/en/latest/topics/mtls.html
+                // Add support for mTLS, from 
+                // https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-5.0
+                // https://docs.identityserver.io/en/latest/topics/mtls.html
                 services.AddCertificateForwarding(options =>
                 {
                     // header name might be different, based on your nginx config
