@@ -8,8 +8,8 @@
   <ItemGroup>
     <PackageReference Include="IdentityModel.AspNetCore.AccessTokenValidation" Version="1.0.0-preview.3" />
     <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="5.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Certificate" Version="5.0.6" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Certificate" Version="5.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
   </ItemGroup>
 
 </Project>
