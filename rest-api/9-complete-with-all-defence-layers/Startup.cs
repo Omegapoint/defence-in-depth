@@ -123,6 +123,7 @@ namespace Defence.In.Depth
             app.UseAuthentication();
 
             // Demo 2 - Add mTLS certificate token binding support
+            // Middleware from https://docs.duendesoftware.com/identityserver/v5/apis/aspnetcore/confirmation/
             app.UseMiddleware<ConfirmationValidationMiddleware>(new ConfirmationValidationMiddlewareOptions
             {
                 CertificateSchemeName = CertificateAuthenticationDefaults.AuthenticationScheme,

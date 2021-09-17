@@ -84,6 +84,7 @@ namespace Defence.In.Depth
             app.UseRouting();
             app.UseAuthentication();
 
+            // Middleware from https://docs.duendesoftware.com/identityserver/v5/apis/aspnetcore/confirmation/
             app.UseMiddleware<ConfirmationValidationMiddleware>(new ConfirmationValidationMiddlewareOptions
             {
                 CertificateSchemeName = CertificateAuthenticationDefaults.AuthenticationScheme,
