@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Http;
 
 namespace Defence.In.Depth.Domain.Services
 {
-    public class PermissionService : IPermissionService
+    public class HttpContextPermissionService : IPermissionService
     {
-        public PermissionService(IHttpContextAccessor contextAccessor)
+        public HttpContextPermissionService(IHttpContextAccessor contextAccessor)
         {
             var principal = contextAccessor.HttpContext?.User;
 
