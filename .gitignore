@@ -3,6 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# global.json files are for users, and should not be
+# checked in
+global.json
+
 # File where we normally keep HTTP requests for tests
 requests.http
 
