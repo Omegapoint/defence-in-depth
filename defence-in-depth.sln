@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Secrets", "rest-api\8-secre
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompleteWithAllDefenceLayers", "rest-api\9-complete-with-all-defence-layers\CompleteWithAllDefenceLayers.csproj", "{CCE86286-32B2-4F89-950F-9F27FF1AD600}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "identity", "identity\identity.csproj", "{53232C3D-3D68-4ECE-BDB9-D5B62DC23C3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -144,6 +146,18 @@ Global
 		{CCE86286-32B2-4F89-950F-9F27FF1AD600}.Release|x64.Build.0 = Release|Any CPU
 		{CCE86286-32B2-4F89-950F-9F27FF1AD600}.Release|x86.ActiveCfg = Release|Any CPU
 		{CCE86286-32B2-4F89-950F-9F27FF1AD600}.Release|x86.Build.0 = Release|Any CPU
+		{53232C3D-3D68-4ECE-BDB9-D5B62DC23C3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53232C3D-3D68-4ECE-BDB9-D5B62DC23C3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53232C3D-3D68-4ECE-BDB9-D5B62DC23C3A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{53232C3D-3D68-4ECE-BDB9-D5B62DC23C3A}.Debug|x64.Build.0 = Debug|Any CPU
+		{53232C3D-3D68-4ECE-BDB9-D5B62DC23C3A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{53232C3D-3D68-4ECE-BDB9-D5B62DC23C3A}.Debug|x86.Build.0 = Debug|Any CPU
+		{53232C3D-3D68-4ECE-BDB9-D5B62DC23C3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53232C3D-3D68-4ECE-BDB9-D5B62DC23C3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53232C3D-3D68-4ECE-BDB9-D5B62DC23C3A}.Release|x64.ActiveCfg = Release|Any CPU
+		{53232C3D-3D68-4ECE-BDB9-D5B62DC23C3A}.Release|x64.Build.0 = Release|Any CPU
+		{53232C3D-3D68-4ECE-BDB9-D5B62DC23C3A}.Release|x86.ActiveCfg = Release|Any CPU
+		{53232C3D-3D68-4ECE-BDB9-D5B62DC23C3A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BF6D55CF-479D-442B-9B5A-DFD0D5266F29} = {7B0C1CA8-ECD9-4E51-8528-4D85BC84A9B0}
