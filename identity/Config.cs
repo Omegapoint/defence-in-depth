@@ -23,6 +23,12 @@ namespace identity
                 new ApiScope("products.write"),
             };
 
+        public static IEnumerable<ApiResource> ApiResources =>
+            new ApiResource[]
+            {
+                new ApiResource("products.api") { Scopes = { "products.read", "products.write" } }
+            };
+
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
