@@ -17,8 +17,8 @@ namespace Defence.In.Depth
             // Note that this is only demo code, token validation is part of demo 2
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
-                    options.Authority = "https://demo.identityserver.io";
-                    options.Audience = "api";
+                    options.Authority = "https://localhost:4000";
+                    options.Audience = "products.api";
                 });
         }
 

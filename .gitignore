@@ -7,9 +7,6 @@
 # checked in
 global.json
 
-# File where we normally keep HTTP requests for tests
-requests.http
-
 # VS Code
 .vscode
 
@@ -399,3 +396,6 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+# Duende Identity Server signing key
+identity/keys/

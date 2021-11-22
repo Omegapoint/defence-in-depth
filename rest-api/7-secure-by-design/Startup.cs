@@ -25,8 +25,8 @@ namespace Defence.In.Depth
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
-                    options.Authority = "https://demo.identityserver.io";
-                    options.Audience = "api";
+                    options.Authority = "https://localhost:4000";
+                    options.Audience = "products.api";
 
                     options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
                 });

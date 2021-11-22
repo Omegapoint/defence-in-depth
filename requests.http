@@ -1,0 +1,22 @@
+// returns 401
+GET https://localhost:5001/api/products/test
+
+
+// get token
+###
+# @name token
+POST https://localhost:4000/connect/token HTTP/1.1
+content-type: application/x-www-form-urlencoded
+accept: application/json
+cache-control: no-cache
+
+grant_type=client_credentials
+&client_id=m2m
+&client_secret=secret
+
+// returns 200
+###
+GET https://localhost:5001/api/products/test
+content-type: application/json
+cache-control: no-cache
+Authorization: Bearer {{token.response.body.$.access_token}}
