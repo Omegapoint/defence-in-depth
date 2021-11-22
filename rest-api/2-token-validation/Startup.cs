@@ -20,8 +20,8 @@ namespace Defence.In.Depth
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
-                    options.Authority = "https://demo.identityserver.io";
-                    options.Audience = "api";
+                    options.Authority = "https://localhost:4000";
+                    options.Audience = "products.api";
 
                     // Note that type validation might differ, depending on token serivce (IdP)
                     options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
@@ -31,7 +31,7 @@ namespace Defence.In.Depth
                 // Add support for reference-tokens, from https://leastprivilege.com/2020/07/06/flexible-access-token-validation-in-asp-net-core/
                 .AddOAuth2Introspection(IntrospectionScheme, options =>
                 {
-                    options.Authority = "https://demo.identityserver.io";
+                    options.Authority = "https://localhost:4000";
                     options.ClientId = "resource1";
                     options.ClientSecret = "secret";
 
