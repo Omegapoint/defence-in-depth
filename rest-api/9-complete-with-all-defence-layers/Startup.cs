@@ -51,28 +51,6 @@ namespace Defence.In.Depth
                     // restricted to the API audience and access tokens, hence no need validate this.
                 });
 
-                // Add support for mTLS, from 
-                // https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-5.0
-                // https://docs.identityserver.io/en/latest/topics/mtls.html
-                services.AddCertificateForwarding(options =>
-                {
-                    // header name might be different, based on your nginx config
-                    options.CertificateHeader = "X-SSL-CERT";
-
-                    options.HeaderConverter = (headerValue) =>
-                    {
-                        X509Certificate2 clientCertificate = null;
-
-                        if(!string.IsNullOrWhiteSpace(headerValue))
-                        {
-                            var bytes = Encoding.UTF8.GetBytes(Uri.UnescapeDataString(headerValue));
-                            clientCertificate = new X509Certificate2(bytes);
-                        }
-
-                        return clientCertificate;
-                    };
-                });
-
             // Demo 2 - Require Bearer authentication scheme for all requests (including non mvc requests), 
             // even if no other policy has been configured
             services.AddAuthorization(options =>
@@ -116,20 +94,8 @@ namespace Defence.In.Depth
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
-            // Demo 2 - Add mTLS support
-            app.UseCertificateForwarding();
-
             app.UseRouting();
             app.UseAuthentication();
-
-            // Demo 2 - Add mTLS certificate token binding support
-            // Middleware from https://docs.duendesoftware.com/identityserver/v5/apis/aspnetcore/confirmation/
-            app.UseMiddleware<ConfirmationValidationMiddleware>(new ConfirmationValidationMiddlewareOptions
-            {
-                CertificateSchemeName = CertificateAuthenticationDefaults.AuthenticationScheme,
-                JwtBearerSchemeName = JwtBearerDefaults.AuthenticationScheme
-            });
-
             app.UseAuthorization();
             
             app.UseEndpoints(endpoints =>

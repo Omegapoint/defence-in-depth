@@ -36,28 +36,6 @@ namespace Defence.In.Depth
                     options.ClientSecret = "secret";
 
                 });
-                
-                // Add support for mTLS, from 
-                // https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-5.0
-                // https://docs.identityserver.io/en/latest/topics/mtls.html
-                services.AddCertificateForwarding(options =>
-                {
-                    // header name might be different, based on your nginx config
-                    options.CertificateHeader = "X-SSL-CERT";
-
-                    options.HeaderConverter = (headerValue) =>
-                    {
-                        X509Certificate2 clientCertificate = null;
-
-                        if(!string.IsNullOrWhiteSpace(headerValue))
-                        {
-                            var bytes = Encoding.UTF8.GetBytes(Uri.UnescapeDataString(headerValue));
-                            clientCertificate = new X509Certificate2(bytes);
-                        }
-
-                        return clientCertificate;
-                    };
-                });
 
             services.AddAuthorization(options =>
             {
@@ -80,17 +58,8 @@ namespace Defence.In.Depth
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
-            app.UseCertificateForwarding();
             app.UseRouting();
             app.UseAuthentication();
-
-            // Middleware from https://docs.duendesoftware.com/identityserver/v5/apis/aspnetcore/confirmation/
-            app.UseMiddleware<ConfirmationValidationMiddleware>(new ConfirmationValidationMiddlewareOptions
-            {
-                CertificateSchemeName = CertificateAuthenticationDefaults.AuthenticationScheme,
-                JwtBearerSchemeName = JwtBearerDefaults.AuthenticationScheme
-            });
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
