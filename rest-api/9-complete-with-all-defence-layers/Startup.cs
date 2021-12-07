@@ -2,16 +2,12 @@ using Defence.In.Depth.Domain.Services;
 using Defence.In.Depth.Infrastructure;
 using IdentityModel.AspNetCore.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Text;
-using System.Security.Cryptography.X509Certificates;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace Defence.In.Depth
@@ -26,7 +22,9 @@ namespace Defence.In.Depth
         
         public void ConfigureServices(IServiceCollection services)
         {
-            // Demo 1 - Log all excpetions, limit the risk of exposing exeption details by removing UseDeveloperExceptionPage()
+            // Use some sort of centralized logging service (e g Application Insights) to log all excpetions etc.
+            // Note that UseDeveloperExceptionPage is built in to the ASP.NET Core 6 default web host builder,
+            // So the API will display detailed execption messages if Environment.IsDevelopment() returns true. 
             services.AddApplicationInsightsTelemetry();
 
             // Demo 2 - This JWT middeware has secure defaults, with validation according to the JWT spec, 
@@ -52,7 +50,8 @@ namespace Defence.In.Depth
                 });
 
             // Demo 2 - Require Bearer authentication scheme for all requests (including non mvc requests), 
-            // even if no other policy has been configured
+            // even if no other policy has been configured.
+            // Enable public endpoints by decorating with the AllowAnonymous attribute.
             services.AddAuthorization(options =>
             {
                 var policy = new AuthorizationPolicyBuilder()
@@ -67,7 +66,7 @@ namespace Defence.In.Depth
             // Demo 3 - Add claims transformation
             services.AddSingleton<IClaimsTransformation, ClaimsTransformation>();
 
-            // Demo 7 - Domain driven security
+            // Demo 7 - Secure by design
             services.AddTransient<IClaimsTransformation, ClaimsTransformation>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IProductRepository, ProductRepository>();
@@ -82,13 +81,13 @@ namespace Defence.In.Depth
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // Demo 1 - Force https, this is done in the API-gateway.
+            // Demo 1 - Force https, this is done in the NGINX reverse proxy.
             //app.UseHttpsRedirection();
             //app.UseHsts();
             
             // Demo 1 - TLS is terminated before our application and we need to handle forwarded headers
-            // in order to support certificate bound tokens later on (Demo 2). Note that we this code should be
-            // removed if the API does not have an API-gateway in-front (which terminates TLS) 
+            // in order to support certificate bound tokens later on (as part of Demo 2). 
+            // Note that we this code should be removed if the API does not have a reverse proxy or API-gateway in-front (which terminates TLS). 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -100,8 +99,9 @@ namespace Defence.In.Depth
             
             app.UseEndpoints(endpoints =>
             {
-                // Demo 2 - even if we have the fallback policy it is a good practice to set a explicit policy
-                // for each mapped route (RequireAuthorization we apply the Default policy)
+                // Demo 2 - Even if we have the fallback policy it is a good practice to set a explicit policy
+                // for each mapped route (with RequireAuthorization we apply the Default policy).
+                // With this code it takes two mistakes get a public endpoint.
                 endpoints
                     .MapControllers()
                     .RequireAuthorization();
