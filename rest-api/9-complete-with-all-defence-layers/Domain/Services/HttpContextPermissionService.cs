@@ -25,10 +25,12 @@ namespace Defence.In.Depth.Domain.Services
             IfScope(principal, "products.read", () => CanReadProducts = true);
             IfScope(principal, "products.write", () => CanWriteProducts = true);
 
-            // There is a balance between this class and ClaimsTransformation.  In
-            // our case, which market a user belongs to is added in
+            // There is a balance between this class and ClaimsTransformation. In
+            // our case, which market a user belongs to could be added in
             // ClaimsTransformation, but you might find that that kind of code is
-            // better placed here, inside your domain.
+            // better placed here, inside your domain, espacially if it requeries an
+            // external lookup. In real world scenarios we would most likely lookup
+            // market information etc given the identity.
             var market = principal.FindFirstValue("urn:identity:market");
             
             MarketId = new MarketId(market);
