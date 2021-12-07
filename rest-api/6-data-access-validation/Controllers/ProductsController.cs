@@ -26,7 +26,7 @@ namespace Defence.In.Depth.Controllers
             var product = new { Name = "product", Market = "se" };            
 
             if (User.HasClaim(claim => 
-                    claim.Type == "urn:identity:market" && 
+                    claim.Type == "urn:permission:market" && 
                     claim.Value == product.Market))
             {
                 return Ok(product);
