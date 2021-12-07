@@ -17,15 +17,17 @@ namespace Defence.In.Depth
 
                 // This sample will just add hard-coded claims to any authenticated
                 // user, but a real example would of course instead use a local
-                // account database to get information about what organization and
+                // account database or external service to get information about 
                 // local permissions to add.
+                // Note that in this demo we represent permissions as claims, but in 
+                // demo 7 (and 9) we move to a permissions service.
 
                 // It is important to honor any scope that affect our domain
                 AddPermissionIfScope(identity, "products.read",  new Claim("urn:permission:product:read",  "true"));
                 AddPermissionIfScope(identity, "products.write", new Claim("urn:permission:product:write", "true"));
 
-                // Example claim that is not affected by scope
-                identity.AddClaim(new Claim("urn:identity:market", "se"));
+                // Example claim that is related to identity (the sub claim), not scopes.
+                identity.AddClaim(new Claim("urn:permission:market", "se"));
 
                 return new ClaimsPrincipal(identity);
             }
