@@ -20,7 +20,7 @@ namespace Defence.In.Depth
                 // On e g Linux it will be hosted out-of process in Kestrel, and you need a reverse proxy like NGINX in front
                 .CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => webBuilder
-                    // DEMO 8 - Handle secretes using App Configuration and Key Vault
+                    // Demo 8 - Handle secretes using App Configuration and Key Vault
                     // Note that MSI needs to be set up and secretes needs to refrence key vault
                     // https://docs.microsoft.com/en-us/azure/app-service/app-service-key-vault-references
                    .ConfigureAppConfiguration((hostingContext, config) =>
