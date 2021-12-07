@@ -1,8 +1,8 @@
-// returns 401
+// Demo 2 returns 401
 GET https://localhost:5001/api/products/test
 
 
-// get token
+// Get token
 ###
 # @name token
 POST https://localhost:4000/connect/token HTTP/1.1
@@ -14,7 +14,7 @@ grant_type=client_credentials
 &client_id=m2m
 &client_secret=secret
 
-// returns 200
+// Returns 200
 ###
 GET https://localhost:5001/api/products/test
 content-type: application/json
