@@ -15,7 +15,7 @@ The approach follows that of the book "Secure by Design":
 
 https://www.manning.com/books/secure-by-design
 
-The repo also contains a token seervice for demo and education purposes built with Duende Identity Server:
+The repo also contains a token service for demo and education purposes built with Duende Identity Server:
 
 https://github.com/DuendeSoftware/IdentityServer
 

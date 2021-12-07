@@ -1,5 +1,5 @@
 This repo demonstrates the patterns and concepts for REST APIs from 
-https://omegapoint.se/applikationssakerhet-forsvar-pa-djupet-start
+https://omegapoint.se/defence-in-depth-secure-apis
 
 DEMO:
 1. Validate request
