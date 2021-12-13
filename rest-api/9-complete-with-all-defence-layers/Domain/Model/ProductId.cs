@@ -4,7 +4,7 @@ using Defence.In.Depth.Domain.Exceptions;
 
 namespace Defence.In.Depth.Domain.Model
 {
-    public class ProductId : IDomainPrimitive<string>
+    public record ProductId : IDomainPrimitive<string>
     {
         public ProductId(string id)
         {
@@ -25,51 +25,6 @@ namespace Defence.In.Depth.Domain.Model
             if (!IsValidId(id))
             {
                 throw new DomainPrimitiveArgumentException<string>(id);
-            }
-        }
-
-        public static bool operator ==(ProductId left, ProductId right)
-        {
-            if (ReferenceEquals(null, left))
-            {
-                return ReferenceEquals(null, right);
-            }
-
-            if (ReferenceEquals(null, right))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(left, right))
-            {
-                return true;
-            }
-
-            return string.Equals(left.Value, right.Value, StringComparison.Ordinal);
-        }
-
-        public static bool operator !=(ProductId left, ProductId right)
-        {
-            return !(left == right);
-        }
-        public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            return (ProductId)obj == this; // This works since we also override the == operator.
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hash = 23;
-                hash = hash * 31 + Value.GetHashCode();
-
-                return hash;
             }
         }
     }
