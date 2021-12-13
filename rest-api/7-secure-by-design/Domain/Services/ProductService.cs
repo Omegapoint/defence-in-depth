@@ -9,12 +9,18 @@ namespace Defence.In.Depth.Domain.Services
     {
         private readonly IPermissionService permissionService;
         private readonly IProductRepository productRepository;
+        private readonly IAuditService auditService;
         private readonly IMapper mapper;
 
-        public ProductService(IPermissionService permissionService, IProductRepository productRepository, IMapper mapper)
+        public ProductService(
+            IPermissionService permissionService,
+            IProductRepository productRepository,
+            IAuditService auditService,
+            IMapper mapper)
         {
             this.permissionService = permissionService;
             this.productRepository = productRepository;
+            this.auditService = auditService;
             this.mapper = mapper;
         }
 
@@ -22,6 +28,8 @@ namespace Defence.In.Depth.Domain.Services
         {
             if (!permissionService.CanReadProducts)
             {
+                await auditService.Log(DomainEvent.NoAccessToOperation, productId);
+
                 return (null, ReadDataResult.NoAccessToOperation);
             }
 
@@ -36,8 +44,12 @@ namespace Defence.In.Depth.Domain.Services
             
             if (permissionService.MarketId != product.MarketId)
             {
+                await auditService.Log(DomainEvent.NoAccessToData, productId);
+
                 return (null, ReadDataResult.NoAccessToData);
             }
+
+            await auditService.Log(DomainEvent.ProductRead, productId);
 
             return (product, ReadDataResult.Success);
         }

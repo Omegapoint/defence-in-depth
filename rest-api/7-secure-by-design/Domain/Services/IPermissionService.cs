@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Defence.In.Depth.Domain.Model;
 
 namespace Defence.In.Depth.Domain.Services
@@ -9,5 +10,11 @@ namespace Defence.In.Depth.Domain.Services
         bool CanWriteProducts { get; }
         
         MarketId MarketId { get; }
+
+        UserId UserId { get; }
+
+        ClientId ClientId { get; }
+
+        AuthenticationMethods AuthenticationMethods { get; }
     }
 }

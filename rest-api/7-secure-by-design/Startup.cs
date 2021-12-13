@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using Defence.In.Depth.Domain.Services;
 using Defence.In.Depth.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
@@ -10,11 +11,18 @@ namespace Defence.In.Depth
 {
     public class Startup
     {
+        public Startup()
+        {
+            // We want all claims from the IdP, not filtered or altered by ASP.NET Core
+            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+        }
+        
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IClaimsTransformation, ClaimsTransformation>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IAuditService, LoggerAuditService>();
 
             services.AddHttpContextAccessor();
             services.AddPermissionService();
