@@ -48,7 +48,7 @@ namespace Defence.In.Depth.Domain.Services
                     "pwd" => AuthenticationMethods.Password,
                         _ => AuthenticationMethods.Unknown
                 })
-                .Aggregate((prev , next) => prev | next);
+                .Aggregate(AuthenticationMethods.None, (prev , next) => prev | next);
         }
         
         public bool CanReadProducts { get; private set; }
