@@ -19,9 +19,8 @@ public class LoggerAuditService : IAuditService
     {
         var source = permissionService.UserId?.Value ?? permissionService.ClientId?.Value ?? "null";
         var amr = permissionService.AuthenticationMethods;
-        var message = $"{source} [{amr.ToString()}] {domainEvent.ToString()} {payload.ToString()}";
 
-        logger.LogInformation(message);
+        logger.LogInformation("{Source} [{Amr}] {DomainEvent} {Payload}", source, amr, domainEvent, payload);
 
         await Task.CompletedTask;
     }

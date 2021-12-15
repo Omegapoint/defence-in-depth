@@ -1,15 +1,14 @@
-namespace Defence.In.Depth.Domain.Services
+namespace Defence.In.Depth.Domain.Services;
+
+public enum ReadDataResult
 {
-    public enum ReadDataResult
-    {
-        None = 0,
+    None = 0,
         
-        Success,
+    Success,
         
-        NotFound,
+    NotFound,
         
-        NoAccessToData,
+    NoAccessToData,
         
-        NoAccessToOperation
-    }
+    NoAccessToOperation
 }

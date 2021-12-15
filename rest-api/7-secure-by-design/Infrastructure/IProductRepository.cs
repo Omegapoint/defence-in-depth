@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
 using Defence.In.Depth.Infrastructure.Entities;
 
-namespace Defence.In.Depth.Infrastructure
+namespace Defence.In.Depth.Infrastructure;
+
+public interface IProductRepository
 {
-    public interface IProductRepository
-    {
-        Task<ProductEntity> GetById(string id);
-    }
+    Task<ProductEntity> GetById(string id);
 }

@@ -1,14 +1,13 @@
 using System.Runtime.Serialization;
 
-namespace Defence.In.Depth.DataContracts
+namespace Defence.In.Depth.DataContracts;
+
+[DataContract]
+public record ProductDataContract
 {
-    [DataContract]
-    public class ProductDataContract
-    {
-        [DataMember]
-        public string Id { get; set; }
+    [DataMember]
+    public string Id { get; init; }
         
-        [DataMember]
-        public string Name { get; set; }
-    }
+    [DataMember]
+    public string Name { get; init; }
 }
