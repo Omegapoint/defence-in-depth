@@ -1,13 +1,12 @@
-namespace Defence.In.Depth.Domain.Model
+namespace Defence.In.Depth.Domain.Model;
+
+public enum DomainEvent
 {
-    public enum DomainEvent
-    {
-        None = 0,
+    None = 0,
 
-        NoAccessToOperation = 1,
+    NoAccessToOperation = 1,
 
-        NoAccessToData = 2,
+    NoAccessToData = 2,
 
-        ProductRead = 3
-    }
+    ProductRead = 3
 }

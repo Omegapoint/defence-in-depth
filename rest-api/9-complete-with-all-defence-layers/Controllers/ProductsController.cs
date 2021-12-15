@@ -6,50 +6,49 @@ using Defence.In.Depth.Domain.Model;
 using Defence.In.Depth.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Defence.In.Depth.Controllers
-{
-    [Route("/api/products")]
-    public class ProductsController : ControllerBase
-    {
-        private readonly IProductService productService;
-        private readonly IMapper mapper;
+namespace Defence.In.Depth.Controllers;
 
-        public ProductsController(IProductService productService, IMapper mapper)
+[Route("/api/products")]
+public class ProductsController : ControllerBase
+{
+    private readonly IProductService productService;
+    private readonly IMapper mapper;
+
+    public ProductsController(IProductService productService, IMapper mapper)
+    {
+        this.productService = productService;
+        this.mapper = mapper;
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ProductDataContract>> GetById([FromRoute] string id)
+    {
+        //DEMO 4,5,6 and 7 - DDSec pattern
+        if (!ProductId.IsValidId(id))
         {
-            this.productService = productService;
-            this.mapper = mapper;
+            return BadRequest("Id is not valid.");
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ProductDataContract>> GetById([FromRoute] string id)
+        var productId = new ProductId(id);
+            
+        var (product, result) = await productService.GetById(productId);
+
+        switch (result)
         {
-            //DEMO 4,5,6 and 7 - DDSec pattern
-            if (!ProductId.IsValidId(id))
-            {
-                return BadRequest("Id is not valid.");
-            }
-
-            var productId = new ProductId(id);
-            
-            var (product, result) = await productService.GetById(productId);
-
-            switch (result)
-            {
-                case ReadDataResult.NoAccessToOperation:
-                    return Forbid();
+            case ReadDataResult.NoAccessToOperation:
+                return Forbid();
                 
-                case ReadDataResult.NotFound:
-                case ReadDataResult.NoAccessToData:
-                    return NotFound();
+            case ReadDataResult.NotFound:
+            case ReadDataResult.NoAccessToData:
+                return NotFound();
 
-                case ReadDataResult.Success:
-                    var contract = mapper.Map<ProductDataContract>(product);
+            case ReadDataResult.Success:
+                var contract = mapper.Map<ProductDataContract>(product);
             
-                    return Ok(contract);
+                return Ok(contract);
                 
-                default:
-                    throw new InvalidOperationException($"Result kind {result} is not supported");
-            }
+            default:
+                throw new InvalidOperationException($"Result kind {result} is not supported");
         }
     }
 }

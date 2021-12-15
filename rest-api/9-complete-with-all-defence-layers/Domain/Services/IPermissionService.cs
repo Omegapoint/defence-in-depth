@@ -1,20 +1,18 @@
-using System.Collections.Generic;
 using Defence.In.Depth.Domain.Model;
 
-namespace Defence.In.Depth.Domain.Services
+namespace Defence.In.Depth.Domain.Services;
+
+public interface IPermissionService
 {
-    public interface IPermissionService
-    {
-        bool CanReadProducts { get; }
+    bool CanReadProducts { get; }
 
-        bool CanWriteProducts { get; }
+    bool CanWriteProducts { get; }
         
-        MarketId MarketId { get; }
+    MarketId MarketId { get; }
 
-        UserId UserId { get; }
+    UserId UserId { get; }
 
-        ClientId ClientId { get; }
+    ClientId ClientId { get; }
 
-        AuthenticationMethods AuthenticationMethods { get; }
-    }
+    AuthenticationMethods AuthenticationMethods { get; }
 }

@@ -1,7 +1,6 @@
-namespace Defence.In.Depth.Domain.Model
+namespace Defence.In.Depth.Domain.Model;
+
+public interface IDomainPrimitive<out T>
 {
-    public interface IDomainPrimitive<out T>
-    {
-        T Value { get; }
-    }
+    T Value { get; }
 }
