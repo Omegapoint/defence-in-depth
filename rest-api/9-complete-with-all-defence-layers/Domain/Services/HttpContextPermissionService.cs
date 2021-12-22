@@ -23,8 +23,8 @@ public class HttpContextPermissionService : IPermissionService
         }
 
         // It is important to honor any scope that affect our domain
-        IfScope(principal, "products.read", () => CanReadProducts = true);
-        IfScope(principal, "products.write", () => CanWriteProducts = true);
+        IfScope(principal, ClaimSettings.ProductsRead, () => CanReadProducts = true);
+        IfScope(principal, ClaimSettings.ProductsWrite, () => CanWriteProducts = true);
 
         // There is a balance between this class and ClaimsTransformation. In our
         // case, which market a user belongs to could be added in
@@ -32,17 +32,17 @@ public class HttpContextPermissionService : IPermissionService
         // better placed here, inside your domain, especially if it requires an
         // external lookup. In real world scenarios we would most likely lookup
         // market information etc given the identity.
-        var market = principal.FindFirstValue("urn:identity:market");            
+        var market = principal.FindFirstValue(ClaimSettings.UrnIdentityMarket);            
         MarketId = market == null ? null : new MarketId(market);
 
-        var sub = principal.FindFirstValue("sub");
+        var sub = principal.FindFirstValue(ClaimSettings.Sub);
         UserId = sub == null ? null : new UserId(sub);
 
-        var clientId = principal.FindFirstValue("client_id");
+        var clientId = principal.FindFirstValue(ClaimSettings.ClientId);
         ClientId = clientId == null ? null : new ClientId(clientId);
             
         AuthenticationMethods = principal.Claims
-            .Where(c => c.Type == "amr")
+            .Where(c => c.Type == ClaimSettings.AMR)
             .Select(claim => claim.Value switch
             {
                 "pwd" => AuthenticationMethods.Password,
