@@ -70,6 +70,7 @@ public class Startup
         services.AddTransient<IClaimsTransformation, ClaimsTransformation>();
         services.AddTransient<IProductService, ProductService>();
         services.AddTransient<IProductRepository, ProductRepository>();
+        services.AddTransient<IAuditService, LoggerAuditService>();
 
         services.AddHttpContextAccessor();
         services.AddPermissionService();

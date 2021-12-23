@@ -10,10 +10,10 @@ namespace CompleteWithAllDefenceLayers.Test;
 internal class TokenHttpClient
 {
     private const string Content = "client_id=m2m&client_secret=secret&scope=products.read&grant_type=client_credentials";
-    private readonly Uri tokenUri = new Uri("http://localhost:4000/connect/token");
+    private readonly Uri tokenUri = new Uri("https://localhost:4000/connect/token");
 
     private readonly HttpClient client;
-    private string accessToken;
+    private string? accessToken;
 
     public TokenHttpClient()
     {
@@ -46,7 +46,7 @@ internal class TokenHttpClient
 
         var result = JsonConvert.DeserializeObject<TokenResult>(content);
 
-        accessToken = result.access_token ?? string.Empty;
+        accessToken = result.access_token;
     }
 
     private class TokenResult

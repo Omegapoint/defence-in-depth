@@ -10,7 +10,7 @@ namespace CompleteWithAllDefenceLayers.Test;
 [Trait("Category", "System")]
 public class SystemTests
 {
-    private readonly Uri baseUri = new Uri("http://localhost:5001/");
+    private readonly Uri baseUri = new Uri("https://localhost:5001/");
 
     [Fact]
     public async Task GetProductByIdShouldReturn401WhenNotAuthenticated()
