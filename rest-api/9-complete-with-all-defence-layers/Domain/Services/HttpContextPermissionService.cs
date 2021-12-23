@@ -45,7 +45,7 @@ public class HttpContextPermissionService : IPermissionService
             .Where(c => c.Type == ClaimSettings.AMR)
             .Select(claim => claim.Value switch
             {
-                "pwd" => AuthenticationMethods.Password,
+                ClaimSettings.AuthenticationMethodPassword => AuthenticationMethods.Password,
                     _ => AuthenticationMethods.Unknown
             })
             .Aggregate(AuthenticationMethods.None, (prev , next) => prev | next);
@@ -65,7 +65,7 @@ public class HttpContextPermissionService : IPermissionService
 
     private static void IfScope(ClaimsPrincipal principal, string scope, Action action)
     {
-        if (principal.HasClaim(claim => claim.Type == "scope" && claim.Value == scope))
+        if (principal.HasClaim(claim => claim.Type == ClaimSettings.Scope && claim.Value == scope))
         {
             action();
         }
