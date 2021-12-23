@@ -20,7 +20,7 @@ public class ProductsServiceTests
     {
         var claims = new[]
         {
-                new Claim("not valid read claim", "true"),
+                new Claim(ClaimSettings.Scope, "not valid read claim"),
                 new Claim(ClaimSettings.UrnIdentityMarket, "se"),
         };
         var productService = CreateSUT(claims);
@@ -36,7 +36,7 @@ public class ProductsServiceTests
     {
         var claims = new[]
         {
-            new Claim("scope", ClaimSettings.ProductsRead),
+            new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead),
             new Claim(ClaimSettings.UrnIdentityMarket, "se"),
         };
         var productService = CreateSUT(claims);
@@ -52,7 +52,7 @@ public class ProductsServiceTests
     {
         var claims = new[]
         {
-            new Claim("scope", ClaimSettings.ProductsRead),
+            new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead),
             new Claim(ClaimSettings.UrnIdentityMarket, "se"),
         };
         var productService = CreateSUT(claims);
@@ -72,7 +72,7 @@ public class ProductsServiceTests
     {
         var claims = new[]
         {
-            new Claim("scope", ClaimSettings.ProductsRead),
+            new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead),
             new Claim(ClaimSettings.UrnIdentityMarket, "se"),
         };
         var productService = CreateSUT(claims);
