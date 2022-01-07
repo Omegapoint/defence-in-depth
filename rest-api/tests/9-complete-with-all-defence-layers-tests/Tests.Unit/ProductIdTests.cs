@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
-using Defence.In.Depth.Domain.Model;
 using Defence.In.Depth.Domain.Exceptions;
+using Defence.In.Depth.Domain.Model;
 using Xunit;
 
-namespace CompleteWithAllDefenceLayers.Test;
+namespace CompleteWithAllDefenceLayers.Tests.Unit;
 
 [Trait("Category", "Unit")]
 public class ProductIdTests

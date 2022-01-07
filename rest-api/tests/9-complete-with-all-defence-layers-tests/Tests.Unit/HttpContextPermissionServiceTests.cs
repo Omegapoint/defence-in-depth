@@ -1,16 +1,12 @@
+using System.Collections.Generic;
 using System.Security.Claims;
 using Defence.In.Depth.Domain.Model;
 using Defence.In.Depth.Domain.Services;
-using Xunit;
-using System.Threading.Tasks;
-using AutoMapper;
-using Defence.In.Depth.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Moq;
-using System.Collections.Generic;
-using Defence.In.Depth;
+using Xunit;
 
-namespace CompleteWithAllDefenceLayers.Test;
+namespace CompleteWithAllDefenceLayers.Tests.Unit;
 
 [Trait("Category", "Unit")]
 public class HttpContextPermissionServiceTests

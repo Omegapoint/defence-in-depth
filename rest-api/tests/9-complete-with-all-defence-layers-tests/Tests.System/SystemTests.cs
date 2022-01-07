@@ -1,10 +1,10 @@
-using Xunit;
-using System.Threading.Tasks;
+using System;
 using System.Net;
 using System.Net.Http;
-using System;
+using System.Threading.Tasks;
+using Xunit;
 
-namespace CompleteWithAllDefenceLayers.Test;
+namespace CompleteWithAllDefenceLayers.Tests.System;
 
 
 [Trait("Category", "System")]

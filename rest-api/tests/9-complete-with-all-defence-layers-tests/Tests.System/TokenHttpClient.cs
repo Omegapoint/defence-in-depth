@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace CompleteWithAllDefenceLayers.Test;
+namespace CompleteWithAllDefenceLayers.Tests.System;
 
 internal class TokenHttpClient
 {

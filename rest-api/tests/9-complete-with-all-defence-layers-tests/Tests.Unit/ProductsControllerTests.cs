@@ -1,13 +1,13 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Defence.In.Depth.Controllers;
 using Defence.In.Depth.Domain.Model;
 using Defence.In.Depth.Domain.Services;
-using Xunit;
-using System.Threading.Tasks;
-using Moq;
-using System.Collections.Generic;
-using Defence.In.Depth.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
+using Xunit;
 
-namespace CompleteWithAllDefenceLayers.Test;
+namespace CompleteWithAllDefenceLayers.Tests.Unit;
 
 [Trait("Category", "Unit")]
 public class ProductsControllerTests
