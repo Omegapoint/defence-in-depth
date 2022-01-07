@@ -77,9 +77,9 @@ public class ProductsServiceTests
     }
 
     // Testing successful resource access is important to verify that the
-    // correct claim is needed to authorize access.  If we did not, then
+    // correct claim is needed to authorize access. If we did not, then
     // requiring a lower claim, e.g. "read:guest" would not be caught by the
-    // NoValidScopeClaim test above; This test will catch such configuration errors.
+    // NoValidReadClaim test above. This test will catch such configuration errors.
     [Fact]
     public async void GetById_ReturnsOk_IfValidClaims()
     {
