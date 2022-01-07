@@ -13,7 +13,7 @@ public class SystemTests
     private readonly Uri baseUri = new Uri("https://localhost:5001/");
 
     [Fact]
-    public async Task GetProductByIdShouldReturn401WhenNotAuthenticated()
+    public async Task GetProductById_ShouldReturn401_WhenNotAuthenticated()
     {
         var client = new HttpClient();
         var response = await client.GetAsync(new Uri(baseUri, "/api/products/productSE"));
@@ -22,7 +22,7 @@ public class SystemTests
     }
 
     [Fact]
-    public async Task GetProductByIdShouldReturn200WhenAuthenticated()
+    public async Task GetProductById_ShouldReturn200_WhenAuthenticated()
     {
         var client = new TokenHttpClient();
         var response = await client.GetAsync(new Uri(baseUri, "/api/products/productSE"));
