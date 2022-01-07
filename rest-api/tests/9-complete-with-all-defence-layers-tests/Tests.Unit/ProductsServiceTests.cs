@@ -22,15 +22,17 @@ public class ProductsServiceTests
                 new Claim(ClaimSettings.Scope, "not valid read claim"),
                 new Claim(ClaimSettings.UrnIdentityMarket, "se"),
         };
+
         var mockAuditService = new Mock<IAuditService>();
-        var productService = CreateSUT(claims, mockAuditService.Object);
+        var productService = CreateSut(claims, mockAuditService.Object);
         
         var (product, result)  = await productService.GetById(new ProductId("productSE"));
 
         Assert.Equal(ReadDataResult.NoAccessToOperation, result);
         Assert.Null(product);
-        mockAuditService.Verify(_ => _.Log(It.IsAny<DomainEvent>(), It.IsAny<object>()), Times.Once);
-        mockAuditService.Verify(_ => _.Log(DomainEvent.NoAccessToOperation, It.IsAny<object>()), Times.Once);
+        
+        mockAuditService.Verify(service => service.Log(It.IsAny<DomainEvent>(), It.IsAny<object>()), Times.Once);
+        mockAuditService.Verify(service => service.Log(DomainEvent.NoAccessToOperation, It.IsAny<object>()), Times.Once);
     }
 
     [Fact]
@@ -41,14 +43,16 @@ public class ProductsServiceTests
             new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead),
             new Claim(ClaimSettings.UrnIdentityMarket, "se"),
         };
+
         var mockAuditService = new Mock<IAuditService>();
-        var productService = CreateSUT(claims, mockAuditService.Object);
+        var productService = CreateSut(claims, mockAuditService.Object);
         
         var (product, result)  = await productService.GetById(new ProductId("notfound"));
 
         Assert.Equal(ReadDataResult.NotFound, result);
         Assert.Null(product);
-        mockAuditService.Verify(_ => _.Log(It.IsAny<DomainEvent>(), It.IsAny<object>()), Times.Never);
+
+        mockAuditService.Verify(service => service.Log(It.IsAny<DomainEvent>(), It.IsAny<object>()), Times.Never);
     }
 
     [Fact]
@@ -59,15 +63,17 @@ public class ProductsServiceTests
             new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead),
             new Claim(ClaimSettings.UrnIdentityMarket, "se"),
         };
+        
         var mockAuditService = new Mock<IAuditService>();
-        var productService = CreateSUT(claims, mockAuditService.Object);
+        var productService = CreateSut(claims, mockAuditService.Object);
         
         var (product, result)  = await productService.GetById(new ProductId("productNO"));
 
         Assert.Equal(ReadDataResult.NoAccessToData, result);
         Assert.Null(product);
-        mockAuditService.Verify(_ => _.Log(It.IsAny<DomainEvent>(), It.IsAny<object>()), Times.Once);
-        mockAuditService.Verify(_ => _.Log(DomainEvent.NoAccessToData, It.IsAny<object>()), Times.Once);
+        
+        mockAuditService.Verify(service => service.Log(It.IsAny<DomainEvent>(), It.IsAny<object>()), Times.Once);
+        mockAuditService.Verify(service => service.Log(DomainEvent.NoAccessToData, It.IsAny<object>()), Times.Once);
     }
 
     // Testing successful resource access is important to verify that the
@@ -82,31 +88,32 @@ public class ProductsServiceTests
             new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead),
             new Claim(ClaimSettings.UrnIdentityMarket, "se"),
         };
+
         var mockAuditService = new Mock<IAuditService>();
-        var productService = CreateSUT(claims, mockAuditService.Object);
+        var productService = CreateSut(claims, mockAuditService.Object);
         
         var (product, result)  = await productService.GetById(new ProductId("productSE"));
 
         Assert.Equal(ReadDataResult.Success, result);
         Assert.NotNull(product);
-        mockAuditService.Verify(_ => _.Log(It.IsAny<DomainEvent>(), It.IsAny<object>()), Times.Once);
-        mockAuditService.Verify(_ => _.Log(DomainEvent.ProductRead, It.IsAny<object>()), Times.Once);
+
+        mockAuditService.Verify(service => service.Log(It.IsAny<DomainEvent>(), It.IsAny<object>()), Times.Once);
+        mockAuditService.Verify(service => service.Log(DomainEvent.ProductRead, It.IsAny<object>()), Times.Once);
     }
 
-    private static IProductService CreateSUT(IEnumerable<Claim> claims, IAuditService? auditService = null)
+    private static IProductService CreateSut(IEnumerable<Claim> claims, IAuditService? auditService = null)
     {
         var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
         var context = new DefaultHttpContext();
+
         context.User.AddIdentity(new ClaimsIdentity(claims));
         mockHttpContextAccessor.Setup(_ => _.HttpContext).Returns(context);
-        
-        var sut = new ProductService(
+
+        return new ProductService(
             new HttpContextPermissionService(mockHttpContextAccessor.Object), 
             new ProductRepository(), 
             auditService ?? new Mock<IAuditService>().Object, 
             TestMapper.Create());
-        
-        return sut;
     }
 }
 
