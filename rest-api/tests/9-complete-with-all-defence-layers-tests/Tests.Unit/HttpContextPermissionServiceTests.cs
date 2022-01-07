@@ -23,6 +23,7 @@ public class HttpContextPermissionServiceTests
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead),
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsWrite)
         };
+
         var httpContextPermissionService = CreateSut(claims);
         
         Assert.Equal(AuthenticationMethods.Password, httpContextPermissionService.AuthenticationMethods);
@@ -44,6 +45,7 @@ public class HttpContextPermissionServiceTests
                 new Claim(ClaimSettings.UrnIdentityMarket, "se"),
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsWrite)
         };
+
         var httpContextPermissionService = CreateSut(claims);
         
         Assert.Equal(AuthenticationMethods.Password, httpContextPermissionService.AuthenticationMethods);
@@ -65,6 +67,7 @@ public class HttpContextPermissionServiceTests
                 new Claim(ClaimSettings.UrnIdentityMarket, "se"),
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead)
         };
+        
         var httpContextPermissionService = CreateSut(claims);
         
         Assert.Equal(AuthenticationMethods.Password, httpContextPermissionService.AuthenticationMethods);
@@ -81,10 +84,8 @@ public class HttpContextPermissionServiceTests
         var context = new DefaultHttpContext();
         context.User.AddIdentity(new ClaimsIdentity(claims));
         mockHttpContextAccessor.Setup(_ => _.HttpContext).Returns(context);
-        
-        var sut = new HttpContextPermissionService(mockHttpContextAccessor.Object);
-        
-        return sut;
+
+        return new HttpContextPermissionService(mockHttpContextAccessor.Object);
     }
 }
 

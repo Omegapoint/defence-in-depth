@@ -34,11 +34,11 @@ internal class TokenHttpClient
 
     private async Task Initialize()
     {
-        var client = new HttpClient();
+        var innerClient = new HttpClient();
 
         var body = new StringContent(Content, Encoding.UTF8, "application/x-www-form-urlencoded");
 
-        var response = await client.PostAsync(tokenUri, body);
+        var response = await innerClient.PostAsync(tokenUri, body);
 
         response.EnsureSuccessStatusCode();
 
@@ -49,8 +49,13 @@ internal class TokenHttpClient
         accessToken = result.access_token;
     }
 
+    // ReSharper disable InconsistentNaming
+    // ReSharper disable UnusedAutoPropertyAccessor.Local
     private class TokenResult
     {
         public string? access_token { get; set; }
     }
+
+    // ReSharper restore InconsistentNaming
+    // ReSharper restore UnusedAutoPropertyAccessor.Local
 }
