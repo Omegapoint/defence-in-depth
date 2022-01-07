@@ -11,7 +11,7 @@ public class ProductIdTests
     [Theory]
     [MemberData(nameof(IdInjection))]
     [MemberData(nameof(InvalidIds))]
-    public void ProductIdShouldReject(string id)
+    public void ProductId_Should_Reject(string id)
     {
         Assert.False(ProductId.IsValidId(id));
     }
@@ -19,14 +19,14 @@ public class ProductIdTests
     [Theory]
     [MemberData(nameof(IdInjection))]
     [MemberData(nameof(InvalidIds))]
-    public void ProductIdConstructorShouldThrow(string id)
+    public void ProductId_Constructor_ShouldThrow(string id)
     {
         Assert.Throws<DomainPrimitiveArgumentException<string>>(() => new ProductId(id));
     }
 
     [Theory]
     [MemberData(nameof(ValidIds))]
-    public void ProductIdConstructorShouldNotThrow(string id)
+    public void ProductId_Constructor_ShouldNotThrow(string id)
     {
         var product = new ProductId(id);
         Assert.True(product.Value == id);

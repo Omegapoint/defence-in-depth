@@ -13,7 +13,7 @@ namespace CompleteWithAllDefenceLayers.Tests.Unit;
 public class ProductsControllerTests
 {
     [Fact]
-    public async void GetProductsByIdShouldReturn403WhenCanNotRead()
+    public async void GetProductsById_ShouldReturn403_WhenCanNotRead()
     {
         var productServiceMock = new Mock<IProductService>();
         productServiceMock.Setup(ps => ps.GetById(It.IsAny<ProductId>())).Returns(Task.FromResult((new Product(new ProductId("productSE"), new ProductName("productSE"), new MarketId("se")), ReadDataResult.NoAccessToOperation)));
@@ -26,7 +26,7 @@ public class ProductsControllerTests
     }
 
     [Fact]
-    public async void GetProductsByIdShouldReturn200WhenAuthorized()
+    public async void GetProductsById_ShouldReturn200_WhenAuthorized()
     {
         var productServiceMock = new Mock<IProductService>();
         productServiceMock.Setup(ps => ps.GetById(It.IsAny<ProductId>()))
@@ -42,7 +42,7 @@ public class ProductsControllerTests
     [Theory]
     [MemberData(nameof(IdInjection))]
     [MemberData(nameof(InvalidIds))]
-    public async void GetProductsByIdShouldReturn400WhenInvalidId(string id)
+    public async void GetProductsById_ShouldReturn400_WhenInvalidId(string id)
     {
         var productServiceMock = new Mock<IProductService>();
         productServiceMock.Setup(ps => ps.GetById(It.IsAny<ProductId>()))
@@ -56,7 +56,7 @@ public class ProductsControllerTests
     }
 
     [Fact]
-    public async void GetProductsByIdShouldReturn404WhenNotFound()
+    public async void GetProductsById_ShouldReturn404_WhenNotFound()
     {
         var productServiceMock = new Mock<IProductService>();
         productServiceMock.Setup(ps => ps.GetById(It.IsAny<ProductId>())).Returns(Task.FromResult((new Product(new ProductId("productSE"), new ProductName("productSE"), new MarketId("se")), ReadDataResult.NotFound)));
