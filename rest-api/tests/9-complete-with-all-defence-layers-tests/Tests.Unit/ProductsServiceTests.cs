@@ -19,8 +19,8 @@ public class ProductsServiceTests
     {
         var claims = new[]
         {
-                new Claim(ClaimSettings.Scope, "not valid read claim"),
-                new Claim(ClaimSettings.UrnIdentityMarket, "se"),
+                new Claim(ClaimSettings.Sub, "user1"),
+                new Claim(ClaimSettings.Scope, "not valid read claim")
         };
 
         var mockAuditService = new Mock<IAuditService>();
@@ -40,8 +40,8 @@ public class ProductsServiceTests
     {
         var claims = new[]
         {
-            new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead),
-            new Claim(ClaimSettings.UrnIdentityMarket, "se"),
+            new Claim(ClaimSettings.Sub, "user1"),
+            new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead)
         };
 
         var mockAuditService = new Mock<IAuditService>();
@@ -60,8 +60,8 @@ public class ProductsServiceTests
     {
         var claims = new[]
         {
-            new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead),
-            new Claim(ClaimSettings.UrnIdentityMarket, "se"),
+            new Claim(ClaimSettings.Sub, "user1"),
+            new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead)
         };
         
         var mockAuditService = new Mock<IAuditService>();
@@ -85,8 +85,8 @@ public class ProductsServiceTests
     {
         var claims = new[]
         {
-            new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead),
-            new Claim(ClaimSettings.UrnIdentityMarket, "se"),
+            new Claim(ClaimSettings.Sub, "user1"),
+            new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead)
         };
 
         var mockAuditService = new Mock<IAuditService>();

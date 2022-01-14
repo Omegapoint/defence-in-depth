@@ -1,7 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using Defence.In.Depth.Domain.Services;
 using Defence.In.Depth.Infrastructure;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,7 +18,6 @@ public class Startup
         
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddTransient<IClaimsTransformation, ClaimsTransformation>();
         services.AddTransient<IProductService, ProductService>();
         services.AddTransient<IProductRepository, ProductRepository>();
         services.AddTransient<IAuditService, LoggerAuditService>();

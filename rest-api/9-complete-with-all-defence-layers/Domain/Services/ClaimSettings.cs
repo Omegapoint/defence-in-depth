@@ -7,7 +7,6 @@ public static class ClaimSettings
     public const string ClientId = "client_id";
     public const string Scope = "scope";
     public const string AMR = "amr";
-    public const string UrnIdentityMarket = "urn:identity:market";
 
     //Authorization server AMR values 
     public const string AuthenticationMethodPassword = "pwd";
