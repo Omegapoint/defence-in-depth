@@ -1,7 +1,6 @@
 using Defence.In.Depth.Domain.Services;
 using Defence.In.Depth.Infrastructure;
 using IdentityModel.AspNetCore.AccessTokenValidation;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -63,11 +62,6 @@ public class Startup
             options.FallbackPolicy = policy;
         });
 
-        // Demo 3 - Add claims transformation
-        services.AddSingleton<IClaimsTransformation, ClaimsTransformation>();
-
-        // Demo 7 - Secure by design
-        services.AddTransient<IClaimsTransformation, ClaimsTransformation>();
         services.AddTransient<IProductService, ProductService>();
         services.AddTransient<IProductRepository, ProductRepository>();
         services.AddTransient<IAuditService, LoggerAuditService>();

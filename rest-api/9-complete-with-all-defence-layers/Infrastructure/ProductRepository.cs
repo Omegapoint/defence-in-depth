@@ -7,8 +7,8 @@ namespace Defence.In.Depth.Infrastructure;
 public class ProductRepository : IProductRepository
 {
     private Dictionary<string, ProductEntity> _repo = new Dictionary<string, ProductEntity>{
-        {"productSE", new ProductEntity { Id = "productSE", Name = "product", MarketId = "se" }},
-        {"productNO", new ProductEntity { Id = "productNO", Name = "product", MarketId = "no" }}
+        {"productSE", new ProductEntity { Id = "productSE", Name = "product", MarketId = "SE" }},
+        {"productNO", new ProductEntity { Id = "productNO", Name = "product", MarketId = "NO" }}
     };
     public async Task<ProductEntity> GetById(string id)
     {

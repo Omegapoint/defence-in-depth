@@ -19,19 +19,18 @@ public class HttpContextPermissionServiceTests
                 new Claim(ClaimSettings.Sub, "user1"),
                 new Claim(ClaimSettings.ClientId, "client1"),
                 new Claim(ClaimSettings.AMR, ClaimSettings.AuthenticationMethodPassword),
-                new Claim(ClaimSettings.UrnIdentityMarket, "se"),
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead),
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsWrite)
         };
 
         var httpContextPermissionService = CreateSut(claims);
-        
+
+        Assert.Equal(new UserId("user1"), httpContextPermissionService.UserId);
+        Assert.Equal(new ClientId("client1"), httpContextPermissionService.ClientId);        
         Assert.Equal(AuthenticationMethods.Password, httpContextPermissionService.AuthenticationMethods);
         Assert.True(httpContextPermissionService.CanReadProducts);
         Assert.True(httpContextPermissionService.CanWriteProducts);
-        Assert.Equal(new ClientId("client1"), httpContextPermissionService.ClientId);
-        Assert.Equal(new MarketId("se"), httpContextPermissionService.MarketId);
-        Assert.Equal(new UserId("user1"), httpContextPermissionService.UserId);
+        Assert.Equal(new MarketId("SE"), httpContextPermissionService.MarketId);
     }
 
     [Fact]
@@ -42,18 +41,17 @@ public class HttpContextPermissionServiceTests
                 new Claim(ClaimSettings.Sub, "user1"),
                 new Claim(ClaimSettings.ClientId, "client1"),
                 new Claim(ClaimSettings.AMR, "pwd"),
-                new Claim(ClaimSettings.UrnIdentityMarket, "se"),
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsWrite)
         };
 
         var httpContextPermissionService = CreateSut(claims);
         
+        Assert.Equal(new UserId("user1"), httpContextPermissionService.UserId);
+        Assert.Equal(new ClientId("client1"), httpContextPermissionService.ClientId);        
         Assert.Equal(AuthenticationMethods.Password, httpContextPermissionService.AuthenticationMethods);
         Assert.False(httpContextPermissionService.CanReadProducts);
         Assert.True(httpContextPermissionService.CanWriteProducts);
-        Assert.Equal(new ClientId("client1"), httpContextPermissionService.ClientId);
-        Assert.Equal(new MarketId("se"), httpContextPermissionService.MarketId);
-        Assert.Equal(new UserId("user1"), httpContextPermissionService.UserId);
+        Assert.Equal(new MarketId("SE"), httpContextPermissionService.MarketId);
     }
 
     [Fact]
@@ -64,18 +62,17 @@ public class HttpContextPermissionServiceTests
                 new Claim(ClaimSettings.Sub, "user1"),
                 new Claim(ClaimSettings.ClientId, "client1"),
                 new Claim(ClaimSettings.AMR, "pwd"),
-                new Claim(ClaimSettings.UrnIdentityMarket, "se"),
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead)
         };
         
         var httpContextPermissionService = CreateSut(claims);
         
+        Assert.Equal(new UserId("user1"), httpContextPermissionService.UserId);
+        Assert.Equal(new ClientId("client1"), httpContextPermissionService.ClientId);        
         Assert.Equal(AuthenticationMethods.Password, httpContextPermissionService.AuthenticationMethods);
         Assert.True(httpContextPermissionService.CanReadProducts);
         Assert.False(httpContextPermissionService.CanWriteProducts);
-        Assert.Equal(new ClientId("client1"), httpContextPermissionService.ClientId);
-        Assert.Equal(new MarketId("se"), httpContextPermissionService.MarketId);
-        Assert.Equal(new UserId("user1"), httpContextPermissionService.UserId);
+        Assert.Equal(new MarketId("SE"), httpContextPermissionService.MarketId);
     }
 
     private static HttpContextPermissionService CreateSut(IEnumerable<Claim> claims )

@@ -21,20 +21,7 @@ public class HttpContextPermissionService : IPermissionService
                 
             throw new ArgumentException("User object is null", nameof(contextAccessor));
         }
-
-        // It is important to honor any scope that affect our domain
-        IfScope(principal, "products.read", () => CanReadProducts = true);
-        IfScope(principal, "products.write", () => CanWriteProducts = true);
-
-        // There is a balance between this class and ClaimsTransformation. In our
-        // case, which market a user belongs to could be added in
-        // ClaimsTransformation, but you might find that that kind of code is
-        // better placed here, inside your domain, especially if it requires an
-        // external lookup. In real world scenarios we would most likely lookup
-        // market information etc given the identity.
-        var market = principal.FindFirstValue("urn:identity:market");            
-        MarketId = market == null ? null : new MarketId(market);
-
+        
         var sub = principal.FindFirstValue("sub");
         UserId = sub == null ? null : new UserId(sub);
 
@@ -49,6 +36,19 @@ public class HttpContextPermissionService : IPermissionService
                     _ => AuthenticationMethods.Unknown
             })
             .Aggregate(AuthenticationMethods.None, (prev , next) => prev | next);
+
+        // It is important to honor any scope that affect our domain
+        IfScope(principal, "products.read", () => CanReadProducts = true);
+        IfScope(principal, "products.write", () => CanWriteProducts = true);
+
+        // There is a balance between this class and ClaimsTransformation. In our
+        // case, which market a user belongs to could be added in
+        // ClaimsTransformation, but you might find that that kind of code is
+        // better placed here, inside your domain, especially if it requires an
+        // external lookup. In real world scenarios we would most likely lookup
+        // market information etc given the identity.
+        // Here we have just hard coded the market to SE for all users.        
+        MarketId = new MarketId("SE");
     }
         
     public bool CanReadProducts { get; private set; }

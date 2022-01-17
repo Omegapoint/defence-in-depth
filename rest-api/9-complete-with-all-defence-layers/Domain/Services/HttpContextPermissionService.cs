@@ -22,6 +22,21 @@ public class HttpContextPermissionService : IPermissionService
             throw new ArgumentException("User object is null", nameof(contextAccessor));
         }
 
+        var sub = principal.FindFirstValue(ClaimSettings.Sub);
+        UserId = sub == null ? null : new UserId(sub);
+
+        var clientId = principal.FindFirstValue(ClaimSettings.ClientId);
+        ClientId = clientId == null ? null : new ClientId(clientId);
+
+        AuthenticationMethods = principal.Claims
+            .Where(c => c.Type == ClaimSettings.AMR)
+            .Select(claim => claim.Value switch
+            {
+                ClaimSettings.AuthenticationMethodPassword => AuthenticationMethods.Password,
+                    _ => AuthenticationMethods.Unknown
+            })
+            .Aggregate(AuthenticationMethods.None, (prev , next) => prev | next);
+
         // It is important to honor any scope that affect our domain
         IfScope(principal, ClaimSettings.ProductsRead, () => CanReadProducts = true);
         IfScope(principal, ClaimSettings.ProductsWrite, () => CanWriteProducts = true);
@@ -32,23 +47,8 @@ public class HttpContextPermissionService : IPermissionService
         // better placed here, inside your domain, especially if it requires an
         // external lookup. In real world scenarios we would most likely lookup
         // market information etc given the identity.
-        var market = principal.FindFirstValue(ClaimSettings.UrnIdentityMarket);            
-        MarketId = market == null ? null : new MarketId(market);
-
-        var sub = principal.FindFirstValue(ClaimSettings.Sub);
-        UserId = sub == null ? null : new UserId(sub);
-
-        var clientId = principal.FindFirstValue(ClaimSettings.ClientId);
-        ClientId = clientId == null ? null : new ClientId(clientId);
-            
-        AuthenticationMethods = principal.Claims
-            .Where(c => c.Type == ClaimSettings.AMR)
-            .Select(claim => claim.Value switch
-            {
-                ClaimSettings.AuthenticationMethodPassword => AuthenticationMethods.Password,
-                    _ => AuthenticationMethods.Unknown
-            })
-            .Aggregate(AuthenticationMethods.None, (prev , next) => prev | next);
+        // Here we have just hard coded the market to SE for all valid users.          
+        MarketId = new MarketId("NO");
     }
         
     public bool CanReadProducts { get; private set; }
