@@ -1,6 +1,4 @@
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 
 namespace Defence.In.Depth;
@@ -23,11 +21,11 @@ internal class ClaimsTransformation : IClaimsTransformation
             // demo 7 (and 9) we move to a permissions service.
 
             // It is important to honor any scope that affect our domain
-            AddPermissionIfScope(identity, "products.read",  new Claim("urn:permission:product:read",  "true"));
-            AddPermissionIfScope(identity, "products.write", new Claim("urn:permission:product:write", "true"));
+            AddPermissionIfScope(identity, "products.read",  new Claim("urn:permissions:products:read",  "true"));
+            AddPermissionIfScope(identity, "products.write", new Claim("urn:permissions:products:write", "true"));
 
             // Example claim that is related to identity (the sub claim), not scopes.
-            identity.AddClaim(new Claim("urn:permission:market", "se"));
+            identity.AddClaim(new Claim("urn:permissions:market", "se"));
 
             return new ClaimsPrincipal(identity);
         }

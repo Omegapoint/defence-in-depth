@@ -14,15 +14,6 @@ public class ProductsController : ControllerBase
             return BadRequest("Parameter id is not well formed");
         }
 
-        var canRead = User.HasClaim(claim => 
-            claim.Type == "urn:permission:product:read" && 
-            claim.Value == "true");
-
-        if (!canRead)
-        {
-            return Forbid();
-        }
-
         return Ok("product");
     }
 }
