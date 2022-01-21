@@ -10,9 +10,11 @@ public interface IPermissionService
         
     MarketId MarketId { get; }
 
-    UserId UserId { get; }
+    UserId? UserId { get; }
 
-    ClientId ClientId { get; }
+    ClientId? ClientId { get; }
 
     AuthenticationMethods AuthenticationMethods { get; }
+
+    bool HasPermissionToMarket(MarketId requestedMarket);
 }

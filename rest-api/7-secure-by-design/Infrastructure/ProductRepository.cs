@@ -10,7 +10,8 @@ public class ProductRepository : IProductRepository
         await Task.CompletedTask;
             
         // Please always use correct output encoding of input data "id" for
-        // your query context.  For example, parameterized SQL.
-        return new ProductEntity { Id = id, Name = "product", MarketId = "se" };
+        // your query context. For example, parameterized SQL.
+        // Here we have just hardcoded the id to the input.
+        return new ProductEntity { Id = id, Name = "ProductSweden", MarketId = "se" };
     }
 }

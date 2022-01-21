@@ -16,7 +16,7 @@ public record ProductName : IDomainPrimitive<string>
 
     public static bool IsValidName(string name)
     {
-        return !string.IsNullOrEmpty(name) && name.Length < 10 && (name.All(char.IsLetterOrDigit) || name.All(char.IsWhiteSpace));
+        return !string.IsNullOrEmpty(name) && name.Length < 20 && (name.All(char.IsLetterOrDigit) || name.All(char.IsWhiteSpace));
     }
 
     public static void AssertValidName(string name)
