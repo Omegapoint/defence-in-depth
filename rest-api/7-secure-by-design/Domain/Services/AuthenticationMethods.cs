@@ -1,5 +1,3 @@
-using System;
-
 namespace Defence.In.Depth.Domain.Services;
 
 [Flags]

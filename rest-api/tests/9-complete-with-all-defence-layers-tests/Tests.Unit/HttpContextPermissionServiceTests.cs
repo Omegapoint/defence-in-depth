@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Security.Claims;
 using Defence.In.Depth.Domain.Model;
 using Defence.In.Depth.Domain.Services;

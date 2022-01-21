@@ -1,4 +1,3 @@
-using System.Linq;
 using Defence.In.Depth.Domain.Exceptions;
 
 namespace Defence.In.Depth.Domain.Model;

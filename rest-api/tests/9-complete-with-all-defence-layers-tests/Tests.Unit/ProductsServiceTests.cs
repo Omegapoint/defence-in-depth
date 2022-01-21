@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using AutoMapper;
 using Defence.In.Depth;
 using Defence.In.Depth.Domain.Model;

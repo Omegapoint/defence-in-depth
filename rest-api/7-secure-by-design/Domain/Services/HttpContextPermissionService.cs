@@ -1,8 +1,5 @@
-using System;
-using System.Linq;
 using System.Security.Claims;
 using Defence.In.Depth.Domain.Model;
-using Microsoft.AspNetCore.Http;
 
 namespace Defence.In.Depth.Domain.Services;
 

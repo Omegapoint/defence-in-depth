@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Defence.In.Depth.Domain.Exceptions;
 using Defence.In.Depth.Domain.Model;
 using Xunit;
