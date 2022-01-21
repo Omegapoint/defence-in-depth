@@ -6,8 +6,8 @@ namespace Defence.In.Depth.DataContracts;
 public record ProductDataContract
 {
     [DataMember]
-    public string Id { get; init; }
+    public string? Id { get; init; }
         
     [DataMember]
-    public string Name { get; init; }
+    public string? Name { get; init; }
 }

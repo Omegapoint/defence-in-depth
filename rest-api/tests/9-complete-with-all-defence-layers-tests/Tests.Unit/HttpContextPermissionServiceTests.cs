@@ -30,7 +30,8 @@ public class HttpContextPermissionServiceTests
         Assert.Equal(AuthenticationMethods.Password, httpContextPermissionService.AuthenticationMethods);
         Assert.True(httpContextPermissionService.CanReadProducts);
         Assert.True(httpContextPermissionService.CanWriteProducts);
-        Assert.Equal(new MarketId("SE"), httpContextPermissionService.MarketId);
+        Assert.Equal(new MarketId("se"), httpContextPermissionService.MarketId);
+        Assert.True(httpContextPermissionService.HasPermissionToMarket(new MarketId("se")));
     }
 
     [Fact]
@@ -51,7 +52,8 @@ public class HttpContextPermissionServiceTests
         Assert.Equal(AuthenticationMethods.Password, httpContextPermissionService.AuthenticationMethods);
         Assert.False(httpContextPermissionService.CanReadProducts);
         Assert.True(httpContextPermissionService.CanWriteProducts);
-        Assert.Equal(new MarketId("SE"), httpContextPermissionService.MarketId);
+        Assert.Equal(new MarketId("se"), httpContextPermissionService.MarketId);
+        Assert.True(httpContextPermissionService.HasPermissionToMarket(new MarketId("se")));
     }
 
     [Fact]
@@ -72,7 +74,31 @@ public class HttpContextPermissionServiceTests
         Assert.Equal(AuthenticationMethods.Password, httpContextPermissionService.AuthenticationMethods);
         Assert.True(httpContextPermissionService.CanReadProducts);
         Assert.False(httpContextPermissionService.CanWriteProducts);
-        Assert.Equal(new MarketId("SE"), httpContextPermissionService.MarketId);
+        Assert.Equal(new MarketId("se"), httpContextPermissionService.MarketId);
+        Assert.True(httpContextPermissionService.HasPermissionToMarket(new MarketId("se")));
+    }
+
+        [Fact]
+    public void HasAllClaims_ButNoPermissionForMarketNO()
+    {
+        var claims = new[]
+        {
+                new Claim(ClaimSettings.Sub, "user1"),
+                new Claim(ClaimSettings.ClientId, "client1"),
+                new Claim(ClaimSettings.AMR, "pwd"),
+                new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead)
+        };
+        
+        var httpContextPermissionService = CreateSut(claims);
+        
+        Assert.Equal(new UserId("user1"), httpContextPermissionService.UserId);
+        Assert.Equal(new ClientId("client1"), httpContextPermissionService.ClientId);        
+        Assert.Equal(AuthenticationMethods.Password, httpContextPermissionService.AuthenticationMethods);
+        Assert.True(httpContextPermissionService.CanReadProducts);
+        Assert.False(httpContextPermissionService.CanWriteProducts);
+        Assert.Equal(new MarketId("se"), httpContextPermissionService.MarketId);
+        Assert.True(httpContextPermissionService.HasPermissionToMarket(new MarketId("se")));
+        Assert.False(httpContextPermissionService.HasPermissionToMarket(new MarketId("no")));
     }
 
     private static HttpContextPermissionService CreateSut(IEnumerable<Claim> claims )

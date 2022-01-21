@@ -1,5 +1,5 @@
 // Demo 2 returns 401
-GET https://localhost:5001/api/products/test
+GET https://localhost:5001/api/products/se1
 
 
 // Get token
@@ -16,7 +16,7 @@ grant_type=client_credentials
 
 // Returns 200
 ###
-GET https://localhost:5001/api/products/test
+GET https://localhost:5001/api/products/se1
 content-type: application/json
 cache-control: no-cache
 Authorization: Bearer {{token.response.body.$.access_token}}

@@ -16,11 +16,11 @@ public class ProductsControllerTests
     public async void GetProductsById_ShouldReturn403_WhenCanNotRead()
     {
         var productServiceMock = new Mock<IProductService>();
-        productServiceMock.Setup(ps => ps.GetById(It.IsAny<ProductId>())).Returns(Task.FromResult((new Product(new ProductId("productSE"), new ProductName("productSE"), new MarketId("se")), ReadDataResult.NoAccessToOperation)));
+        productServiceMock.Setup(ps => ps.GetById(It.IsAny<ProductId>())).Returns(Task.FromResult((new Product(new ProductId("se1"), new ProductName("ProductSweden"), new MarketId("se")), ReadDataResult.NoAccessToOperation)));
 
         var controller = new ProductsController(productServiceMock.Object, TestMapper.Create());
 
-        var result = await controller.GetById("productSE");
+        var result = await controller.GetById("se1");
 
         Assert.IsType<ForbidResult>(result.Result);
     }
@@ -30,11 +30,11 @@ public class ProductsControllerTests
     {
         var productServiceMock = new Mock<IProductService>();
         productServiceMock.Setup(ps => ps.GetById(It.IsAny<ProductId>()))
-            .Returns(Task.FromResult((new Product(new ProductId("productSE"), new ProductName("productSE"), new MarketId("se")), ReadDataResult.Success)));
+            .Returns(Task.FromResult((new Product(new ProductId("se1"), new ProductName("ProductSweden"), new MarketId("se")), ReadDataResult.Success)));
 
         var controller = new ProductsController(productServiceMock.Object, TestMapper.Create());
 
-        var result = await controller.GetById("productSE");
+        var result = await controller.GetById("se1");
 
         Assert.IsType<OkObjectResult>(result.Result);
     }
@@ -46,7 +46,7 @@ public class ProductsControllerTests
     {
         var productServiceMock = new Mock<IProductService>();
         productServiceMock.Setup(ps => ps.GetById(It.IsAny<ProductId>()))
-             .Returns(Task.FromResult((new Product(new ProductId("productSE"), new ProductName("productSE"), new MarketId("se")), ReadDataResult.Success)));
+             .Returns(Task.FromResult((new Product(new ProductId("se1"), new ProductName("ProductSweden"), new MarketId("se")), ReadDataResult.Success)));
 
         var controller = new ProductsController(productServiceMock.Object, TestMapper.Create());
 
@@ -59,7 +59,7 @@ public class ProductsControllerTests
     public async void GetProductsById_ShouldReturn404_WhenNotFound()
     {
         var productServiceMock = new Mock<IProductService>();
-        productServiceMock.Setup(ps => ps.GetById(It.IsAny<ProductId>())).Returns(Task.FromResult((new Product(new ProductId("productSE"), new ProductName("productSE"), new MarketId("se")), ReadDataResult.NotFound)));
+        productServiceMock.Setup(ps => ps.GetById(It.IsAny<ProductId>())).Returns(Task.FromResult((new Product(new ProductId("se1"), new ProductName("ProductSweden"), new MarketId("se")), ReadDataResult.NotFound)));
 
         var controller = new ProductsController(productServiceMock.Object, TestMapper.Create());
 

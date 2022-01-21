@@ -19,11 +19,11 @@ public class DomainPrimitiveArgumentException<T> : ArgumentException
         Value = value;
     }
         
-    public T Value { get; }
+    public T? Value { get; }
         
     protected DomainPrimitiveArgumentException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
-        Value = (T)info.GetValue(nameof(Value), typeof(T));
+        Value = (T?)info.GetValue(nameof(Value), typeof(T));
     }
         
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
