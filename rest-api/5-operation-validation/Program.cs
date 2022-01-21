@@ -1,19 +1,46 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using Defence.In.Depth;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Defence.In.Depth;
+var builder = WebApplication.CreateBuilder(args);
 
-public class Program
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options => {
+        options.Authority = "https://localhost:4000";
+        options.Audience = "products.api";
+
+        // Note that type validation might differ, depending on token serivce (IdP)
+        options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+    });
+
+builder.Services.AddAuthorization(options =>
 {
-    public static void Main(string[] args)
-    {
-        CreateHostBuilder(args).Build().Run();
-    }
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+        .Build();
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
-}
+    options.DefaultPolicy = policy;
+    options.FallbackPolicy = policy;
+});
+
+builder.Services.AddSingleton<IClaimsTransformation, ClaimsTransformation>();
+
+builder.Services.AddControllers();
+
+
+var app = builder.Build();
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+    
+app.UseEndpoints(endpoints =>
+{
+    endpoints
+        .MapControllers()
+        .RequireAuthorization();
+});
+
+app.Run();
