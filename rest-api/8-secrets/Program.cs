@@ -2,7 +2,7 @@ using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
+builder.WebHost.ConfigureAppConfiguration((_, config) =>
 {
     var settings = config.Build();
     var credentials = new DefaultAzureCredential();

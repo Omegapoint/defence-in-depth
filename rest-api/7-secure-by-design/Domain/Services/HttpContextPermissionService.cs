@@ -62,12 +62,7 @@ public class HttpContextPermissionService : IPermissionService
 
     public bool HasPermissionToMarket(MarketId requestedMarket)
     {
-        if(requestedMarket == null)
-        {
-            return false;
-        }
-
-        return string.Equals(MarketId.Value, requestedMarket.Value, System.StringComparison.OrdinalIgnoreCase);
+        return string.Equals(MarketId.Value, requestedMarket.Value, StringComparison.OrdinalIgnoreCase);
     } 
 
     private static void IfScope(ClaimsPrincipal principal, string scope, Action action)

@@ -17,7 +17,7 @@ public class HttpContextPermissionServiceTests
         {
                 new Claim(ClaimSettings.Sub, "user1"),
                 new Claim(ClaimSettings.ClientId, "client1"),
-                new Claim(ClaimSettings.AMR, ClaimSettings.AuthenticationMethodPassword),
+                new Claim(ClaimSettings.Amr, ClaimSettings.AuthenticationMethodPassword),
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead),
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsWrite)
         };
@@ -40,7 +40,7 @@ public class HttpContextPermissionServiceTests
         {
                 new Claim(ClaimSettings.Sub, "user1"),
                 new Claim(ClaimSettings.ClientId, "client1"),
-                new Claim(ClaimSettings.AMR, "pwd"),
+                new Claim(ClaimSettings.Amr, "pwd"),
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsWrite)
         };
 
@@ -62,7 +62,7 @@ public class HttpContextPermissionServiceTests
         {
                 new Claim(ClaimSettings.Sub, "user1"),
                 new Claim(ClaimSettings.ClientId, "client1"),
-                new Claim(ClaimSettings.AMR, "pwd"),
+                new Claim(ClaimSettings.Amr, "pwd"),
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead)
         };
         
@@ -84,7 +84,7 @@ public class HttpContextPermissionServiceTests
         {
                 new Claim(ClaimSettings.Sub, "user1"),
                 new Claim(ClaimSettings.ClientId, "client1"),
-                new Claim(ClaimSettings.AMR, "pwd"),
+                new Claim(ClaimSettings.Amr, "pwd"),
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead)
         };
         
