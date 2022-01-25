@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
 using Defence.In.Depth.Domain.Model;
-using Microsoft.Extensions.Logging;
 
 namespace Defence.In.Depth.Domain.Services;
 

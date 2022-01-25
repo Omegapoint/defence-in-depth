@@ -6,7 +6,7 @@ public static class ClaimSettings
     public const string Sub = "sub";
     public const string ClientId = "client_id";
     public const string Scope = "scope";
-    public const string AMR = "amr";
+    public const string Amr = "amr";
 
     //Authorization server AMR values 
     public const string AuthenticationMethodPassword = "pwd";

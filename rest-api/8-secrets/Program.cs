@@ -1,36 +1,24 @@
-using System;
 using Azure.Identity;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 
-namespace Defence.In.Depth;
+var builder = WebApplication.CreateBuilder(args);
 
-public class Program
+builder.WebHost.ConfigureAppConfiguration((_, config) =>
 {
-    public static void Main(string[] args)
+    var settings = config.Build();
+    var credentials = new DefaultAzureCredential();
+
+    config.AddAzureAppConfiguration(options =>
     {
-        CreateHostBuilder(args).Build().Run();
-    }
+        options.Connect(new Uri(settings["AzureAppConfiguration:Url"]), credentials)
+            .ConfigureKeyVault(kv =>
+            {
+                kv.SetCredential(credentials);
+            });
+    });
+});
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Microsoft.Extensions.Hosting.Host
-            .CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder => webBuilder
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    var settings = config.Build();
-                    var credentials = new DefaultAzureCredential();
+var app = builder.Build();
 
-                    config.AddAzureAppConfiguration(options =>
-                    {
-                        options.Connect(new Uri(settings["AzureAppConfiguration:Url"]), credentials)
-                            .ConfigureKeyVault(kv =>
-                            {
-                                kv.SetCredential(credentials);
-                            });
-                    });
-                })
-                .UseStartup<Startup>()
-            );
-}
+app.MapGet("/", () => "Hello World!");
+
+app.Run();

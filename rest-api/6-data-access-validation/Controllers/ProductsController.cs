@@ -1,4 +1,3 @@
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Defence.In.Depth.Controllers;
@@ -14,24 +13,23 @@ public class ProductsController : ControllerBase
             return BadRequest("Parameter id is not well formed");
         }
 
-        var canRead = User.HasClaim(claim => 
-            claim.Type == "urn:permission:product:read" && 
-            claim.Value == "true");
+        var canRead = User.HasClaim(c => c.Type == "urn:permissions:products:read" && c.Value == "true");
 
         if (!canRead)
         {
             return Forbid();
         }
 
+        // Get product by id, here we have just hard coded a product for the Swedish market.
         var product = new { Name = "product", Market = "se" };            
 
         if (User.HasClaim(claim => 
-                claim.Type == "urn:permission:market" && 
+                claim.Type == "urn:permissions:market" && 
                 claim.Value == product.Market))
         {
             return Ok(product);
         }
 
-        return NotFound("product");
+        return NotFound();
     }
 }

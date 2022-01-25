@@ -1,19 +1,54 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using Defence.In.Depth;
+using Defence.In.Depth.Domain.Services;
+using Defence.In.Depth.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Defence.In.Depth;
+var builder = WebApplication.CreateBuilder(args);
 
-public class Program
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options => {
+        options.Authority = "https://localhost:4000";
+        options.Audience = "products.api";
+
+        // Note that type validation might differ, depending on token serivce (IdP)
+        options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+    });
+
+builder.Services.AddAuthorization(options =>
 {
-    public static void Main(string[] args)
-    {
-        CreateHostBuilder(args).Build().Run();
-    }
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+        .Build();
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
-}
+    options.DefaultPolicy = policy;
+    options.FallbackPolicy = policy;
+});
+
+builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<IProductRepository, ProductRepository>();
+builder.Services.AddTransient<IAuditService, LoggerAuditService>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddPermissionService();
+
+builder.Services.AddControllers();
+
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+
+var app = builder.Build();
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+    
+app.UseEndpoints(endpoints =>
+{
+    endpoints
+        .MapControllers()
+        .RequireAuthorization();
+});
+
+app.Run();

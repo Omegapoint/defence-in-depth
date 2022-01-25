@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using AutoMapper;
 using Defence.In.Depth.DataContracts;
 using Defence.In.Depth.Domain.Model;

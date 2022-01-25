@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using AutoMapper;
 using Defence.In.Depth;
 using Defence.In.Depth.Domain.Model;
@@ -26,7 +25,7 @@ public class ProductsServiceTests
         var mockAuditService = new Mock<IAuditService>();
         var productService = CreateSut(claims, mockAuditService.Object);
         
-        var (product, result)  = await productService.GetById(new ProductId("productSE"));
+        var (product, result)  = await productService.GetById(new ProductId("se1"));
 
         Assert.Equal(ReadDataResult.NoAccessToOperation, result);
         Assert.Null(product);
@@ -56,7 +55,7 @@ public class ProductsServiceTests
     }
 
     [Fact]
-    public async void GetById_ReturnsNoAccessToData_IfNotValidProduct()
+    public async void GetById_ReturnsNoAccessToData_IfNotValidMarket()
     {
         var claims = new[]
         {
@@ -67,7 +66,7 @@ public class ProductsServiceTests
         var mockAuditService = new Mock<IAuditService>();
         var productService = CreateSut(claims, mockAuditService.Object);
         
-        var (product, result)  = await productService.GetById(new ProductId("productNO"));
+        var (product, result)  = await productService.GetById(new ProductId("no1"));
 
         Assert.Equal(ReadDataResult.NoAccessToData, result);
         Assert.Null(product);
@@ -92,7 +91,7 @@ public class ProductsServiceTests
         var mockAuditService = new Mock<IAuditService>();
         var productService = CreateSut(claims, mockAuditService.Object);
         
-        var (product, result)  = await productService.GetById(new ProductId("productSE"));
+        var (product, result)  = await productService.GetById(new ProductId("se1"));
 
         Assert.Equal(ReadDataResult.Success, result);
         Assert.NotNull(product);

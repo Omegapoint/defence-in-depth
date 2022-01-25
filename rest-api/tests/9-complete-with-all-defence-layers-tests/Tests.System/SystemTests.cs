@@ -1,7 +1,4 @@
-using System;
 using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace CompleteWithAllDefenceLayers.Tests.System;
@@ -16,7 +13,7 @@ public class SystemTests
     public async Task GetProductById_ShouldReturn401_WhenNotAuthenticated()
     {
         var client = new HttpClient();
-        var response = await client.GetAsync(new Uri(baseUri, "/api/products/productSE"));
+        var response = await client.GetAsync(new Uri(baseUri, "/api/products/se1"));
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -25,7 +22,7 @@ public class SystemTests
     public async Task GetProductById_ShouldReturn200_WhenAuthenticated()
     {
         var client = new TokenHttpClient();
-        var response = await client.GetAsync(new Uri(baseUri, "/api/products/productSE"));
+        var response = await client.GetAsync(new Uri(baseUri, "/api/products/se1"));
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }

@@ -1,8 +1,5 @@
-using System;
-using System.Linq;
 using System.Security.Claims;
 using Defence.In.Depth.Domain.Model;
-using Microsoft.AspNetCore.Http;
 
 namespace Defence.In.Depth.Domain.Services;
 
@@ -47,8 +44,8 @@ public class HttpContextPermissionService : IPermissionService
         // better placed here, inside your domain, especially if it requires an
         // external lookup. In real world scenarios we would most likely lookup
         // market information etc given the identity.
-        // Here we have just hard coded the market to SE for all users.        
-        MarketId = new MarketId("SE");
+        // Here we have just hard coded the market to the Swedish for all users.        
+        MarketId = new MarketId("se");
     }
         
     public bool CanReadProducts { get; private set; }
@@ -57,11 +54,16 @@ public class HttpContextPermissionService : IPermissionService
         
     public MarketId MarketId { get; private set; }
 
-    public UserId UserId { get; private set; }
+    public UserId? UserId { get; private set; }
 
-    public ClientId ClientId { get; private set; }
+    public ClientId? ClientId { get; private set; }
 
     public AuthenticationMethods AuthenticationMethods { get; private set; }
+
+    public bool HasPermissionToMarket(MarketId requestedMarket)
+    {
+        return string.Equals(MarketId.Value, requestedMarket.Value, StringComparison.OrdinalIgnoreCase);
+    } 
 
     private static void IfScope(ClaimsPrincipal principal, string scope, Action action)
     {

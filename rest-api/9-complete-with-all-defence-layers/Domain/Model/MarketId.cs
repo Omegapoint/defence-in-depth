@@ -1,32 +1,30 @@
-using System;
-using System.Linq;
 using Defence.In.Depth.Domain.Exceptions;
 
 namespace Defence.In.Depth.Domain.Model;
 
 public record MarketId : IDomainPrimitive<string>
 {
-    public MarketId(string countryCode)
+    public MarketId(string id)
     {
-        AssertValidCountryCode(countryCode);
+        AssertValidId(id);
 
-        Value = countryCode;
+        Value = id;
     }
 
     public string Value { get; }
 
-    public static bool IsValidCountryCode(string name)
+    public static bool IsValidId(string id)
     {
-        var allowList = new[] { "SE", "NO", "FI" }; // ISO 3166-1 alpha-2 codes
+        var allowList = new[] { "se", "no", "fi" };
             
-        return allowList.Contains(name, StringComparer.OrdinalIgnoreCase);
+        return allowList.Contains(id, StringComparer.OrdinalIgnoreCase);
     }
 
-    public static void AssertValidCountryCode(string countryCode)
+    public static void AssertValidId(string id)
     {
-        if (!IsValidCountryCode(countryCode))
+        if (!IsValidId(id))
         {
-            throw new DomainPrimitiveArgumentException<string>(countryCode);
+            throw new DomainPrimitiveArgumentException<string>(id);
         }
     }
 }

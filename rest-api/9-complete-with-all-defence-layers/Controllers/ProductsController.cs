@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using AutoMapper;
 using Defence.In.Depth.DataContracts;
 using Defence.In.Depth.Domain.Model;
@@ -23,7 +21,6 @@ public class ProductsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<ProductDataContract>> GetById([FromRoute] string id)
     {
-        //DEMO 4,5,6 and 7 - DDSec pattern
         if (!ProductId.IsValidId(id))
         {
             return BadRequest("Id is not valid.");

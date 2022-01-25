@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Defence.In.Depth.Infrastructure.Entities;
 
 namespace Defence.In.Depth.Infrastructure;
