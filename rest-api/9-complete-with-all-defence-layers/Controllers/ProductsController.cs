@@ -2,6 +2,7 @@ using AutoMapper;
 using Defence.In.Depth.DataContracts;
 using Defence.In.Depth.Domain.Model;
 using Defence.In.Depth.Domain.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Defence.In.Depth.Controllers;
@@ -18,6 +19,7 @@ public class ProductsController : ControllerBase
         this.mapper = mapper;
     }
 
+    [Authorize(ClaimSettings.ProductsRead)]
     [HttpGet("{id}")]
     public async Task<ActionResult<ProductDataContract>> GetById([FromRoute] string id)
     {
