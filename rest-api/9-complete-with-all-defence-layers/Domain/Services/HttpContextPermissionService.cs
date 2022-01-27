@@ -30,6 +30,7 @@ public class HttpContextPermissionService : IPermissionService
             .Select(claim => claim.Value switch
             {
                 "pwd" => AuthenticationMethods.Password,
+                "mfa" => AuthenticationMethods.MFA,
                     _ => AuthenticationMethods.Unknown
             })
             .Aggregate(AuthenticationMethods.None, (prev , next) => prev | next);
@@ -46,11 +47,24 @@ public class HttpContextPermissionService : IPermissionService
         // market information etc given the identity.
         // Here we have just hard coded the market to the Swedish for all users.        
         MarketId = new MarketId("se");
+
+        // Roles and groups we sometimes get from the IdP as claims in our token 
+        // and then we might just need to transform them to fit our model. Or we
+        // need to look up roles from a user store, like Azure AD or our own repository.
+        // Here we have just hard coded the user role to a role with high privileges.
+        // Note that often permissions are based on both the user and the client scopes,
+        // as for CanDoHighPrivilegeOperations. 
+        UserRoles = UserRoles.ProductManager;
     }
         
     public bool CanReadProducts { get; private set; }
 
     public bool CanWriteProducts { get; private set; }
+
+    public bool CanDoHighPrivilegeOperations => (
+        UserRoles == UserRoles.ProductManager &&  
+        CanWriteProducts &&
+        AuthenticationMethods == AuthenticationMethods.MFA);
         
     public MarketId MarketId { get; private set; }
 
@@ -72,4 +86,6 @@ public class HttpContextPermissionService : IPermissionService
             action();
         }
     }
+
+    private UserRoles UserRoles { get; set; }
 }
