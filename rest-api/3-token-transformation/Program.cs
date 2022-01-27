@@ -1,9 +1,14 @@
+using System.IdentityModel.Tokens.Jwt;
 using Defence.In.Depth;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Needed if we want all token claims from the IdP in the ClaimsPrincipal, 
+// not filtered or transformed by ASP.NET Core default claim mapping
+JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => {
