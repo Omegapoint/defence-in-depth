@@ -19,4 +19,6 @@ The repo also contains a token service for demo and education purposes built wit
 
 https://github.com/DuendeSoftware/IdentityServer
 
+Presentation of this material from NDC Oslo 2021 can also be found at YouTube:
 
+https://www.youtube.com/watch?v=5nQ00_z0hF4
