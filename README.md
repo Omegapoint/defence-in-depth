@@ -7,6 +7,14 @@ that follows the series of articles found at:
 
 https://omegapoint.se/defence-in-depth
 
+An article that covers these concepts exactly can be found at:
+
+https://omegapoint.se/secure-apis-in-aspnet
+
+Presentation of this material from NDC Oslo 2021 can also be found at YouTube:
+
+https://www.youtube.com/watch?v=5nQ00_z0hF4
+
 Video recordings of presentations (in Swedish) can be found at:
 
 https://omegapoint.se/academy-plus
@@ -18,7 +26,3 @@ https://www.manning.com/books/secure-by-design
 The repo also contains a token service for demo and education purposes built with Duende Identity Server:
 
 https://github.com/DuendeSoftware/IdentityServer
-
-Presentation of this material from NDC Oslo 2021 can also be found at YouTube:
-
-https://www.youtube.com/watch?v=5nQ00_z0hF4
