@@ -78,9 +78,9 @@ builder.Services.AddAuthorization(options =>
     options.FallbackPolicy = policy;
 
     // Even if we validate permission to perform the operation in the domain layer,
-    // we might also verify this basic access as early as possible using ASP.NET Core policies.
-    // It could also be done in a API-gateway in front of us, but the domain should not assume any of this.
-    // Defence in depth and Zero trust!
+    // we should also verify this basic access as early as possible, e g by using ASP.NET Core policies.
+    // This could also be done in a API-gateway in front of us, but the core domain should not 
+    // assume any of this. Defence in depth and Zero trust!
     options.AddPolicy(ClaimSettings.ProductsRead, policy =>
         policy.RequireScope(ClaimSettings.ProductsRead));
     options.AddPolicy(ClaimSettings.ProductsWrite, policy =>
