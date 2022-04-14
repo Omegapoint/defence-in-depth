@@ -1,13 +1,13 @@
 namespace Defence.In.Depth.Domain.Services;
 
 [Flags]
-public enum AuthenticationMethods
+public enum UserRoles
 {
     None = 0,
     
     Unknown = 0x1,
     
-    Password = 0x2,
+    TeamMember = 0x2,
 
-    MFA = 0x4
+    ProductManager = 0x4
 }

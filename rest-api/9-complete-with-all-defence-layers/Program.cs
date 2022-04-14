@@ -40,7 +40,8 @@ if(!string.IsNullOrEmpty(azureAppConfigurationUrl))
 // So the API will display detailed execution messages if Environment.IsDevelopment() returns true. 
 builder.Services.AddApplicationInsightsTelemetry();
 
-// We want all claims from the IdP, not filtered or altered by ASP.NET Core
+// Demo 3 - Needed if we want all token claims from the IdP in the ClaimsPrincipal, 
+// not filtered or transformed by ASP.NET Core default claim mapping
 JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
 // Demo 2 - This JWT middleware has secure defaults, with validation according to the JWT spec, 
@@ -75,6 +76,15 @@ builder.Services.AddAuthorization(options =>
 
     options.DefaultPolicy = policy;
     options.FallbackPolicy = policy;
+
+    // Even if we validate permission to perform the operation in the domain layer,
+    // we should also verify this basic access as early as possible, e g by using ASP.NET Core policies.
+    // This could also be done in a API-gateway in front of us, but the core domain should not 
+    // assume any of this. Defence in depth and Zero trust!
+    options.AddPolicy(ClaimSettings.ProductsRead, policy =>
+        policy.RequireScope(ClaimSettings.ProductsRead));
+    options.AddPolicy(ClaimSettings.ProductsWrite, policy =>
+        policy.RequireScope(ClaimSettings.ProductsWrite));
 });
 
 builder.Services.AddTransient<IProductService, ProductService>();

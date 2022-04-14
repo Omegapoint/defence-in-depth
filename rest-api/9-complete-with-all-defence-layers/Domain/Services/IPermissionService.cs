@@ -7,6 +7,8 @@ public interface IPermissionService
     bool CanReadProducts { get; }
 
     bool CanWriteProducts { get; }
+
+    bool CanDoHighPrivilegeOperations { get; }
         
     MarketId MarketId { get; }
 
