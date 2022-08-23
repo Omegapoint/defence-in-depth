@@ -11,9 +11,13 @@ An article that covers these concepts exactly can be found at:
 
 https://omegapoint.se/secure-apis-in-aspnet
 
-Presentation of this material from NDC Oslo 2021 can also be found at YouTube:
+Presentation of this material can be found at YouTube:
 
-https://www.youtube.com/watch?v=5nQ00_z0hF4
+https://www.youtube.com/watch?v=5nQ00_z0hF4 (NDC Oslo 2021, demos in ASP.NET Core 6)
+
+https://www.youtube.com/watch?v=_7fFm8e8UpM (Jfokus 2022, demos in Java 17 with Maven and Spring Security)
+
+Java repo at https://github.com/Omegapoint/defence-in-depth-java
 
 Video recordings of presentations (in Swedish) can be found at:
 
