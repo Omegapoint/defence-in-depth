@@ -9,15 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
-    <PackageReference Include="Azure.Identity" Version="1.5.0" />
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Azure.Identity" Version="1.6.1" />
     <PackageReference Include="IdentityModel.AspNetCore.AccessTokenValidation" Version="1.0.0-preview.3" />
-    <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="5.1.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.19.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Certificate" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="4.5.1" />
+    <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.1.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Certificate" Version="6.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
+    <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="5.1.0" />
   </ItemGroup>
 
 </Project>
