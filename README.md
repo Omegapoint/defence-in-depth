@@ -19,7 +19,7 @@ https://www.youtube.com/watch?v=_7fFm8e8UpM (Jfokus 2022, demos in Java 17 with 
 
 Java repo at https://github.com/Omegapoint/defence-in-depth-java
 
-Video recordings of presentations (in Swedish) can be found at:
+Video recordings of additional "Defence in Depth" presentations (in Swedish) can be found at:
 
 https://omegapoint.se/academy-plus
 
