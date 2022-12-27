@@ -20,3 +20,10 @@ GET https://localhost:5001/api/products/se1
 content-type: application/json
 cache-control: no-cache
 Authorization: Bearer {{token.response.body.$.access_token}}
+
+// Test exception handling
+###
+GET https://localhost:5001/api/health/readyness?throwExcpetion=true
+content-type: application/json
+cache-control: no-cache
+Authorization: Bearer {{token.response.body.$.access_token}}

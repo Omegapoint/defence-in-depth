@@ -6,15 +6,16 @@ namespace CompleteWithAllDefenceLayers.Tests.System;
 
 internal class TokenHttpClient
 {
-    private const string Content = "client_id=m2m&client_secret=secret&scope=products.read&grant_type=client_credentials";
+    private string requestContent;
     private readonly Uri tokenUri = new Uri("https://localhost:4000/connect/token");
 
     private readonly HttpClient client;
     private string? accessToken;
 
-    public TokenHttpClient()
+    public TokenHttpClient(string scope = "products.read")
     {
         client = new HttpClient();
+        requestContent = $"client_id=m2m&client_secret=secret&scope={scope}&grant_type=client_credentials";
     }
 
     public async Task<HttpResponseMessage> GetAsync(Uri requestUri)
@@ -29,21 +30,33 @@ internal class TokenHttpClient
         return await client.GetAsync(requestUri);
     }
 
+    public async Task<HttpResponseMessage> PutAsync(Uri requestUri)
+    {
+        if (string.IsNullOrEmpty(accessToken))
+        {
+            await Initialize();
+        }
+
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        return await client.PutAsync(requestUri, null);
+    }
+
     private async Task Initialize()
     {
         var innerClient = new HttpClient();
 
-        var body = new StringContent(Content, Encoding.UTF8, "application/x-www-form-urlencoded");
+        var body = new StringContent(requestContent, Encoding.UTF8, "application/x-www-form-urlencoded");
 
         var response = await innerClient.PostAsync(tokenUri, body);
 
         response.EnsureSuccessStatusCode();
 
-        var content = await response.Content.ReadAsStringAsync();
+        var responseContent = await response.Content.ReadAsStringAsync();
 
-        var result = JsonConvert.DeserializeObject<TokenResult>(content);
+        var result = JsonConvert.DeserializeObject<TokenResult>(responseContent);
 
-        accessToken = result.access_token;
+        accessToken = result?.access_token;
     }
 
     // ReSharper disable InconsistentNaming

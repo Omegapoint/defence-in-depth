@@ -1,5 +1,5 @@
 using AutoMapper;
-using Defence.In.Depth.Domain.Model;
+using Defence.In.Depth.Domain.Models;
 using Defence.In.Depth.Infrastructure;
 
 namespace Defence.In.Depth.Domain.Services;

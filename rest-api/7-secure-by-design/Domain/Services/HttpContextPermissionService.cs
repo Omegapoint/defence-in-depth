@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Defence.In.Depth.Domain.Model;
+using Defence.In.Depth.Domain.Models;
 
 namespace Defence.In.Depth.Domain.Services;
 

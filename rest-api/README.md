@@ -32,3 +32,13 @@ Step 6 - Verify access to the data, is done using unit tests for the Product ser
 Note that the unit tests for the Product service also verifies the correct audit logging in order to assert requirements for accountability.
 
 Also note that the system tests we added can be run against the production environment as well. It is important to continuously monitor the actual production environment, do health checks and detect any security misconfiguration in that environment (for example a public API endpoint).
+
+Run all unit tests with
+
+`dotnet test tests\9-complete-with-all-defence-layers-tests\CompleteWithAllDefenceLayers.Test.csproj --filter "FullyQualifiedName~Unit"`
+
+Run all system tests with
+
+`dotnet test tests\9-complete-with-all-defence-layers-tests\CompleteWithAllDefenceLayers.Test.csproj --filter "FullyQualifiedName~System"`
+
+Note that for system test the token service (at https://localhost:4000) and the API (at https://localhost:5001) needs to be started.

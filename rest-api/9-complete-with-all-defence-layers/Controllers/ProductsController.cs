@@ -1,6 +1,6 @@
 using AutoMapper;
 using Defence.In.Depth.DataContracts;
-using Defence.In.Depth.Domain.Model;
+using Defence.In.Depth.Domain.Models;
 using Defence.In.Depth.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

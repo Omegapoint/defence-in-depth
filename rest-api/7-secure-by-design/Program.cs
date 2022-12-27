@@ -8,9 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => {
-        options.Authority = "https://localhost:4000";
-        options.Audience = "products.api";
-
+        // TokenValidationParameters not not currently supported in appsettings.config for .NET 7
         // Note that type validation might differ, depending on token serivce (IdP)
         options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
     });
@@ -32,23 +30,12 @@ builder.Services.AddTransient<IAuditService, LoggerAuditService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddPermissionService();
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 builder.Services.AddControllers();
 
-builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
-
-
 var app = builder.Build();
-
 app.UseRouting();
-app.UseAuthentication();
 app.UseAuthorization();
-    
-app.UseEndpoints(endpoints =>
-{
-    endpoints
-        .MapControllers()
-        .RequireAuthorization();
-});
-
+app.MapControllers().RequireAuthorization();
 app.Run();

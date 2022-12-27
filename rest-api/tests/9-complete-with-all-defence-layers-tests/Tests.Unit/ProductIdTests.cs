@@ -1,5 +1,6 @@
 using Defence.In.Depth.Domain.Exceptions;
-using Defence.In.Depth.Domain.Model;
+using Defence.In.Depth.Domain.Models;
+using Test.Unit.Token.Domain;
 using Xunit;
 
 namespace CompleteWithAllDefenceLayers.Tests.Unit;
@@ -8,48 +9,32 @@ namespace CompleteWithAllDefenceLayers.Tests.Unit;
 public class ProductIdTests
 {
     [Theory]
-    [MemberData(nameof(IdInjection))]
+    [MemberData(nameof(TestData.InjectionStrings), MemberType = typeof(TestData))]
     [MemberData(nameof(InvalidIds))]
-    public void ProductId_Should_Reject(string id)
-    {
-        Assert.False(ProductId.IsValidId(id));
-    }
-
-    [Theory]
-    [MemberData(nameof(IdInjection))]
-    [MemberData(nameof(InvalidIds))]
-    public void ProductId_Constructor_ShouldThrow(string id)
+    public void Constructor_Should_Reject_InvalidData(string id)
     {
         Assert.Throws<DomainPrimitiveArgumentException<string>>(() => new ProductId(id));
     }
 
-    [Theory]
-    [MemberData(nameof(ValidIds))]
-    public void ProductId_Constructor_ShouldNotThrow(string id)
+    [Fact]
+    public void Constructor_Should_Reject_EmptyData()
     {
-        var product = new ProductId(id);
-        Assert.True(product.Value == id);
+        Assert.Throws<DomainPrimitiveArgumentException<string>>(() => new ProductId(null!));
+        Assert.Throws<DomainPrimitiveArgumentException<string>>(() => new ProductId(string.Empty));
     }
 
-    public static IEnumerable<object[]> IdInjection => new[]
+    [Theory]
+    [InlineData("abcdefghi")]
+    [InlineData("123456789")]
+    public void Constructor_Accept_ValidData(string id)
     {
-            new object[] { "<script>" },
-            new object[] { "'1==1" },
-            new object[] { "--sql" }
-        };
+        Assert.Equal(id, new ProductId(id).Value);   
+    }
 
     public static IEnumerable<object[]> InvalidIds => new[]
     {
-            new object[] { "" },
-            new object[] { "no spaces" },
-            new object[] { "thisisanidthatistoolong" },
-            new object[] { "#" }
-        };
-
-    public static IEnumerable<object[]> ValidIds => new[]
-    {
-            new object[] { "abcdefghi" },
-            new object[] { "123456789" },
-            new object[] { "dhgf54" }
-        };
+        new object[] { "no spaces" },
+        new object[] { "thisisanidthatistoolong" },
+        new object[] { "#" }
+    };
 }

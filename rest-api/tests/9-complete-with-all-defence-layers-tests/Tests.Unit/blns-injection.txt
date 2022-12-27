@@ -1,0 +1,42 @@
+'
+"
+''
+""
+'"'
+"''''"'"
+"'"'"''''"
+<foo val=“bar” />
+<foo val=“bar” />
+<foo val=”bar“ />
+<foo val=`bar' />
+<script>alert(0)</script>
+&lt;script&gt;alert(&#39;1&#39;);&lt;/script&gt;
+ onfocus=JaVaSCript:alert(9) autofocus
+" onfocus=JaVaSCript:alert(10) autofocus
+' onfocus=JaVaSCript:alert(11) autofocus
+perl -e 'print "<IMG SRC=java\0script:alert(\"218\")>";' > out
+http://a/%%30%30
+1;DROP TABLE users
+1'; DROP TABLE users-- 1
+' OR 1=1 -- 1
+' OR '1'='1
+'; EXEC sp_MSForEachTable 'DROP TABLE ?'; --
+$USER
+/dev/null; touch /tmp/blns.fail ; echo
+`touch /tmp/blns.fail`
+$(touch /tmp/blns.fail)
+@{[system "touch /tmp/blns.fail"]}
+<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE foo [ <!ELEMENT foo ANY ><!ENTITY xxe SYSTEM "file:///etc/passwd" >]><foo>&xxe;</foo>
+$HOME
+$ENV{'HOME'}
+%d
+%s%s%s%s%s
+%*.*s
+%@
+%n
+File:///
+../../../../../../../../../../../etc/passwd%00
+../../../../../../../../../../../etc/hosts
+() { 0; }; touch /tmp/blns.shellshock1.fail;
+() { _; } >_[$($())] { touch /tmp/blns.shellshock2.fail; }
+<<< %s(un='%s') = %u
