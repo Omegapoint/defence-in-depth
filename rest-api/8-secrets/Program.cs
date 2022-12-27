@@ -2,20 +2,11 @@ using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.WebHost.ConfigureAppConfiguration((_, config) =>
-{
-    var settings = config.Build();
-    var credentials = new DefaultAzureCredential();
-
-    config.AddAzureAppConfiguration(options =>
-    {
-        options.Connect(new Uri(settings["AzureAppConfiguration:Url"]), credentials)
-            .ConfigureKeyVault(kv =>
-            {
-                kv.SetCredential(credentials);
-            });
-    });
-});
+builder.Configuration.AddAzureAppConfiguration(options => options
+    .Connect(
+        new Uri(builder.Configuration["AzureAppConfiguration:Url"] ?? string.Empty), 
+        new DefaultAzureCredential())
+    .ConfigureKeyVault(c => c.SetCredential(new DefaultAzureCredential())));
 
 var app = builder.Build();
 

@@ -20,19 +20,11 @@ var builder = WebApplication.CreateBuilder(args);
 var azureAppConfigurationUrl =  builder.Configuration["AzureAppConfiguration:Url"];
 if(!string.IsNullOrEmpty(azureAppConfigurationUrl))
 {
-    builder.WebHost.ConfigureAppConfiguration((_, config) =>
-    {
-        var credentials = new DefaultAzureCredential();
-
-        config.AddAzureAppConfiguration(options =>
-        {
-            options.Connect(new Uri(azureAppConfigurationUrl), credentials)
-                .ConfigureKeyVault(kv =>
-                {
-                    kv.SetCredential(credentials);
-                });
-        });
-    });
+    builder.Configuration.AddAzureAppConfiguration(options => options
+        .Connect(
+            new Uri(azureAppConfigurationUrl), 
+            new DefaultAzureCredential())
+        .ConfigureKeyVault(c => c.SetCredential(new DefaultAzureCredential())));
 }
 
 // Use some sort of centralized logging service (e g Application Insights) to log all exceptions etc.
@@ -48,10 +40,8 @@ JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 // all we need to do is configure iss and aud, and add valid type.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => {
-        options.Authority = "https://localhost:4000";
-        options.Audience = "products.api";
-
-        // Note that type validation might need to be done differently depending in token service (IdP).
+        // TokenValidationParameters not not currently supported in appsettings.config for .NET 7
+        // Note that type validation might differ, depending on token serivce (IdP)
         options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
 
         options.ForwardDefaultSelector = Selector.ForwardReferenceToken("introspection");
@@ -93,7 +83,6 @@ builder.Services.AddTransient<IAuditService, LoggerAuditService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddPermissionService();
-
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 builder.Services.AddControllers();
@@ -114,17 +103,11 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 });
 
 app.UseRouting();
-app.UseAuthentication();
 app.UseAuthorization();
-    
-app.UseEndpoints(endpoints =>
-{
-    // Demo 2 - Even if we have the fallback policy it is a good practice to set a explicit policy
-    // for each mapped route (with RequireAuthorization we apply the Default policy).
-    // With this code it takes two mistakes get a public endpoint.
-    endpoints
-        .MapControllers()
-        .RequireAuthorization();
-});
 
+// Demo 2 - Even if we have the fallback policy it is a good practice to set a explicit policy
+// for each mapped route (with RequireAuthorization we apply the Default policy).
+// With this code it takes two mistakes get a public endpoint.
+app.MapControllers().RequireAuthorization();
+    
 app.Run();
