@@ -1,22 +1,25 @@
 using System.Net;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace CompleteWithAllDefenceLayers.Tests.System;
 
 // The controller specific system test (int this case for the Products controller) verify 
 // any authorization policies outside the domain e g using controller attributes or a gateway
 [Trait("Category", "System")]
-public class ProductsTests
+public class ProductsTests : BaseTests
 {
-    private readonly Uri baseUri = new Uri("https://localhost:5001/");
+    public ProductsTests(ITestOutputHelper output) : base(output)
+    {
+    }
 
     [Fact]
     public async Task GetProductById_ShouldReturn401_WhenWrongScope()
     {
         // Use a token with wrong scope, GetProductById requires products.read
-        var client = new TokenHttpClient("products.write");
+        var httpClient = CreateAuthenticatedHttpClient(new[] {"products.write"});
 
-        var response = await client.GetAsync(new Uri(baseUri, "/api/products/se1"));
+        var response = await httpClient.GetAsync("/api/products/se1");
 
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
@@ -24,9 +27,9 @@ public class ProductsTests
     [Fact]
     public async Task GetProductById_ShouldReturn200_WhenCorrectScope()
     {
-        var client = new TokenHttpClient("products.read");
+        var httpClient = CreateAuthenticatedHttpClient(new[] {"products.read"});
 
-        var response = await client.GetAsync(new Uri(baseUri, "/api/products/se1"));
+        var response = await httpClient.GetAsync("/api/products/se1");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
