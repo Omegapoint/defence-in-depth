@@ -1,0 +1,10 @@
+{
+  "BaseAddress": {
+    "Uri": "base URI to the API endpoint we are testing"
+  },
+  "TokenUri": "https://localhost:4000/connect/token",
+  "ValidClient": {
+    "ClientId": "m2m",
+    "ClientSecret": "secret"
+  }
+}

@@ -1,22 +1,25 @@
 using System.Net;
 using System.Security.Authentication;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace CompleteWithAllDefenceLayers.Tests.System;
 
-// The Health controller tests verify that we run the correct version, has mandatory JWT access controll,
+// The Health controller tests verify that we run the correct version, has mandatory JWT access control,
 // handle exceptions and return recommended security headers.
 [Trait("Category", "System")]
-public class HealthTests
+public class HealthTests : BaseTests
 {
-    private readonly Uri baseUri = new Uri("https://localhost:5001/");
+    public HealthTests(ITestOutputHelper output) : base(output)
+    {
+    }
 
     [Fact]
     public async Task LivenessAnonymous_ShouldReturn200AndCorrectVersion()
     {
-        var client = new HttpClient();
+        var httpClient = CreateAnonymousHttpClient();
 
-        var response = await client.GetAsync(new Uri(baseUri, "/api/health/live"));
+        var response = await httpClient.GetAsync("/api/health/live");
         var responseContent = await response.Content.ReadAsStringAsync();
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -26,9 +29,9 @@ public class HealthTests
     [Fact]
     public async Task ReadynessWithValidToken_ShouldReturn200()
     {
-        var client = new TokenHttpClient();
+        var httpClient = CreateAuthenticatedHttpClient();
 
-        var response = await client.GetAsync(new Uri(baseUri, "/api/health/ready"));
+        var response = await httpClient.GetAsync("/api/health/ready");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -36,9 +39,9 @@ public class HealthTests
     [Fact]
     public async Task ReadynessWithNoToken_ShouldReturn401()
     {
-        var client = new HttpClient();
+        var httpClient = CreateAnonymousHttpClient();
 
-        var response = await client.GetAsync(new Uri(baseUri, "/api/health/ready"));
+        var response = await httpClient.GetAsync("/api/health/ready");
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -47,10 +50,11 @@ public class HealthTests
     public async Task ReadynessWithInvalidToken_ShouldReturn401()
     {
         //Use a token from jwt.io, which has an invalid issuer for our API
-        var client = new HttpClient();
-        client.DefaultRequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c");
+        var httpClient = CreateAnonymousHttpClient();
+
+        httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c");
         
-        var response = await client.GetAsync(new Uri(baseUri, "/api/health/ready"));
+        var response = await httpClient.GetAsync("/api/health/ready");
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -58,9 +62,9 @@ public class HealthTests
     [Fact]
     public async Task ReadynessHttp_ShouldReturn405()
     {
-        var client = new HttpClient();
+        var httpClient = CreateAuthenticatedHttpClient();
 
-        var response = await client.GetAsync(new Uri(new Uri("http://localhost/"), "/api/health/ready"));
+        var response = await httpClient.GetAsync(new Uri(new Uri("http://localhost/"), "/api/health/ready"));
         
         // Note that this will fail when running without NGINX 
         Assert.Equal(HttpStatusCode.MethodNotAllowed, response.StatusCode);
@@ -69,9 +73,9 @@ public class HealthTests
     [Fact]
     public async Task LivenessAnonymous_ReturnsSecurityHeaders()
     {
-        var client = new HttpClient();
+        var httpClient = CreateAnonymousHttpClient();
 
-        var response = await client.GetAsync(new Uri(baseUri, "/api/health/live"));
+        var response = await httpClient.GetAsync("/api/health/live");
 
         // Verify according to https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html#security-headers
         // Note that this will fail when running without NGINX 
@@ -90,7 +94,7 @@ public class HealthTests
         // there are no validation errors (accroding to .NET default policy) to assert sufficient TLS quality. 
         // For TLS 1.2 we should also verify strong chiphers according to e g 
         // https://openid.bitbucket.io/fapi/fapi-2_0-security-profile.html#section-5.2.2
-        #pragma warning disable //Disable warnings for depricated TLS and SSL versions
+        #pragma warning disable //Disable warnings for deprecated TLS and SSL versions
         var handler13 = new HttpClientHandler();
         handler13.SslProtocols = SslProtocols.Tls13;
         var client13 = new HttpClient(handler13);
@@ -108,6 +112,8 @@ public class HealthTests
         var clientSsl2 = new HttpClient(handlerSsl2);
         #pragma warning restore
 
+        var baseUri = new Uri(Configuration["BaseAddress:Uri"]!);
+        
         var response13 = await client13.GetAsync(new Uri(baseUri, "/api/health/live"));
 
         // Note that this will fail when running without NGINX
