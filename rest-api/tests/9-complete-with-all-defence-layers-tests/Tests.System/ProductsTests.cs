@@ -14,6 +14,16 @@ public class ProductsTests : BaseTests
     }
 
     [Fact]
+    public async Task GetProductById_ShouldReturn401_WhenAnonymous()
+    {
+        var httpClient = CreateAnonymousHttpClient();
+
+        var response = await httpClient.GetAsync("/api/products/se1");
+
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    [Fact]
     public async Task GetProductById_ShouldReturn401_WhenWrongScope()
     {
         // Use a token with wrong scope, GetProductById requires products.read
