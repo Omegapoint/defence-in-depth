@@ -1,3 +1,5 @@
+using AutoMapper;
+using Defence.In.Depth;
 using Defence.In.Depth.Controllers;
 using Defence.In.Depth.Domain.Models;
 using Defence.In.Depth.Domain.Services;
@@ -10,11 +12,13 @@ namespace CompleteWithAllDefenceLayers.Tests.Unit;
 [Trait("Category", "Unit")]
 public class ProductsControllerTests
 {
+    private readonly IMapper mapper = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>()).CreateMapper();
+
     [Fact]
     public async void GetProductsById_ShouldReturn403_WhenCanNotRead()
     {
-        var productServiceMock = new Mock<IProductService>();
-        productServiceMock.Setup(ps => ps.GetById(It.IsAny<ProductId>()))
+        var productService = Mock.Of<IProductService>();
+        Mock.Get(productService).Setup(ps => ps.GetById(It.IsAny<ProductId>()))
             .ReturnsAsync((
                 new Product(
                     new ProductId("se1"),
@@ -22,7 +26,7 @@ public class ProductsControllerTests
                     new MarketId("se")),
                 ReadDataResult.NoAccessToOperation));
 
-        var controller = new ProductsController(productServiceMock.Object, TestMapper.Create());
+        var controller = new ProductsController(productService, mapper);
 
         var result = await controller.GetById("se1");
 
@@ -32,8 +36,8 @@ public class ProductsControllerTests
     [Fact]
     public async void GetProductsById_ShouldReturn200_WhenAuthorized()
     {
-        var productServiceMock = new Mock<IProductService>();
-        productServiceMock.Setup(ps => ps.GetById(It.IsAny<ProductId>()))
+        var productService = Mock.Of<IProductService>();
+        Mock.Get(productService).Setup(ps => ps.GetById(It.IsAny<ProductId>()))
             .ReturnsAsync((
                     new Product(
                         new ProductId("se1"), 
@@ -41,7 +45,7 @@ public class ProductsControllerTests
                         new MarketId("se")),
                     ReadDataResult.Success));
 
-        var controller = new ProductsController(productServiceMock.Object, TestMapper.Create());
+        var controller = new ProductsController(productService, mapper);
 
         var result = await controller.GetById("se1");
 
@@ -53,8 +57,8 @@ public class ProductsControllerTests
     [MemberData(nameof(InvalidIds))]
     public async void GetProductsById_ShouldReturn400_WhenInvalidId(string id)
     {
-        var productServiceMock = new Mock<IProductService>();
-        productServiceMock.Setup(ps => ps.GetById(It.IsAny<ProductId>()))
+        var productService = Mock.Of<IProductService>();
+        Mock.Get(productService).Setup(ps => ps.GetById(It.IsAny<ProductId>()))
              .ReturnsAsync((
                  new Product(
                      new ProductId("se1"),
@@ -62,7 +66,7 @@ public class ProductsControllerTests
                      new MarketId("se")), 
                  ReadDataResult.Success));
 
-        var controller = new ProductsController(productServiceMock.Object, TestMapper.Create());
+        var controller = new ProductsController(productService, mapper);
 
         var result = await controller.GetById(id);
 
@@ -72,8 +76,8 @@ public class ProductsControllerTests
     [Fact]
     public async void GetProductsById_ShouldReturn404_WhenNotFound()
     {
-        var productServiceMock = new Mock<IProductService>();
-        productServiceMock.Setup(ps => ps.GetById(It.IsAny<ProductId>()))
+        var productService = Mock.Of<IProductService>();
+        Mock.Get(productService).Setup(ps => ps.GetById(It.IsAny<ProductId>()))
             .ReturnsAsync((
                 new Product(
                     new ProductId("se1"),
@@ -81,7 +85,7 @@ public class ProductsControllerTests
                     new MarketId("se")),
                 ReadDataResult.NotFound));
 
-        var controller = new ProductsController(productServiceMock.Object, TestMapper.Create());
+        var controller = new ProductsController(productService, mapper);
 
         var result = await controller.GetById("def"); // This is a valid, non-existing id
 

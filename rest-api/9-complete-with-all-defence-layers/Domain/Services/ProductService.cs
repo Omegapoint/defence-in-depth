@@ -9,18 +9,15 @@ public class ProductService : IProductService
     private readonly IPermissionService permissionService;
     private readonly IProductRepository productRepository;
     private readonly IAuditService auditService;
-    private readonly IMapper mapper;
-
+ 
     public ProductService(
         IPermissionService permissionService,
         IProductRepository productRepository,
-        IAuditService auditService,
-        IMapper mapper)
+        IAuditService auditService)
     {
         this.permissionService = permissionService;
         this.productRepository = productRepository;
         this.auditService = auditService;
-        this.mapper = mapper;
     }
 
     // Note that in a real world domain, with more services and methods, it is important to
@@ -38,15 +35,13 @@ public class ProductService : IProductService
             return (null, ReadDataResult.NoAccessToOperation);
         }
 
-        var entity = await productRepository.GetById(productId.Value);
+        var product = await productRepository.GetById(productId);
 
-        if (entity.Id == null)
+        if (product == null)
         {
             return (null, ReadDataResult.NotFound);
         }
 
-        var product = mapper.Map<Product>(entity);
-            
         if (!permissionService.HasPermissionToMarket(product.MarketId))
         {
             await auditService.Log(DomainEvent.NoAccessToData, productId);
@@ -55,7 +50,7 @@ public class ProductService : IProductService
         }
        
         // When we have access to the specific product we can do more complex logic,
-        // like finding out if it is availible in stores etc.
+        // like finding out if it is available in stores etc.
 
         await auditService.Log(DomainEvent.ProductRead, productId);
 

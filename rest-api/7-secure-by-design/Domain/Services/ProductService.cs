@@ -1,4 +1,3 @@
-using AutoMapper;
 using Defence.In.Depth.Domain.Models;
 using Defence.In.Depth.Infrastructure;
 
@@ -9,18 +8,15 @@ public class ProductService : IProductService
     private readonly IPermissionService permissionService;
     private readonly IProductRepository productRepository;
     private readonly IAuditService auditService;
-    private readonly IMapper mapper;
 
     public ProductService(
         IPermissionService permissionService,
         IProductRepository productRepository,
-        IAuditService auditService,
-        IMapper mapper)
+        IAuditService auditService)
     {
         this.permissionService = permissionService;
         this.productRepository = productRepository;
         this.auditService = auditService;
-        this.mapper = mapper;
     }
 
     public async Task<(Product? product, ReadDataResult result)> GetById(ProductId productId)
@@ -32,15 +28,13 @@ public class ProductService : IProductService
             return (null, ReadDataResult.NoAccessToOperation);
         }
 
-        var entity = await productRepository.GetById(productId.Value);
+        var product = await productRepository.GetById(productId);
 
-        if (entity == null)
+        if (product == null)
         {
             return (null, ReadDataResult.NotFound);
         }
 
-        var product = mapper.Map<Product>(entity);
-            
         if (!permissionService.HasPermissionToMarket(product.MarketId))
         {
             await auditService.Log(DomainEvent.NoAccessToData, productId);
