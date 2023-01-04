@@ -11,5 +11,5 @@ public class RateLimitOptions
     public int QueueLimit {get;set;}
     public double ReplenishmentPeriod {get;set;}
     public int TokensPerPeriod {get;set;}
-    public bool AutoReplenishment {get;set;}
+    public bool AutoReplenishment {get;set;} = true;
 }

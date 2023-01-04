@@ -48,7 +48,7 @@ public static class WebApplicationBuilderExtensions
                         QueueLimit = options.QueueLimit,
                         ReplenishmentPeriod = TimeSpan.FromSeconds(options.ReplenishmentPeriod),
                         TokensPerPeriod = options.TokensPerPeriod,
-                        AutoReplenishment = true
+                        AutoReplenishment = options.AutoReplenishment
                     });
             });
         });
