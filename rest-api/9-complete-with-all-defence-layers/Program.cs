@@ -6,9 +6,7 @@ using IdentityModel.AspNetCore.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.RateLimiting;
 using System.IdentityModel.Tokens.Jwt;
-using System.Threading.RateLimiting;
 
 
 // Demo 1 - The default configuration will on Windows, where IIS is available,
