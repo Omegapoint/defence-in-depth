@@ -1,8 +1,8 @@
-using Defence.In.Depth.Infrastructure.Entities;
+using Defence.In.Depth.Domain.Models;
 
 namespace Defence.In.Depth.Infrastructure;
 
 public interface IProductRepository
 {
-    Task<ProductEntity> GetById(string id);
+    Task<Product> GetById(ProductId productId);
 }

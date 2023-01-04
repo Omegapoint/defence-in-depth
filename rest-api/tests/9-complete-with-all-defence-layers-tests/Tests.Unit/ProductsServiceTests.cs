@@ -1,10 +1,6 @@
-﻿using System.Security.Claims;
-using AutoMapper;
-using Defence.In.Depth;
-using Defence.In.Depth.Domain.Models;
+﻿using Defence.In.Depth.Domain.Models;
 using Defence.In.Depth.Domain.Services;
 using Defence.In.Depth.Infrastructure;
-using Microsoft.AspNetCore.Http;
 using Moq;
 using Xunit;
 
@@ -16,63 +12,67 @@ public class ProductsServiceTests
     [Fact]
     public async void GetById_ReturnsNoAccessToOperation_IfNoValidReadClaim()
     {
-        var claims = new[]
-        {
-                new Claim(ClaimSettings.Sub, "user1"),
-                new Claim(ClaimSettings.Scope, "not valid read claim")
-        };
-
-        var mockAuditService = new Mock<IAuditService>();
-        var productService = CreateSut(claims, mockAuditService.Object);
+        var auditService = Mock.Of<IAuditService>();
+        var productRepository = Mock.Of<IProductRepository>(MockBehavior.Strict);
+        var permissionService = Mock.Of<IPermissionService>();
         
-        var (product, result)  = await productService.GetById(new ProductId("se1"));
+        var productService = new ProductService(permissionService, productRepository, auditService);
+
+        var productId = new ProductId("se1");
+        
+        var (product, result) = await productService.GetById(productId);
 
         Assert.Equal(ReadDataResult.NoAccessToOperation, result);
         Assert.Null(product);
         
-        mockAuditService.Verify(service => service.Log(It.IsAny<DomainEvent>(), It.IsAny<object>()), Times.Once);
-        mockAuditService.Verify(service => service.Log(DomainEvent.NoAccessToOperation, It.IsAny<object>()), Times.Once);
+        Mock.Get(auditService).Verify(service => service.Log(DomainEvent.NoAccessToOperation, productId), Times.Once);
+        Mock.Get(auditService).VerifyNoOtherCalls();
     }
 
     [Fact]
     public async void GetById_ReturnsNotFound_IfValidClaimButNotExisting()
     {
-        var claims = new[]
-        {
-            new Claim(ClaimSettings.Sub, "user1"),
-            new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead)
-        };
+        var auditService = Mock.Of<IAuditService>(MockBehavior.Strict);
+        var productRepository = Mock.Of<IProductRepository>();
+        var permissionService = Mock.Of<IPermissionService>();
 
-        var mockAuditService = new Mock<IAuditService>();
-        var productService = CreateSut(claims, mockAuditService.Object);
+        Mock.Get(permissionService).SetupGet(service => service.CanReadProducts).Returns(true);
+
+        var productService = new ProductService(permissionService, productRepository, auditService);
         
         var (product, result)  = await productService.GetById(new ProductId("notfound"));
 
         Assert.Equal(ReadDataResult.NotFound, result);
         Assert.Null(product);
 
-        mockAuditService.Verify(service => service.Log(It.IsAny<DomainEvent>(), It.IsAny<object>()), Times.Never);
+        Mock.Get(auditService).VerifyNoOtherCalls();
     }
 
     [Fact]
     public async void GetById_ReturnsNoAccessToData_IfNotValidMarket()
     {
-        var claims = new[]
-        {
-            new Claim(ClaimSettings.Sub, "user1"),
-            new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead)
-        };
+        var auditService = Mock.Of<IAuditService>();
+        var productRepository = Mock.Of<IProductRepository>();
+        var permissionService = Mock.Of<IPermissionService>();
+
+        var productId = new ProductId("42");
         
-        var mockAuditService = new Mock<IAuditService>();
-        var productService = CreateSut(claims, mockAuditService.Object);
+        Mock.Get(productRepository)
+            .Setup(repository => repository.GetById(productId))
+            .ReturnsAsync(new Product(productId, new ProductName("My Name"), new MarketId("no")));
+
+        Mock.Get(permissionService).SetupGet(service => service.CanReadProducts).Returns(true);
+        Mock.Get(permissionService).SetupGet(service => service.MarketId).Returns(new MarketId("se"));
         
-        var (product, result)  = await productService.GetById(new ProductId("no1"));
+        var productService = new ProductService(permissionService, productRepository, auditService);
+
+        var (product, result) = await productService.GetById(productId);
 
         Assert.Equal(ReadDataResult.NoAccessToData, result);
         Assert.Null(product);
         
-        mockAuditService.Verify(service => service.Log(It.IsAny<DomainEvent>(), It.IsAny<object>()), Times.Once);
-        mockAuditService.Verify(service => service.Log(DomainEvent.NoAccessToData, It.IsAny<object>()), Times.Once);
+        Mock.Get(auditService).Verify(service => service.Log(DomainEvent.NoAccessToData, productId), Times.Once);
+        Mock.Get(auditService).VerifyNoOtherCalls();
     }
 
     // Testing successful resource access is important to verify that the
@@ -82,51 +82,27 @@ public class ProductsServiceTests
     [Fact]
     public async void GetById_ReturnsOk_IfValidClaims()
     {
-        var claims = new[]
-        {
-            new Claim(ClaimSettings.Sub, "user1"),
-            new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead)
-        };
+        var auditService = Mock.Of<IAuditService>();
+        var productRepository = Mock.Of<IProductRepository>();
+        var permissionService = Mock.Of<IPermissionService>();
 
-        var mockAuditService = new Mock<IAuditService>();
-        var productService = CreateSut(claims, mockAuditService.Object);
+        var productId = new ProductId("42");
         
-        var (product, result)  = await productService.GetById(new ProductId("se1"));
+        Mock.Get(productRepository)
+            .Setup(repository => repository.GetById(productId))
+            .ReturnsAsync(new Product(productId, new ProductName("My Name"), new MarketId("se")));
+
+        Mock.Get(permissionService).SetupGet(service => service.CanReadProducts).Returns(true);
+        Mock.Get(permissionService).Setup(service => service.HasPermissionToMarket(new MarketId("se"))).Returns(true);
+        
+        var productService = new ProductService(permissionService, productRepository, auditService);
+
+        var (product, result) = await productService.GetById(productId);
 
         Assert.Equal(ReadDataResult.Success, result);
         Assert.NotNull(product);
-
-        mockAuditService.Verify(service => service.Log(It.IsAny<DomainEvent>(), It.IsAny<object>()), Times.Once);
-        mockAuditService.Verify(service => service.Log(DomainEvent.ProductRead, It.IsAny<object>()), Times.Once);
-    }
-
-    private static IProductService CreateSut(IEnumerable<Claim> claims, IAuditService? auditService = null)
-    {
-        var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
-        var context = new DefaultHttpContext();
-
-        context.User.AddIdentity(new ClaimsIdentity(claims));
-        mockHttpContextAccessor.Setup(_ => _.HttpContext).Returns(context);
-
-        return new ProductService(
-            new HttpContextPermissionService(mockHttpContextAccessor.Object), 
-            new ProductRepository(), 
-            auditService ?? new Mock<IAuditService>().Object, 
-            TestMapper.Create());
+        
+        Mock.Get(auditService).Verify(service => service.Log(DomainEvent.ProductRead, productId), Times.Once);
+        Mock.Get(auditService).VerifyNoOtherCalls();
     }
 }
-
-public static class TestMapper
-{
-    public static IMapper Create()
-    {
-        var mappingConfig = new MapperConfiguration(mc =>
-        {
-            mc.AddProfile(new MappingProfile());
-        });
-
-        return mappingConfig.CreateMapper();
-    }
-}
-
-

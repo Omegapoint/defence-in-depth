@@ -1,25 +1,29 @@
+using AutoMapper;
+using Defence.In.Depth.Domain.Models;
 using Defence.In.Depth.Infrastructure.Entities;
 
 namespace Defence.In.Depth.Infrastructure;
 
 public class ProductRepository : IProductRepository
 {
-    private Dictionary<string, ProductEntity> _repo = new Dictionary<string, ProductEntity>{
+    private readonly IMapper mapper;
+
+    private readonly Dictionary<string, ProductEntity> data = new Dictionary<string, ProductEntity>{
         {"se1", new ProductEntity { Id = "se1", Name = "ProductSweden", MarketId = "se" }},
         {"no1", new ProductEntity { Id = "no1", Name = "ProductNorway", MarketId = "no" }}
     };
 
-    public async Task<ProductEntity> GetById(string id)
+    public ProductRepository(IMapper mapper)
+    {
+        this.mapper = mapper;
+    }
+
+    public async Task<Product> GetById(ProductId productId)
     {
         await Task.CompletedTask;
             
-        // Please always use correct output encoding of input data "id" for
-        // your query context.  For example, parameterized SQL.
-        if(!_repo.ContainsKey(id))
-        {
-            return new ProductEntity();
-        }
+        var entity = data.GetValueOrDefault(productId.Value);
 
-        return _repo[id];
+        return mapper.Map<Product>(entity);
     }
 }
