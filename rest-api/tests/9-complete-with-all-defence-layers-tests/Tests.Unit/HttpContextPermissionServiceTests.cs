@@ -77,7 +77,7 @@ public class HttpContextPermissionServiceTests
         Assert.True(httpContextPermissionService.HasPermissionToMarket(new MarketId("se")));
     }
 
-        [Fact]
+    [Fact]
     public void HasAllClaims_ButNoPermissionForMarketNO()
     {
         var claims = new[]

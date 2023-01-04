@@ -1,6 +1,6 @@
 {
   "BaseAddress": {
-    "Uri": "base URI to the API endpoint we are testing"
+    "Uri": "https://localhost:5000"
   },
   "TokenUri": "https://localhost:4000/connect/token",
   "ValidClient": {
