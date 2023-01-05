@@ -77,10 +77,6 @@ builder.Services.AddAuthorization(options =>
         policy.RequireScope(ClaimSettings.ProductsWrite));
 });
 
-// Configure rate limit policies, we apply a more restrictive policy for anonymous requests 
-// then for requests authenticated with a JWT.
-builder.AddRateLimitPolicies();
-
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<IProductRepository, ProductRepository>();
 builder.Services.AddTransient<IAuditService, LoggerAuditService>();
@@ -92,8 +88,6 @@ builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddControllers();
 
 var app = builder.Build();
-
-app.UseRateLimiter();
 
 // Demo 1 - Force https, this is done in the NGINX reverse proxy.
 //app.UseHttpsRedirection();
@@ -114,12 +108,6 @@ app.UseAuthorization();
 // Demo 2 - Even if we have the fallback policy it is a good practice to set a explicit policy
 // for each mapped route (with RequireAuthorization we apply the Default policy).
 // With this code it takes two mistakes get a public endpoint.
-//
-// Note that we also apply a rate limting policy for all requests. 
-// This can be disabled in the controller using the [DisableRateLimiting] attribute.
-// But we will still have basic DoS protection from NGINX or other infrastructure in front of our API. 
-app.MapControllers()
-    .RequireRateLimiting(RateLimitOptions.JwtPolicyName)
-    .RequireAuthorization();
+app.MapControllers().RequireAuthorization();
     
 app.Run();
