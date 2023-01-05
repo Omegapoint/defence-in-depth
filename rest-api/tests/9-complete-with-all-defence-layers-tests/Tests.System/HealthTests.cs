@@ -123,6 +123,4 @@ public class HealthTests : BaseTests
         await Assert.ThrowsAsync<Exception>(async () => await clientSsl3.GetAsync(new Uri(baseUri, "/api/health/live")));
         await Assert.ThrowsAsync<Exception>(async () => await clientSsl2.GetAsync(new Uri(baseUri, "/api/health/live")));
     }
-
-    //TODO: Add rate limit tests? see e g https://learn.microsoft.com/en-us/dotnet/core/extensions/http-ratelimiter#emulate-many-concurrent-requests
 }
