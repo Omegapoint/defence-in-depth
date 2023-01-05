@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Defence.In.Depth.Controllers;
@@ -5,8 +6,8 @@ namespace Defence.In.Depth.Controllers;
 [Route("/api/error")]
 public class ErrorController : ControllerBase
 {
-    [HttpPut]
-    [Route("")]
+    [Authorize]
+    [HttpPut("")]
     public IActionResult Throw()
     {
         throw new NotImplementedException("Not implemented on purpose");
