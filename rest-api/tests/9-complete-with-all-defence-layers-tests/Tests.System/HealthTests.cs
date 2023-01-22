@@ -62,7 +62,7 @@ public class HealthTests : BaseTests
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 
-    [Theory(Skip = "Will always fail when running without NGINX")]
+    [Theory]
     [MemberData(nameof(AuthenticatedEndpoints))]
     [MemberData(nameof(AnonymousEndpoints))]
     public async Task Endpoints_Should_RequireTls(string path)
@@ -75,7 +75,7 @@ public class HealthTests : BaseTests
         Assert.Equal(HttpStatusCode.MethodNotAllowed, response.StatusCode);
     }
 
-    [Theory(Skip = "Will always fail when running without NGINX")]
+    [Theory]
     [MemberData(nameof(AuthenticatedEndpoints))]
     [MemberData(nameof(AnonymousEndpoints))]
     public async Task Endpoints_Should_RequireTls13(string path)
@@ -114,7 +114,7 @@ public class HealthTests : BaseTests
         await Assert.ThrowsAsync<Exception>(async () => await clientSsl2.GetAsync(new Uri(baseUri, path)));
     }
 
-    [Theory(Skip = "Will always fail when running without NGINX")]
+    [Theory]
     [MemberData(nameof(AuthenticatedEndpoints))]
     [MemberData(nameof(AnonymousEndpoints))]
     public async Task Endpoints_Should_ReturnsSecurityHeaders(string path)
