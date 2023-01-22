@@ -46,51 +46,39 @@ public class HealthTests : BaseTests
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 
-    [Fact]
-    public async Task ReadynessWithInvalidToken_ShouldReturn401()
-    {
-        //Use a token from jwt.io, which has an invalid issuer for our API
+    [Theory]
+    [MemberData(nameof(AuthenticatedEndpoints))]
+    public async Task Endpoints_WithInvalidToken_ShouldReturn401(string path)
+    { 
         var httpClient = CreateAnonymousHttpClient();
 
+        // Use a invalid token, the test demonstrates one with the wrong issuer (jwt.io)
+        // Other testcases for invalid tokens are e g expired, alg-none, id-token etc.
+        // See e g https://42crunch.com/7-ways-to-avoid-jwt-pitfalls/
         httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c");
         
-        var response = await httpClient.GetAsync("/api/health/ready");
+        var response = await httpClient.GetAsync(path);
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 
-    [Fact]
-    public async Task ReadynessHttp_ShouldReturn405()
+    [Theory(Skip = "Will always fail when running without NGINX")]
+    [MemberData(nameof(AuthenticatedEndpoints))]
+    [MemberData(nameof(AnonymousEndpoints))]
+    public async Task Endpoints_Should_RequireTls(string path)
     {
         var httpClient = CreateAuthenticatedHttpClient();
 
-        var response = await httpClient.GetAsync(new Uri(new Uri("http://localhost/"), "/api/health/ready"));
+        var response = await httpClient.GetAsync(new Uri(new Uri("http://localhost/"), path));
         
         // Note that this will fail when running without NGINX 
         Assert.Equal(HttpStatusCode.MethodNotAllowed, response.StatusCode);
     }
 
-    [Fact]
-    public async Task LivenessAnonymous_ReturnsSecurityHeaders()
-    {
-        var httpClient = CreateAnonymousHttpClient();
-
-        var response = await httpClient.GetAsync("/api/health/live");
-
-        // Verify according to https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html#security-headers
-        // The sanbox directive has been addeed according to recommendations from Phillippe De Ryck, 
-        // see e g https://auth0.com/blog/from-zero-to-hero-with-csp/ 
-        // Note that this will fail when running without NGINX 
-        Assert.Contains(response.Headers, h => h.Key == "Cache-Control" && h.Value.ToString() == "no-store");
-        Assert.Contains(response.Headers, h => h.Key == "Content-Security-Policy" && h.Value.ToString() == "frame-ancestors 'none'; sandbox");
-        Assert.Contains(response.Headers, h => h.Key == "Content-Type" && h.Value.ToString() == "application/json");
-        Assert.Contains(response.Headers, h => h.Key == "Strict-Transport-Security" && h.Value.ToString() == "max-age=31536000; includeSubDomains");
-        Assert.Contains(response.Headers, h => h.Key == "X-Content-Type-Options" && h.Value.ToString() == "nosniff");
-        Assert.Contains(response.Headers, h => h.Key == "X-Frame-Options" && h.Value.ToString() == "DENY");
-    }
-
-    [Fact]
-    public async Task LivenessAnonymous_TLS_1_3_Only()
+    [Theory(Skip = "Will always fail when running without NGINX")]
+    [MemberData(nameof(AuthenticatedEndpoints))]
+    [MemberData(nameof(AnonymousEndpoints))]
+    public async Task Endpoints_Should_RequireTls13(string path)
     {
         // Since we only allow TLS 1.3 we only need to verify that we only accept TLS 1.3 and 
         // there are no validation errors (accroding to .NET default policy) to assert sufficient TLS quality. 
@@ -116,13 +104,50 @@ public class HealthTests : BaseTests
 
         var baseUri = new Uri(Configuration["BaseAddress:Uri"]!);
         
-        var response13 = await client13.GetAsync(new Uri(baseUri, "/api/health/live"));
+        var response13 = await client13.GetAsync(new Uri(baseUri, path));
 
         // Note that this will fail when running without NGINX
         Assert.Equal(HttpStatusCode.OK, response13.StatusCode);
-        await Assert.ThrowsAsync<Exception>(async () => await client12.GetAsync(new Uri(baseUri, "/api/health/live")));
-        await Assert.ThrowsAsync<Exception>(async () => await client11.GetAsync(new Uri(baseUri, "/api/health/live")));
-        await Assert.ThrowsAsync<Exception>(async () => await clientSsl3.GetAsync(new Uri(baseUri, "/api/health/live")));
-        await Assert.ThrowsAsync<Exception>(async () => await clientSsl2.GetAsync(new Uri(baseUri, "/api/health/live")));
+        await Assert.ThrowsAsync<Exception>(async () => await client12.GetAsync(new Uri(baseUri, path)));
+        await Assert.ThrowsAsync<Exception>(async () => await client11.GetAsync(new Uri(baseUri, path)));
+        await Assert.ThrowsAsync<Exception>(async () => await clientSsl3.GetAsync(new Uri(baseUri, path)));
+        await Assert.ThrowsAsync<Exception>(async () => await clientSsl2.GetAsync(new Uri(baseUri, path)));
     }
+
+    [Theory(Skip = "Will always fail when running without NGINX")]
+    [MemberData(nameof(AuthenticatedEndpoints))]
+    [MemberData(nameof(AnonymousEndpoints))]
+    public async Task Endpoints_Should_ReturnsSecurityHeaders(string path)
+    {
+        var httpClient = CreateAnonymousHttpClient();
+
+        var response = await httpClient.GetAsync(path);
+
+        // Verify according to https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html#security-headers
+        // The sanbox directive has been addeed according to recommendations from Philippe De Ryck, 
+        // see e g https://auth0.com/blog/from-zero-to-hero-with-csp/ 
+        // Note that this will fail when running without NGINX 
+        Assert.Contains(response.Headers, h => h.Key == "Cache-Control" && h.Value.ToString() == "no-store");
+        Assert.Contains(response.Headers, h => h.Key == "Content-Security-Policy" && h.Value.ToString() == "frame-ancestors 'none'; sandbox");
+        Assert.Contains(response.Headers, h => h.Key == "Content-Type" && h.Value.ToString() == "application/json");
+        Assert.Contains(response.Headers, h => h.Key == "Strict-Transport-Security" && h.Value.ToString() == "max-age=31536000; includeSubDomains");
+        Assert.Contains(response.Headers, h => h.Key == "X-Content-Type-Options" && h.Value.ToString() == "nosniff");
+        Assert.Contains(response.Headers, h => h.Key == "X-Frame-Options" && h.Value.ToString() == "DENY");
+    }
+
+    public static IEnumerable<object[]> AuthenticatedEndpoints => new List<object[]>
+    {
+        new object[]
+        {
+            "/api/health/ready"
+        }
+    };
+
+    public static IEnumerable<object[]> AnonymousEndpoints => new List<object[]>
+    {
+        new object[]
+        {
+            "/api/health/live"
+        }
+    };
 }

@@ -46,7 +46,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
         // If we can restrict algorithms, the current recommendation is to only support PS256
         // See e g https://42crunch.com/7-ways-to-avoid-jwt-pitfalls/
-        // options.TokenValidationParameters.ValidAlgorithms = new [] {"RS256", "PS256"};
+        // options.TokenValidationParameters.ValidAlgorithms = new [] {"PS256"};
 
         options.ForwardDefaultSelector = Selector.ForwardReferenceToken("introspection");
     })
