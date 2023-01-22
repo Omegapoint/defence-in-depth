@@ -78,9 +78,11 @@ public class HealthTests : BaseTests
         var response = await httpClient.GetAsync("/api/health/live");
 
         // Verify according to https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html#security-headers
+        // The sanbox directive has been addeed according to recommendations from Phillippe De Ryck, 
+        // see e g https://auth0.com/blog/from-zero-to-hero-with-csp/ 
         // Note that this will fail when running without NGINX 
         Assert.Contains(response.Headers, h => h.Key == "Cache-Control" && h.Value.ToString() == "no-store");
-        Assert.Contains(response.Headers, h => h.Key == "Content-Security-Policy" && h.Value.ToString() == "frame-ancestors 'none'");
+        Assert.Contains(response.Headers, h => h.Key == "Content-Security-Policy" && h.Value.ToString() == "frame-ancestors 'none'; sandbox");
         Assert.Contains(response.Headers, h => h.Key == "Content-Type" && h.Value.ToString() == "application/json");
         Assert.Contains(response.Headers, h => h.Key == "Strict-Transport-Security" && h.Value.ToString() == "max-age=31536000; includeSubDomains");
         Assert.Contains(response.Headers, h => h.Key == "X-Content-Type-Options" && h.Value.ToString() == "nosniff");

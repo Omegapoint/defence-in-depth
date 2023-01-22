@@ -44,6 +44,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         // Note that type validation might differ, depending on token serivce (IdP)
         options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
 
+        // If we can restrict algorithms, the current recommendation is to only support PS256
+        // See e g https://42crunch.com/7-ways-to-avoid-jwt-pitfalls/
+        // options.TokenValidationParameters.ValidAlgorithms = new [] {"RS256", "PS256"};
+
         options.ForwardDefaultSelector = Selector.ForwardReferenceToken("introspection");
     })
     // Add support for reference-tokens, from https://leastprivilege.com/2020/07/06/flexible-access-token-validation-in-asp-net-core/
