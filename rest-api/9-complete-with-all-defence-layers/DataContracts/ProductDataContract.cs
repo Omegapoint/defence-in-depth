@@ -6,5 +6,4 @@ public interface IDataContract
 {
 }
 
-[DataContract]
 public record ProductDataContract(string? Id, string? Name) : IDataContract;
