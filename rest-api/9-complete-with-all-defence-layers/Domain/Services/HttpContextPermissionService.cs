@@ -18,7 +18,9 @@ public class HttpContextPermissionService : IPermissionService
     // Also note that in this repo we have placed the PermissionService in our bussiness
     // domain, for other scenarios it might be more appropriate to move this to a
     // subdomain etc. The important thing is that the ProductService requires
-    // complete access control, that this is a mandatory part of our core bussiness domain.   
+    // complete access control, that this is a mandatory part of our core bussiness domain.
+    // Also note that this pattern enbles the use of an external policy or permission service,
+    // which might do caching etc.   
  
     public HttpContextPermissionService(IHttpContextAccessor contextAccessor)
     {
