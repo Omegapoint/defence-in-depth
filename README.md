@@ -2,14 +2,14 @@
 
 Source code samples for "Defence in Depth" articles and presentations.
 
-This is an accompanying implementation of a secure REST API in ASP.NET Core 6
+This is an accompanying implementation of a secure REST API in ASP.NET Core 7
 that follows the series of articles found at:
 
-https://omegapoint.se/defence-in-depth
+https://securityblog.omegapoint.se
 
 An article that covers these concepts exactly can be found at:
 
-https://omegapoint.se/secure-apis-in-aspnet
+https://securityblog.omegapoint.se/en/secure-apis-by-design
 
 Presentation of this material can be found at YouTube:
 
