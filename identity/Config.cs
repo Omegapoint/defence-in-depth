@@ -14,6 +14,10 @@ namespace identity
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResource(
+                    name: "email",
+                    userClaims: new[] {"email"},
+                    displayName: "Your email data")
             };
 
         public static IEnumerable<ApiScope> ApiScopes =>
@@ -57,7 +61,7 @@ namespace identity
                     PostLogoutRedirectUris = { "https://localhost:44300/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "products.read", "products.write" }
+                    AllowedScopes = { "openid", "profile", "email", "offline_access", "products.read", "products.write" }
                 },
             };
     }

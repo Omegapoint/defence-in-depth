@@ -24,7 +24,7 @@ public class ProductsTests : BaseTests
     }
 
     [Fact]
-    public async Task GetProductById_ShouldReturn401_WhenWrongScope()
+    public async Task GetProductById_ShouldReturn403_WhenWrongScope()
     {
         // Use a token with wrong scope, GetProductById requires products.read
         var httpClient = CreateAuthenticatedHttpClient(new[] {"products.write"});
