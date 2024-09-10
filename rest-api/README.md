@@ -43,4 +43,4 @@ Run all system tests with
 
 Note that for system test the token service (at https://localhost:4000) and the API (at https://localhost:5000) needs to be started.
 
-Start with: dotnet `run --urls https://*:4000` and `run --urls https://*:5000`
+Start with: dotnet `dotnet run --urls https://*:4000` and `dotnet run --urls https://*:5000`

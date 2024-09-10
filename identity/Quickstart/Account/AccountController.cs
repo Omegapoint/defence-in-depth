@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -357,7 +358,7 @@ namespace IdentityServerHost.Quickstart.UI
                 var idp = User.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
                 if (idp != null && idp != Duende.IdentityServer.IdentityServerConstants.LocalIdentityProvider)
                 {
-                    var providerSupportsSignout = await HttpContext.GetSchemeSupportsSignOutAsync(idp);
+                    var providerSupportsSignout = await GetSchemeSupportsSignOutAsync(HttpContext, idp);
                     if (providerSupportsSignout)
                     {
                         if (vm.LogoutId == null)
@@ -375,5 +376,12 @@ namespace IdentityServerHost.Quickstart.UI
 
             return vm;
         }
+        private static async Task<bool> GetSchemeSupportsSignOutAsync(HttpContext context, string scheme)
+        {
+            var provider = context.RequestServices.GetRequiredService<IAuthenticationHandlerProvider>();
+            var handler = await provider.GetHandlerAsync(context, scheme);
+            return (handler is IAuthenticationSignOutHandler);
+        }
+        
     }
 }

@@ -2,7 +2,6 @@ using Azure.Identity;
 using Defence.In.Depth;
 using Defence.In.Depth.Domain.Services;
 using Defence.In.Depth.Infrastructure;
-using IdentityModel.AspNetCore.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -43,20 +42,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         // TokenValidationParameters not not currently supported in appsettings.config for .NET 7
         // Note that type validation might differ, depending on token serivce (IdP)
         options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+        options.TokenValidationParameters.ValidAudience = "products.api";
 
         // If we can restrict algorithms, the current recommendation is to only support PS256
         // See e g https://42crunch.com/7-ways-to-avoid-jwt-pitfalls/
         // options.TokenValidationParameters.ValidAlgorithms = new [] {"PS256"};
 
-        options.ForwardDefaultSelector = Selector.ForwardReferenceToken("introspection");
-    })
-    // Add support for reference-tokens, from https://leastprivilege.com/2020/07/06/flexible-access-token-validation-in-asp-net-core/
-    .AddOAuth2Introspection("introspection", options =>
-    {
-        options.Authority = builder.Configuration["Introspection:Authority"] ?? "https://localhost:4000";
-        options.ClientId = builder.Configuration["Introspection:ClientId"] ?? "resource1";
-        options.ClientSecret = builder.Configuration["Introspection:ClientSecret"] ?? "secret";
+        //options.ForwardDefaultSelector = Selector.ForwardReferenceToken("introspection");
     });
+    // Add support for reference-tokens, from https://leastprivilege.com/2020/07/06/flexible-access-token-validation-in-asp-net-core/
+
 
 // Demo 2 - Require Bearer authentication scheme for all requests (including non mvc requests), 
 // even if no other policy has been configured.
@@ -76,9 +71,9 @@ builder.Services.AddAuthorization(options =>
     // This could also be done in a API-gateway in front of us, but the core domain should not 
     // assume any of this. Defence in depth and Zero trust!
     options.AddPolicy(ClaimSettings.ProductsRead, policy =>
-        policy.RequireScope(ClaimSettings.ProductsRead));
+        policy.RequireClaim("scope", ClaimSettings.ProductsRead));
     options.AddPolicy(ClaimSettings.ProductsWrite, policy =>
-        policy.RequireScope(ClaimSettings.ProductsWrite));
+        policy.RequireClaim("scope", ClaimSettings.ProductsWrite));
 });
 
 builder.Services.AddTransient<IProductService, ProductService>();

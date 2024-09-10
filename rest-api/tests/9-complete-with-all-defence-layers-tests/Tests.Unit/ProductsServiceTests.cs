@@ -10,7 +10,7 @@ namespace CompleteWithAllDefenceLayers.Tests.Unit;
 public class ProductsServiceTests
 {  
     [Fact]
-    public async void GetById_ReturnsNoAccessToOperation_IfNoValidReadClaim()
+    public async Task GetById_ReturnsNoAccessToOperation_IfNoValidReadClaim()
     {
         var auditService = Mock.Of<IAuditService>();
         var productRepository = Mock.Of<IProductRepository>(MockBehavior.Strict);
@@ -30,7 +30,7 @@ public class ProductsServiceTests
     }
 
     [Fact]
-    public async void GetById_ReturnsNotFound_IfValidClaimButNotExisting()
+    public async Task GetById_ReturnsNotFound_IfValidClaimButNotExisting()
     {
         var auditService = Mock.Of<IAuditService>(MockBehavior.Strict);
         var productRepository = Mock.Of<IProductRepository>();
@@ -49,7 +49,7 @@ public class ProductsServiceTests
     }
 
     [Fact]
-    public async void GetById_ReturnsNoAccessToData_IfNotValidMarket()
+    public async Task GetById_ReturnsNoAccessToData_IfNotValidMarket()
     {
         var auditService = Mock.Of<IAuditService>();
         var productRepository = Mock.Of<IProductRepository>();
@@ -80,7 +80,7 @@ public class ProductsServiceTests
     // requiring a lower claim, e.g. "read:guest" would not be caught by the
     // NoValidReadClaim test above. This test will catch such configuration errors.
     [Fact]
-    public async void GetById_ReturnsOk_IfValidClaims()
+    public async Task GetById_ReturnsOk_IfValidClaims()
     {
         var auditService = Mock.Of<IAuditService>();
         var productRepository = Mock.Of<IProductRepository>();

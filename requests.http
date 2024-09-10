@@ -23,7 +23,7 @@ Authorization: Bearer {{token.response.body.$.access_token}}
 
 // Test exception handling
 ###
-GET https://localhost:5000/api/health/readyness?throwExcpetion=true
+PUT https://localhost:5000/api/error
 content-type: application/json
 cache-control: no-cache
 Authorization: Bearer {{token.response.body.$.access_token}}

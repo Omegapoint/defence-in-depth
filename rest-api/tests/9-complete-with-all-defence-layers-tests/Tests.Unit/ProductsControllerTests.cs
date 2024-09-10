@@ -16,7 +16,7 @@ public class ProductsControllerTests
     private readonly IMapper mapper = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>()).CreateMapper();
 
     [Fact]
-    public async void GetProductsById_ShouldReturn200_WhenAuthorized()
+    public async Task GetProductsById_ShouldReturn200_WhenAuthorized()
     {
         var productService = Mock.Of<IProductService>();
         Mock.Get(productService).Setup(ps => ps.GetById(It.IsAny<ProductId>()))
@@ -35,7 +35,7 @@ public class ProductsControllerTests
     }
 
     [Fact]
-    public async void GetProductsById_ShouldReturnDataContract_WhenAuthorized()
+    public async Task GetProductsById_ShouldReturnDataContract_WhenAuthorized()
     {
         var productService = Mock.Of<IProductService>();
         Mock.Get(productService).Setup(ps => ps.GetById(It.IsAny<ProductId>()))
@@ -55,7 +55,7 @@ public class ProductsControllerTests
 
     [Theory]
     [MemberData(nameof(InvalidIds))]
-    public async void GetProductsById_ShouldReturn400_WhenInvalidId(string id)
+    public async Task GetProductsById_ShouldReturn400_WhenInvalidId(string id)
     {
         var productService = Mock.Of<IProductService>();
         Mock.Get(productService).Setup(ps => ps.GetById(It.IsAny<ProductId>()))
@@ -70,7 +70,7 @@ public class ProductsControllerTests
     }
 
     [Fact]
-    public async void GetProductsById_ShouldReturn404_WhenNotFound()
+    public async Task GetProductsById_ShouldReturn404_WhenNotFound()
     {
         var productService = Mock.Of<IProductService>();
         Mock.Get(productService).Setup(ps => ps.GetById(It.IsAny<ProductId>()))
@@ -85,7 +85,7 @@ public class ProductsControllerTests
     }
 
     [Fact]
-    public async void GetProductsById_ShouldReturn403_WhenCanNotRead()
+    public async Task GetProductsById_ShouldReturn403_WhenCanNotRead()
     {
         var productService = Mock.Of<IProductService>();
         Mock.Get(productService).Setup(ps => ps.GetById(It.IsAny<ProductId>()))
@@ -100,7 +100,7 @@ public class ProductsControllerTests
     }
 
     [Fact]
-    public async void GetProductsById_ShouldReturn404_WhenNoAccessToData()
+    public async Task GetProductsById_ShouldReturn404_WhenNoAccessToData()
     {
         var productService = Mock.Of<IProductService>();
         Mock.Get(productService).Setup(ps => ps.GetById(It.IsAny<ProductId>()))
