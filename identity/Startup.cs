@@ -3,7 +3,7 @@
 
 
 using Duende.IdentityServer;
-using Duende.IdentityServer.Test;
+using IdentityServerHost;
 
 namespace identity
 {
@@ -35,7 +35,7 @@ namespace identity
             builder.AddInMemoryApiScopes(Config.ApiScopes);
             builder.AddInMemoryClients(Config.Clients);
             builder.AddInMemoryApiResources(Config.ApiResources);
-            builder.AddTestUsers(TestUser.Users);
+            builder.AddTestUsers(TestUsers.Users);
 
             services.AddAuthentication()
                 .AddGoogle(options =>
