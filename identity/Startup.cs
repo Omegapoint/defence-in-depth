@@ -3,12 +3,7 @@
 
 
 using Duende.IdentityServer;
-using IdentityServerHost.Quickstart.UI;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Duende.IdentityServer.Test;
 
 namespace identity
 {
@@ -33,14 +28,14 @@ namespace identity
                 options.Events.RaiseInformationEvents = true;
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
-            })
-                .AddTestUsers(TestUsers.Users);
+            });
 
             // in-memory, code config
             builder.AddInMemoryIdentityResources(Config.IdentityResources);
             builder.AddInMemoryApiScopes(Config.ApiScopes);
             builder.AddInMemoryClients(Config.Clients);
             builder.AddInMemoryApiResources(Config.ApiResources);
+            builder.AddTestUsers(TestUser.Users);
 
             services.AddAuthentication()
                 .AddGoogle(options =>
