@@ -1,11 +1,9 @@
-using AutoMapper;
-using Defence.In.Depth;
+using System.Security.Claims;
+using CompleteWithAllDefenceLayers.Tests.Unit.Mock;
 using Defence.In.Depth.Controllers;
 using Defence.In.Depth.DataContracts;
-using Defence.In.Depth.Domain.Models;
 using Defence.In.Depth.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 using Xunit;
 
 namespace CompleteWithAllDefenceLayers.Tests.Unit;
@@ -13,21 +11,12 @@ namespace CompleteWithAllDefenceLayers.Tests.Unit;
 [Trait("Category", "Unit")]
 public class ProductsControllerTests
 {
-    private readonly IMapper mapper = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>()).CreateMapper();
-
     [Fact]
     public async Task GetProductsById_ShouldReturn200_WhenAuthorized()
     {
-        var productService = Mock.Of<IProductService>();
-        Mock.Get(productService).Setup(ps => ps.GetById(It.IsAny<ProductId>()))
-            .ReturnsAsync((
-                    new Product(
-                        new ProductId("se1"), 
-                        new ProductName("ProductSweden"), 
-                        new MarketId("se")),
-                    ReadDataResult.Success));
-
-        var controller = new ProductsController(productService, mapper);
+        var productService = CreateSUTWithAllAccess();
+        
+        var controller = new ProductsController(productService);
 
         var result = await controller.GetById("se1");
 
@@ -37,16 +26,9 @@ public class ProductsControllerTests
     [Fact]
     public async Task GetProductsById_ShouldReturnDataContract_WhenAuthorized()
     {
-        var productService = Mock.Of<IProductService>();
-        Mock.Get(productService).Setup(ps => ps.GetById(It.IsAny<ProductId>()))
-            .ReturnsAsync((
-                    new Product(
-                        new ProductId("se1"), 
-                        new ProductName("ProductSweden"), 
-                        new MarketId("se")),
-                    ReadDataResult.Success));
+        var productService = CreateSUTWithAllAccess();
 
-        var controller = new ProductsController(productService, mapper);
+        var controller = new ProductsController(productService);
 
         var result = await controller.GetById("se1");
 
@@ -57,11 +39,9 @@ public class ProductsControllerTests
     [MemberData(nameof(InvalidIds))]
     public async Task GetProductsById_ShouldReturn400_WhenInvalidId(string id)
     {
-        var productService = Mock.Of<IProductService>();
-        Mock.Get(productService).Setup(ps => ps.GetById(It.IsAny<ProductId>()))
-             .ReturnsAsync((null, ReadDataResult.NoAccessToData));
+        var productService = CreateSUTWithAllAccess();
 
-        var controller = new ProductsController(productService, mapper);
+        var controller = new ProductsController(productService);
 
         var result = await controller.GetById(id);
 
@@ -72,11 +52,10 @@ public class ProductsControllerTests
     [Fact]
     public async Task GetProductsById_ShouldReturn404_WhenNotFound()
     {
-        var productService = Mock.Of<IProductService>();
-        Mock.Get(productService).Setup(ps => ps.GetById(It.IsAny<ProductId>()))
-            .ReturnsAsync((null, ReadDataResult.NoAccessToData));
 
-        var controller = new ProductsController(productService, mapper);
+        var productService = CreateSUTWithAllAccess();
+
+        var controller = new ProductsController(productService);
 
         var result = await controller.GetById("def"); // This is a valid, non-existing id
 
@@ -87,11 +66,9 @@ public class ProductsControllerTests
     [Fact]
     public async Task GetProductsById_ShouldReturn403_WhenCanNotRead()
     {
-        var productService = Mock.Of<IProductService>();
-        Mock.Get(productService).Setup(ps => ps.GetById(It.IsAny<ProductId>()))
-            .ReturnsAsync((null, ReadDataResult.NoAccessToOperation));
+        var productService = CreateSUTWithNoReadAccess();
 
-        var controller = new ProductsController(productService, mapper);
+        var controller = new ProductsController(productService);
 
         var result = await controller.GetById("se1");
 
@@ -102,13 +79,12 @@ public class ProductsControllerTests
     [Fact]
     public async Task GetProductsById_ShouldReturn404_WhenNoAccessToData()
     {
-        var productService = Mock.Of<IProductService>();
-        Mock.Get(productService).Setup(ps => ps.GetById(It.IsAny<ProductId>()))
-            .ReturnsAsync((null, ReadDataResult.NoAccessToData));
+        var productService = CreateSUTWithAllAccess();
 
-        var controller = new ProductsController(productService, mapper);
-
-        var result = await controller.GetById("no1"); // The user should only be aable to access products on teh SE-market
+        var controller = new ProductsController(productService);
+        
+        // The user should only be able to access products on the SE-market
+        var result = await controller.GetById("no1"); 
 
         Assert.IsType<NotFoundResult>(result.Result);
         Assert.Null(result.Value);
@@ -123,6 +99,42 @@ public class ProductsControllerTests
             new object[] { "#" },
             new object[] { "<script>" }
         };
+    private static IProductService CreateSUTWithAllAccess()
+    {
+        var claims = new[]
+        {
+                new Claim(ClaimSettings.Sub, "user1"),
+                new Claim(ClaimSettings.ClientId, "client1"),
+                new Claim(ClaimSettings.Amr, ClaimSettings.AuthenticationMethodPassword),
+                new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead),
+                new Claim(ClaimSettings.Scope, ClaimSettings.ProductsWrite)
+        };
+
+        var productRepository = new ProductRepositoryMock();
+        var mockHttpContextAccessor = new HttpContextAccessorMock(new ClaimsIdentity(claims));
+        var permissionService = new HttpContextPermissionService(mockHttpContextAccessor);
+        var auditService = new LoggerAuditServiceMock(new LoggerMock(), permissionService);
+        
+        return new ProductServiceMock(permissionService, productRepository, auditService);
+    }
+    
+    private static IProductService CreateSUTWithNoReadAccess()
+    {
+        var claims = new[]
+        {
+                new Claim(ClaimSettings.Sub, "user1"),
+                new Claim(ClaimSettings.ClientId, "client1"),
+                new Claim(ClaimSettings.Amr, ClaimSettings.AuthenticationMethodPassword),
+                new Claim(ClaimSettings.Scope, ClaimSettings.ProductsWrite)
+        };
+        
+        var productRepository = new ProductRepositoryMock();
+        var mockHttpContextAccessor = new HttpContextAccessorMock(new ClaimsIdentity(claims));
+        var permissionService = new HttpContextPermissionService(mockHttpContextAccessor);
+        var auditService = new LoggerAuditServiceMock(new LoggerMock(), permissionService);
+
+        return new ProductServiceMock(permissionService, productRepository, auditService);
+    }
 }
 
 

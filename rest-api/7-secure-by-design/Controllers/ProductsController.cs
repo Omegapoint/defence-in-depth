@@ -1,4 +1,3 @@
-using AutoMapper;
 using Defence.In.Depth.DataContracts;
 using Defence.In.Depth.Domain.Models;
 using Defence.In.Depth.Domain.Services;
@@ -10,12 +9,11 @@ namespace Defence.In.Depth.Controllers;
 public class ProductsController : ControllerBase
 {
     private readonly IProductService productService;
-    private readonly IMapper mapper;
 
-    public ProductsController(IProductService productService, IMapper mapper)
+
+    public ProductsController(IProductService productService)
     {
         this.productService = productService;
-        this.mapper = mapper;
     }
 
     [HttpGet("{id}")]
@@ -40,7 +38,7 @@ public class ProductsController : ControllerBase
                 return NotFound();
 
             case ReadDataResult.Success:
-                var contract = mapper.Map<ProductDataContract>(product);
+                ProductDataContract contract = new(product?.Id.ToString(), product?.Name.ToString());
             
                 return Ok(contract);
                 

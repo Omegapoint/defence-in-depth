@@ -30,7 +30,6 @@ builder.Services.AddTransient<IAuditService, LoggerAuditService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddPermissionService();
-builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 builder.Services.AddControllers();
 

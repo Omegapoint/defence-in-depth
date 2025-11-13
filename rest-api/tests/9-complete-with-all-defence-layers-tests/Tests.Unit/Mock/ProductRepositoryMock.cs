@@ -1,16 +1,17 @@
 using Defence.In.Depth.Domain.Models;
+using Defence.In.Depth.Infrastructure;
 using Defence.In.Depth.Infrastructure.Entities;
 
-namespace Defence.In.Depth.Infrastructure;
+namespace CompleteWithAllDefenceLayers.Tests.Unit.Mock;
 
-public class ProductRepository : IProductRepository
+public class ProductRepositoryMock : IProductRepository
 {
     private readonly Dictionary<string, ProductEntity> data = new Dictionary<string, ProductEntity>{
         {"se1", new ProductEntity { Id = "se1", Name = "ProductSweden", MarketId = "se" }},
         {"no1", new ProductEntity { Id = "no1", Name = "ProductNorway", MarketId = "no" }}
     };
 
-    public ProductRepository()
+    public ProductRepositoryMock()
     {
     }
 

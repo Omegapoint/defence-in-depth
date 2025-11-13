@@ -1,8 +1,7 @@
 using System.Security.Claims;
+using CompleteWithAllDefenceLayers.Tests.Unit.Mock;
 using Defence.In.Depth.Domain.Models;
 using Defence.In.Depth.Domain.Services;
-using Microsoft.AspNetCore.Http;
-using Moq;
 using Xunit;
 
 namespace CompleteWithAllDefenceLayers.Tests.Unit;
@@ -102,12 +101,9 @@ public class HttpContextPermissionServiceTests
 
     private static HttpContextPermissionService CreateSut(IEnumerable<Claim> claims )
     {
-        var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
-        var context = new DefaultHttpContext();
-        context.User.AddIdentity(new ClaimsIdentity(claims));
-        mockHttpContextAccessor.Setup(_ => _.HttpContext).Returns(context);
-
-        return new HttpContextPermissionService(mockHttpContextAccessor.Object);
+        var mockHttpContextAccessor = new HttpContextAccessorMock(new ClaimsIdentity(claims));
+        
+        return new HttpContextPermissionService(mockHttpContextAccessor);
     }
 }
 

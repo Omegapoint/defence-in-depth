@@ -1,15 +1,16 @@
 using Defence.In.Depth.Domain.Models;
+using Defence.In.Depth.Domain.Services;
 using Defence.In.Depth.Infrastructure;
 
-namespace Defence.In.Depth.Domain.Services;
+namespace CompleteWithAllDefenceLayers.Tests.Unit.Mock;
 
-public class ProductService : IProductService
+public class ProductServiceMock : IProductService
 {
     private readonly IPermissionService permissionService;
     private readonly IProductRepository productRepository;
     private readonly IAuditService auditService;
- 
-    public ProductService(
+
+    public ProductServiceMock(
         IPermissionService permissionService,
         IProductRepository productRepository,
         IAuditService auditService)
@@ -19,12 +20,6 @@ public class ProductService : IProductService
         this.auditService = auditService;
     }
 
-    // Note that in a real world domain, with more services and methods, it is important to
-    // keep a clear pattern with access control and input validation as early as possible, 
-    // before any business logic and data processing.
-    // Verify access to operation should always be done first in any service method, but 
-    // sometimes access to data need to be after intial data lookup or even after the 
-    // business logic (e g for a search function).  
     public async Task<(Product? product, ReadDataResult result)> GetById(ProductId productId)
     {
         if (!permissionService.CanReadProducts)
