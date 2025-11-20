@@ -20,7 +20,9 @@ public class ProductRepository : IProductRepository
 
         var entity = data.GetValueOrDefault(productId.Value);
         if (entity == null)
+        {
             return null;
+        }
 
         return new Product(new ProductId(entity.Id ?? "empty"), new ProductName(entity.Name ?? "empty"), new MarketId(entity.MarketId ?? "empty"));
     }

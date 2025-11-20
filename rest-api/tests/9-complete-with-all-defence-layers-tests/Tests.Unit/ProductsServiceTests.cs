@@ -2,6 +2,7 @@
 using CompleteWithAllDefenceLayers.Tests.Unit.Mock;
 using Defence.In.Depth.Domain.Models;
 using Defence.In.Depth.Domain.Services;
+using Defence.In.Depth.Infrastructure;
 using Xunit;
 
 namespace CompleteWithAllDefenceLayers.Tests.Unit;
@@ -12,7 +13,9 @@ public class ProductsServiceTests
     [Fact]
     public async Task GetById_ReturnsNoAccessToOperation_IfNoValidReadClaim()
     {
-        CreateSUT(out ProductRepositoryMock productRepository, out HttpContextPermissionService permissionService, out LoggerAuditServiceMock auditService, []);
+        var loggerMock = new LoggerMock();
+        CreateSUT(out ProductRepository productRepository, out HttpContextPermissionService permissionService, out LoggerAuditService auditService, 
+            [], loggerMock);
 
         var productService = new ProductService(permissionService, productRepository, auditService);
 
@@ -22,9 +25,8 @@ public class ProductsServiceTests
 
         Assert.Equal(ReadDataResult.NoAccessToOperation, result);
         Assert.Null(product);
-
-        //TODO: Mock.Get(auditService).Verify(service => service.Log(DomainEvent.NoAccessToOperation, productId), Times.Once);
-        //TODO: Mock.Get(auditService).VerifyNoOtherCalls();
+        Assert.Equal(1, loggerMock.CountNoAccessToOperation);
+        Assert.Equal(1, loggerMock.TotalCount);
     }
 
     [Fact]
@@ -38,7 +40,10 @@ public class ProductsServiceTests
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead),
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsWrite)
         };
-        CreateSUT(out ProductRepositoryMock productRepository, out HttpContextPermissionService permissionService, out LoggerAuditServiceMock auditService, claims);
+
+        var loggerMock = new LoggerMock();
+        CreateSUT(out ProductRepository productRepository, out HttpContextPermissionService permissionService, out LoggerAuditService auditService, 
+            claims, loggerMock);
 
         var productService = new ProductService(permissionService, productRepository, auditService);
         
@@ -46,8 +51,7 @@ public class ProductsServiceTests
 
         Assert.Equal(ReadDataResult.NotFound, result);
         Assert.Null(product);
-
-        //TODO: Mock.Get(auditService).VerifyNoOtherCalls();
+        Assert.Equal(0, loggerMock.TotalCount);
     }
 
     [Fact]
@@ -61,7 +65,10 @@ public class ProductsServiceTests
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead),
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsWrite)
         };
-        CreateSUT(out ProductRepositoryMock productRepository, out HttpContextPermissionService permissionService, out LoggerAuditServiceMock auditService, claims);
+        
+        var loggerMock = new LoggerMock();
+        CreateSUT(out ProductRepository productRepository, out HttpContextPermissionService permissionService, out LoggerAuditService auditService, 
+            claims, loggerMock);
         
         var productId = new ProductId("no1");
         
@@ -71,9 +78,8 @@ public class ProductsServiceTests
 
         Assert.Equal(ReadDataResult.NoAccessToData, result);
         Assert.Null(product);
-        
-        //TODO: Mock.Get(auditService).Verify(service => service.Log(DomainEvent.NoAccessToData, productId), Times.Once);
-        //TODO: Mock.Get(auditService).VerifyNoOtherCalls();
+        Assert.Equal(1, loggerMock.CountNoAccessToData);
+        Assert.Equal(1, loggerMock.TotalCount);
     }
 
     // Testing successful resource access is important to verify that the
@@ -92,7 +98,9 @@ public class ProductsServiceTests
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsWrite)
         };
 
-        CreateSUT(out ProductRepositoryMock productRepository, out HttpContextPermissionService permissionService, out LoggerAuditServiceMock auditService, claims);
+        var loggerMock = new LoggerMock();
+        CreateSUT(out ProductRepository productRepository, out HttpContextPermissionService permissionService, out LoggerAuditService auditService, 
+            claims, loggerMock);
 
         var productId = new ProductId("se1");
 
@@ -102,16 +110,17 @@ public class ProductsServiceTests
 
         Assert.Equal(ReadDataResult.Success, result);
         Assert.NotNull(product);
-
-        //TODO: Mock.Get(auditService).Verify(service => service.Log(DomainEvent.ProductRead, productId), Times.Once);
-        //TODO: Mock.Get(auditService).VerifyNoOtherCalls();
+        Assert.Equal(1, loggerMock.CountProductRead);
+        Assert.Equal(1, loggerMock.TotalCount);
     }
 
-    private static void CreateSUT(out ProductRepositoryMock productRepository, out HttpContextPermissionService permissionService, out LoggerAuditServiceMock auditService, IEnumerable<Claim> claims)
+    private static void CreateSUT(out ProductRepository productRepository, out HttpContextPermissionService permissionService, out LoggerAuditService auditService, 
+    IEnumerable<Claim> claims, LoggerMock loggerMock)
     {
-        productRepository = new ProductRepositoryMock();
+        // Note that in a real-world application we usually need to mock repositories
+        productRepository = new ProductRepository();
         var mockHttpContextAccessor = new HttpContextAccessorMock(new ClaimsIdentity(claims));
         permissionService = new HttpContextPermissionService(mockHttpContextAccessor);
-        auditService = new LoggerAuditServiceMock(new LoggerMock(), permissionService);
+        auditService = new LoggerAuditService(loggerMock, permissionService);
     }
 }

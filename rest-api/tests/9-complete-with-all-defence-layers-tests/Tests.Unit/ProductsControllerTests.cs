@@ -3,6 +3,7 @@ using CompleteWithAllDefenceLayers.Tests.Unit.Mock;
 using Defence.In.Depth.Controllers;
 using Defence.In.Depth.DataContracts;
 using Defence.In.Depth.Domain.Services;
+using Defence.In.Depth.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
@@ -110,12 +111,13 @@ public class ProductsControllerTests
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsWrite)
         };
 
-        var productRepository = new ProductRepositoryMock();
+        // Note that in a real-world application we usually need to mock repositories
+        var productRepository = new ProductRepository();
         var mockHttpContextAccessor = new HttpContextAccessorMock(new ClaimsIdentity(claims));
         var permissionService = new HttpContextPermissionService(mockHttpContextAccessor);
-        var auditService = new LoggerAuditServiceMock(new LoggerMock(), permissionService);
+        var auditService = new LoggerAuditService(new LoggerMock(), permissionService);
         
-        return new ProductServiceMock(permissionService, productRepository, auditService);
+        return new ProductService(permissionService, productRepository, auditService);
     }
     
     private static IProductService CreateSUTWithNoReadAccess()
@@ -128,12 +130,13 @@ public class ProductsControllerTests
                 new Claim(ClaimSettings.Scope, ClaimSettings.ProductsWrite)
         };
         
-        var productRepository = new ProductRepositoryMock();
+        // Note that in a real-world application we usually need to mock repositories
+        var productRepository = new ProductRepository();
         var mockHttpContextAccessor = new HttpContextAccessorMock(new ClaimsIdentity(claims));
         var permissionService = new HttpContextPermissionService(mockHttpContextAccessor);
-        var auditService = new LoggerAuditServiceMock(new LoggerMock(), permissionService);
+        var auditService = new LoggerAuditService(new LoggerMock(), permissionService);
 
-        return new ProductServiceMock(permissionService, productRepository, auditService);
+        return new ProductService(permissionService, productRepository, auditService);
     }
 }
 
