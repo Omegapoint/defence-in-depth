@@ -28,7 +28,7 @@ public class LoggerMock : ILogger<LoggerAuditService>
     {
         TotalCount++;
 
-        var exceptionMsg = state?.ToString() ?? "";
+        var exceptionMsg = state?.ToString() ?? string.Empty;
 
         if (exceptionMsg.Contains("NoAccessToOperation"))
         {
