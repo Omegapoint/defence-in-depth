@@ -39,9 +39,9 @@ JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 // all we need to do is configure iss and aud, and add valid type.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => {
-        // TokenValidationParameters not not currently supported in appsettings.config for .NET 7
-        // Note that type validation might differ, depending on token serivce (IdP)
-        options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+        // TokenValidationParameters are not currently supported in appsettings.config for .NET 10
+        // Note that type validation might differ, depending on token service (IdP)
+        options.TokenValidationParameters.ValidTypes = ["at+jwt"];
 
         // If we can restrict algorithms, the current recommendation is to only support PS256
         // See e g https://42crunch.com/7-ways-to-avoid-jwt-pitfalls/

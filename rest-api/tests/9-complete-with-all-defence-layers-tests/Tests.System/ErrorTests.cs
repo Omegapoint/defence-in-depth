@@ -5,12 +5,8 @@ using Xunit.Abstractions;
 namespace CompleteWithAllDefenceLayers.Tests.System;
 
 [Trait("Category", "System")]
-public class ErrorTests : BaseTests
+public class ErrorTests(ITestOutputHelper output) : BaseTests(output)
 {
-    public ErrorTests(ITestOutputHelper output) : base(output)
-    {
-    }
-
     [Fact]
     public async Task ThrowWithValidToken_ShouldReturn500AndNoDetails()
     {

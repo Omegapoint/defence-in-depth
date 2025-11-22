@@ -9,5 +9,5 @@ public enum AuthenticationMethods
     
     Password = 0x2,
 
-    MFA = 0x4
+    Mfa = 0x4
 }

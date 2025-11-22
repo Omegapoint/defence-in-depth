@@ -47,7 +47,7 @@ public class HttpContextPermissionService : IPermissionService
             .Select(claim => claim.Value switch
             {
                 ClaimSettings.AuthenticationMethodPassword => AuthenticationMethods.Password,
-                ClaimSettings.AuthenticationMethodMFA => AuthenticationMethods.MFA,
+                ClaimSettings.AuthenticationMethodMfa => AuthenticationMethods.Mfa,
                     _ => AuthenticationMethods.Unknown
             })
             .Aggregate(AuthenticationMethods.None, (prev , next) => prev | next);
@@ -77,7 +77,7 @@ public class HttpContextPermissionService : IPermissionService
     public bool CanDoHighPrivilegeOperations => (
         UserRoles == UserRoles.ProductManager &&  
         CanWriteProducts &&
-        AuthenticationMethods == AuthenticationMethods.MFA);
+        AuthenticationMethods == AuthenticationMethods.Mfa);
         
     public MarketId MarketId { get; private set; }
 

@@ -5,9 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication()
     .AddJwtBearer(options => {
-        // TokenValidationParameters not not currently supported in appsettings.config for .NET 7
-        // Note that type validation might differ, depending on token serivce (IdP)
-        options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+        // TokenValidationParameters are not currently supported in appsettings.config for .NET 10
+        // Note that type validation might differ, depending on token service (IdP)
+        options.TokenValidationParameters.ValidTypes = ["at+jwt"];
     });
 
 builder.Services.AddAuthorization(options =>

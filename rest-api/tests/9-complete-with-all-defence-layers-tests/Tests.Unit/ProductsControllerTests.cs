@@ -12,10 +12,20 @@ namespace CompleteWithAllDefenceLayers.Tests.Unit;
 [Trait("Category", "Unit")]
 public class ProductsControllerTests
 {
+    //Some examples of invalid id:s, this is verified in more depth in e g the ProductId unit tests
+    public static IEnumerable<object[]> InvalidIds =>
+    [
+        [""],
+        ["no spaces"],
+        ["thisisanidthatistoolong"],
+        ["#"],
+        ["<script>"]
+    ];
+    
     [Fact]
     public async Task GetProductsById_ShouldReturn200_WhenAuthorized()
     {
-        var productService = CreateSUTWithAllAccess();
+        var productService = CreateSutWithAllAccess();
         
         var controller = new ProductsController(productService);
 
@@ -27,7 +37,7 @@ public class ProductsControllerTests
     [Fact]
     public async Task GetProductsById_ShouldReturnDataContract_WhenAuthorized()
     {
-        var productService = CreateSUTWithAllAccess();
+        var productService = CreateSutWithAllAccess();
 
         var controller = new ProductsController(productService);
 
@@ -40,7 +50,7 @@ public class ProductsControllerTests
     [MemberData(nameof(InvalidIds))]
     public async Task GetProductsById_ShouldReturn400_WhenInvalidId(string id)
     {
-        var productService = CreateSUTWithAllAccess();
+        var productService = CreateSutWithAllAccess();
 
         var controller = new ProductsController(productService);
 
@@ -54,7 +64,7 @@ public class ProductsControllerTests
     public async Task GetProductsById_ShouldReturn404_WhenNotFound()
     {
 
-        var productService = CreateSUTWithAllAccess();
+        var productService = CreateSutWithAllAccess();
 
         var controller = new ProductsController(productService);
 
@@ -67,7 +77,7 @@ public class ProductsControllerTests
     [Fact]
     public async Task GetProductsById_ShouldReturn403_WhenCanNotRead()
     {
-        var productService = CreateSUTWithNoReadAccess();
+        var productService = CreateSutWithNoReadAccess();
 
         var controller = new ProductsController(productService);
 
@@ -80,7 +90,7 @@ public class ProductsControllerTests
     [Fact]
     public async Task GetProductsById_ShouldReturn404_WhenNoAccessToData()
     {
-        var productService = CreateSUTWithAllAccess();
+        var productService = CreateSutWithAllAccess();
 
         var controller = new ProductsController(productService);
         
@@ -91,24 +101,15 @@ public class ProductsControllerTests
         Assert.Null(result.Value);
     }
 
-    //Some examples of invalid id:s, this is verified in more depth in e g the PriductId unit tests
-    public static IEnumerable<object[]> InvalidIds => new[]
-    {
-            new object[] { "" },
-            new object[] { "no spaces" },
-            new object[] { "thisisanidthatistoolong" },
-            new object[] { "#" },
-            new object[] { "<script>" }
-        };
-    private static IProductService CreateSUTWithAllAccess()
+    private static ProductService CreateSutWithAllAccess()
     {
         var claims = new[]
         {
-                new Claim(ClaimSettings.Sub, "user1"),
-                new Claim(ClaimSettings.ClientId, "client1"),
-                new Claim(ClaimSettings.Amr, ClaimSettings.AuthenticationMethodPassword),
-                new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead),
-                new Claim(ClaimSettings.Scope, ClaimSettings.ProductsWrite)
+            new Claim(ClaimSettings.Sub, "user1"),
+            new Claim(ClaimSettings.ClientId, "client1"),
+            new Claim(ClaimSettings.Amr, ClaimSettings.AuthenticationMethodPassword),
+            new Claim(ClaimSettings.Scope, ClaimSettings.ProductsRead),
+            new Claim(ClaimSettings.Scope, ClaimSettings.ProductsWrite)
         };
 
         // Note that in a real-world application we usually need to mock repositories
@@ -120,7 +121,7 @@ public class ProductsControllerTests
         return new ProductService(permissionService, productRepository, auditService);
     }
     
-    private static IProductService CreateSUTWithNoReadAccess()
+    private static ProductService CreateSutWithNoReadAccess()
     {
         var claims = new[]
         {

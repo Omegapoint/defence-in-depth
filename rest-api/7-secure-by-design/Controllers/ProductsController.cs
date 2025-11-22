@@ -6,16 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Defence.In.Depth.Controllers;
 
 [Route("/api/products")]
-public class ProductsController : ControllerBase
+public class ProductsController(IProductService productService) : ControllerBase
 {
-    private readonly IProductService productService;
-
-
-    public ProductsController(IProductService productService)
-    {
-        this.productService = productService;
-    }
-
     [HttpGet("{id}")]
     public async Task<ActionResult<ProductDataContract>> GetById([FromRoute] string id)
     {
