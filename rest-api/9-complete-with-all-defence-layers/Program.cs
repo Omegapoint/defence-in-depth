@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.HttpOverrides;
 using System.IdentityModel.Tokens.Jwt;
-
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 
 // Demo 1 - The default configuration will on Windows, where IIS is available,
 // run Kestrel in-process hosted by the IIS with the IIS ASP.NET Core module as a reverse proxy. 
@@ -27,9 +27,7 @@ if(!string.IsNullOrEmpty(azureAppConfigurationUrl))
 }
 
 // Use some sort of centralized logging service (e g Application Insights) to log all exceptions etc.
-// Note that UseDeveloperExceptionPage is built in to the ASP.NET Core 6 default web host builder,
-// So the API will display detailed execution messages if Environment.IsDevelopment() returns true. 
-builder.Services.AddApplicationInsightsTelemetry();
+builder.Services.AddOpenTelemetry().UseAzureMonitor();
 
 // Demo 3 - Needed if we want all token claims from the IdP in the ClaimsPrincipal, 
 // not filtered or transformed by ASP.NET Core default claim mapping

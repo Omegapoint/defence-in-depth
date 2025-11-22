@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <PackageReference Include="Duende.IdentityServer" Version="7.3.2" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
   </ItemGroup>
