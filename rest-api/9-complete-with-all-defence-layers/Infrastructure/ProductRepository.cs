@@ -22,6 +22,11 @@ public class ProductRepository : IProductRepository
             return null;
         }
 
-        return new Product(new ProductId(entity.Id ?? "empty"), new ProductName(entity.Name ?? "empty"), new MarketId(entity.MarketId ?? "empty"));
+        return new Product 
+        {
+            Id = new ProductId(entity.Id ?? "empty"), 
+            Name = new ProductName(entity.Name ?? "empty"),
+            MarketId = new MarketId(entity.MarketId ?? "empty")
+        };
     }
 }

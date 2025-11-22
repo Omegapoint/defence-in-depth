@@ -30,7 +30,13 @@ public class ProductsController(IProductService productService) : ControllerBase
                 return NotFound();
 
             case ReadDataResult.Success:
-                ProductDataContract contract = new(product?.Id.ToString(), product?.Name.ToString());
+                if (product == null) throw new InvalidOperationException("Product value expected for success result.");
+
+                var contract = new ProductDataContract
+                {
+                    Id = product.Id.Value,
+                    Name = product.Name.Value
+                };
             
                 return Ok(contract);
                 
