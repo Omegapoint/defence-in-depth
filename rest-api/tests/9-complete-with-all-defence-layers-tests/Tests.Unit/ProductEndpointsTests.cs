@@ -30,7 +30,7 @@ public class ProductEndpointsTests
         
         var result = await ProductEndpoints.GetById("se1", productService);
 
-        Assert.IsType<Ok<ProductDataContract>>(result);
+        Assert.IsType<Ok<IDataContract>>(result);
     }
 
     [Fact]
