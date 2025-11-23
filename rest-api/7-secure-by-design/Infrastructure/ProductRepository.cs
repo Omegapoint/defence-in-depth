@@ -5,7 +5,7 @@ namespace Defence.In.Depth.Infrastructure;
 
 public class ProductRepository : IProductRepository
 {
-    public async Task<Product> GetById(ProductId productId)
+    public async Task<Product?> GetById(ProductId productId)
     {
         await Task.CompletedTask;
 

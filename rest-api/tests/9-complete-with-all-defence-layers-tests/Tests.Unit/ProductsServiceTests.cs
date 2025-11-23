@@ -21,10 +21,10 @@ public class ProductsServiceTests
 
         var productId = new ProductId("se1");
 
-        var (product, result) = await productService.GetById(productId);
+        var result = await productService.GetById(productId);
 
-        Assert.Equal(ReadDataResult.NoAccessToOperation, result);
-        Assert.Null(product);
+        Assert.Equal(ResultKind.NoAccessToOperation, result.Result);
+        Assert.Null(result.Value);
         Assert.Equal(1, loggerMock.CountNoAccessToOperation);
         Assert.Equal(1, loggerMock.TotalCount);
     }
@@ -47,10 +47,10 @@ public class ProductsServiceTests
 
         var productService = new ProductService(permissionService, productRepository, auditService);
         
-        var (product, result)  = await productService.GetById(new ProductId("notfound"));
+        var result  = await productService.GetById(new ProductId("notfound"));
 
-        Assert.Equal(ReadDataResult.NotFound, result);
-        Assert.Null(product);
+        Assert.Equal(ResultKind.NotFound, result.Result);
+        Assert.Null(result.Value);
         Assert.Equal(0, loggerMock.TotalCount);
     }
 
@@ -74,10 +74,10 @@ public class ProductsServiceTests
         
         var productService = new ProductService(permissionService, productRepository, auditService);
 
-        var (product, result) = await productService.GetById(productId);
+        var result = await productService.GetById(productId);
 
-        Assert.Equal(ReadDataResult.NoAccessToData, result);
-        Assert.Null(product);
+        Assert.Equal(ResultKind.NoAccessToData, result.Result);
+        Assert.Null(result.Value);
         Assert.Equal(1, loggerMock.CountNoAccessToData);
         Assert.Equal(1, loggerMock.TotalCount);
     }
@@ -106,10 +106,10 @@ public class ProductsServiceTests
 
         var productService = new ProductService(permissionService, productRepository, auditService);
 
-        var (product, result) = await productService.GetById(productId);
+        var result = await productService.GetById(productId);
 
-        Assert.Equal(ReadDataResult.Success, result);
-        Assert.NotNull(product);
+        Assert.Equal(ResultKind.Success, result.Result);
+        Assert.NotNull(result.Value);
         Assert.Equal(1, loggerMock.CountProductRead);
         Assert.Equal(1, loggerMock.TotalCount);
     }

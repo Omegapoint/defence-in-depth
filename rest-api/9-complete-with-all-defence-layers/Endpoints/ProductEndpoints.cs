@@ -21,26 +21,8 @@ public static class ProductEndpoints
 
         var productId = new ProductId(id);
             
-        var (product, result) = await productService.GetById(productId);
-
-        switch (result)
-        {
-            case ReadDataResult.NoAccessToOperation:
-                return Results.Forbid();
-                
-            case ReadDataResult.NotFound:
-            case ReadDataResult.NoAccessToData:
-                return Results.NotFound();
-
-            case ReadDataResult.Success:
-                if (product == null) throw new InvalidOperationException("Product value expected for success result.");
-                
-                var contract = Mapper.Map(product);
-
-                return Results.Ok(contract);
-                
-            default:
-                throw new InvalidOperationException($"Result kind {result} is not supported");
-        }
+        var result = await productService.GetById(productId);
+        
+        return result.MapToHttpResult(Mapper.Map);
     }
 }
