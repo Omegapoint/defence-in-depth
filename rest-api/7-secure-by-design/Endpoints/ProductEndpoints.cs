@@ -34,11 +34,7 @@ public static class ProductEndpoints
             case ReadDataResult.Success:
                 if (product == null) throw new InvalidOperationException("Product value expected for success result.");
 
-                var contract = new ProductDataContract
-                {
-                    Id = product.Id.Value,
-                    Name = product.Name.Value
-                };
+                var contract = Mapper.Map(product);
             
                 return Results.Ok(contract);
                 

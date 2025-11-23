@@ -12,10 +12,6 @@ public class ProductRepository : IProductRepository
         // We just create an entity, but normally this is a database query
         var entity = new ProductEntity { Id = productId.Value, Name = "Product in Sweden", MarketId = "se" };
 
-        return new Product {
-            Id = new ProductId(entity.Id), 
-            Name = new ProductName(entity.Name),
-            MarketId = new MarketId(entity.MarketId)
-        };
+        return Mapper.Map(entity);
     }
 }
