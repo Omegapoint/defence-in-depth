@@ -1,16 +1,17 @@
 using System.Security.Claims;
 using CompleteWithAllDefenceLayers.Tests.Unit.Mock;
-using Defence.In.Depth.Controllers;
 using Defence.In.Depth.DataContracts;
 using Defence.In.Depth.Domain.Services;
+using Defence.In.Depth.Endpoints;
 using Defence.In.Depth.Infrastructure;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Xunit;
 
 namespace CompleteWithAllDefenceLayers.Tests.Unit;
 
 [Trait("Category", "Unit")]
-public class ProductsControllerTests
+public class ProductEndpointsTests
 {
     //Some examples of invalid id:s, this is verified in more depth in e g the ProductId unit tests
     public static IEnumerable<object[]> InvalidIds =>
@@ -27,11 +28,9 @@ public class ProductsControllerTests
     {
         var productService = CreateSutWithAllAccess();
         
-        var controller = new ProductsController(productService);
+        var result = await ProductEndpoints.GetById("se1", productService);
 
-        var result = await controller.GetById("se1");
-
-        Assert.IsType<OkObjectResult>(result.Result);
+        Assert.IsType<Ok<ProductDataContract>>(result);
     }
 
     [Fact]
@@ -39,11 +38,10 @@ public class ProductsControllerTests
     {
         var productService = CreateSutWithAllAccess();
 
-        var controller = new ProductsController(productService);
+        var result = await ProductEndpoints.GetById("se1", productService);
 
-        var result = await controller.GetById("se1");
-
-        Assert.IsAssignableFrom<IDataContract>((result.Result as ObjectResult)?.Value);
+        var valueHttpResult = Assert.IsType<IValueHttpResult>(result, exactMatch: false);
+        Assert.IsType<IDataContract>(valueHttpResult.Value, exactMatch: false);
     }
 
     [Theory]
@@ -52,26 +50,20 @@ public class ProductsControllerTests
     {
         var productService = CreateSutWithAllAccess();
 
-        var controller = new ProductsController(productService);
+        var result = await ProductEndpoints.GetById(id, productService);
 
-        var result = await controller.GetById(id);
-
-        Assert.IsType<BadRequestObjectResult>(result.Result);
-        Assert.Null(result.Value);
+        var badRequest = Assert.IsType<BadRequest<string>>(result);
+        Assert.Equal("Id is not valid.", badRequest.Value);
     }
 
     [Fact]
     public async Task GetProductsById_ShouldReturn404_WhenNotFound()
     {
-
         var productService = CreateSutWithAllAccess();
 
-        var controller = new ProductsController(productService);
+        var result = await ProductEndpoints.GetById("def", productService); // This is a valid, non-existing id
 
-        var result = await controller.GetById("def"); // This is a valid, non-existing id
-
-        Assert.IsType<NotFoundResult>(result.Result);
-        Assert.Null(result.Value);
+        Assert.IsType<NotFound>(result);
     }
 
     [Fact]
@@ -79,12 +71,9 @@ public class ProductsControllerTests
     {
         var productService = CreateSutWithNoReadAccess();
 
-        var controller = new ProductsController(productService);
+        var result = await ProductEndpoints.GetById("se1", productService);
 
-        var result = await controller.GetById("se1");
-
-        Assert.IsType<ForbidResult>(result.Result);
-        Assert.Null(result.Value);
+        Assert.IsType<ForbidHttpResult>(result);
     }
 
     [Fact]
@@ -92,13 +81,10 @@ public class ProductsControllerTests
     {
         var productService = CreateSutWithAllAccess();
 
-        var controller = new ProductsController(productService);
-        
         // The user should only be able to access products on the SE-market
-        var result = await controller.GetById("no1"); 
+        var result = await ProductEndpoints.GetById("no1", productService); 
 
-        Assert.IsType<NotFoundResult>(result.Result);
-        Assert.Null(result.Value);
+        Assert.IsType<NotFound>(result);
     }
 
     private static ProductService CreateSutWithAllAccess()

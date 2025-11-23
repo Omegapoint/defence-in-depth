@@ -1,3 +1,4 @@
+using Defence.In.Depth.Endpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
@@ -21,10 +22,8 @@ builder.Services.AddAuthorization(options =>
     options.FallbackPolicy = policy;
 });
 
-builder.Services.AddControllers();
-
 var app = builder.Build();
-app.UseRouting();
-app.UseAuthorization();
-app.MapControllers().RequireAuthorization();
+
+app.RegisterProductEndpoints();
+
 app.Run();

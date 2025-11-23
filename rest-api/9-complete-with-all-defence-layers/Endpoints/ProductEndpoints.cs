@@ -1,21 +1,22 @@
 using Defence.In.Depth.DataContracts;
 using Defence.In.Depth.Domain.Models;
 using Defence.In.Depth.Domain.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
-namespace Defence.In.Depth.Controllers;
+namespace Defence.In.Depth.Endpoints;
 
-[Route("/api/products")]
-public class ProductsController(IProductService productService) : ControllerBase
+public static class ProductEndpoints
 {
-    [Authorize(ClaimSettings.ProductsRead)]
-    [HttpGet("{id}")]
-    public async Task<ActionResult<ProductDataContract>> GetById([FromRoute] string id)
+    public static void RegisterProductEndpoints(this IEndpointRouteBuilder app)
+    {
+        app.MapGet("/api/products/{id}", GetById)
+            .RequireAuthorization(ClaimSettings.ProductsRead);
+    }
+
+    public static async Task<IResult> GetById(string id, IProductService productService)
     {
         if (!ProductId.IsValidId(id))
         {
-            return BadRequest("Id is not valid.");
+            return Results.BadRequest("Id is not valid.");
         }
 
         var productId = new ProductId(id);
@@ -25,11 +26,11 @@ public class ProductsController(IProductService productService) : ControllerBase
         switch (result)
         {
             case ReadDataResult.NoAccessToOperation:
-                return Forbid();
+                return Results.Forbid();
                 
             case ReadDataResult.NotFound:
             case ReadDataResult.NoAccessToData:
-                return NotFound();
+                return Results.NotFound();
 
             case ReadDataResult.Success:
                 if (product == null) throw new InvalidOperationException("Product value expected for success result.");
@@ -40,7 +41,7 @@ public class ProductsController(IProductService productService) : ControllerBase
                     Name = product.Name.Value
                 };
             
-                return Ok(contract);
+                return Results.Ok(contract);
                 
             default:
                 throw new InvalidOperationException($"Result kind {result} is not supported");

@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using Defence.In.Depth;
+using Defence.In.Depth.Endpoints;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -30,10 +31,8 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddSingleton<IClaimsTransformation, ClaimsTransformation>();
 
-builder.Services.AddControllers();
-
 var app = builder.Build();
-app.UseRouting();
-app.UseAuthorization();
-app.MapControllers().RequireAuthorization();
+
+app.RegisterProductEndpoints();
+
 app.Run();

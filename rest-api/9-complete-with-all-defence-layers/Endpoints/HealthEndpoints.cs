@@ -1,22 +1,27 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
-namespace Defence.In.Depth.Controllers;
+namespace Defence.In.Depth.Endpoints;
 
-[Route("/api/health")]
-public class HealthController : ControllerBase
+public static class HealthEndpoints
 {
-    [AllowAnonymous]
-    [HttpGet("live")]
-    public ActionResult Live()
+    public static void RegisterHealthEndpoints(this IEndpointRouteBuilder app)
+    {
+        app.MapGet("/api/health/live", Live)
+            .AllowAnonymous();
+
+        app.MapGet("/api/health/ready", Ready)
+            .RequireAuthorization();
+    }
+
+    
+    private static IResult Live()
     {
         var version = Assembly.GetExecutingAssembly().GetName().Version;
         var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
 
-        return Ok(
+        return Results.Ok(
             new
             {
                 Version = $"{version?.Major}.{version?.Minor}.{version?.Build}",
@@ -24,9 +29,7 @@ public class HealthController : ControllerBase
             });
     }
 
-    [Authorize]
-    [HttpGet("ready")]
-    public ActionResult Ready()
+    private static IResult Ready()
     {
         var version = Assembly.GetExecutingAssembly().GetName().Version;
         var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
@@ -34,7 +37,7 @@ public class HealthController : ControllerBase
         // This is where we might make additional checks for the readiness of the
         // application, for example if dependencies are ready for requests.        
 
-        return Ok(
+        return Results.Ok(
             new
             {
                 Version = $"{version?.Major}.{version?.Minor}.{version?.Build}",

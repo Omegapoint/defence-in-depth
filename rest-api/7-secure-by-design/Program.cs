@@ -1,5 +1,6 @@
 using Defence.In.Depth;
 using Defence.In.Depth.Domain.Services;
+using Defence.In.Depth.Endpoints;
 using Defence.In.Depth.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -31,10 +32,8 @@ builder.Services.AddTransient<IAuditService, LoggerAuditService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddPermissionService();
 
-builder.Services.AddControllers();
-
 var app = builder.Build();
-app.UseRouting();
-app.UseAuthorization();
-app.MapControllers().RequireAuthorization();
+
+app.RegisterProductEndpoints();
+
 app.Run();

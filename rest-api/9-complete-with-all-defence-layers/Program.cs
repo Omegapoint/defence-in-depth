@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.HttpOverrides;
 using System.IdentityModel.Tokens.Jwt;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
+using Defence.In.Depth.Endpoints;
 
 // Demo 1 - The default configuration will on Windows, where IIS is available,
 // run Kestrel in-process hosted by the IIS with the IIS ASP.NET Core module as a reverse proxy. 
@@ -14,7 +15,7 @@ using Azure.Monitor.OpenTelemetry.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Demo 8 - Handle secretes using App Configuration and Key Vault
-// Note that MSI needs to be set up and secretes needs to reference key vault
+// Note that MSI needs to be set up and secrets needs to reference key vault
 // https://docs.microsoft.com/en-us/azure/app-service/app-service-key-vault-references
 var azureAppConfigurationUrl =  builder.Configuration["AzureAppConfiguration:Url"];
 if(!string.IsNullOrEmpty(azureAppConfigurationUrl))
@@ -27,7 +28,7 @@ if(!string.IsNullOrEmpty(azureAppConfigurationUrl))
 }
 
 // Use some sort of centralized logging service (e g Application Insights) to log all exceptions etc.
-builder.Services.AddOpenTelemetry().UseAzureMonitor();
+//builder.Services.AddOpenTelemetry().UseAzureMonitor();
 
 // Demo 3 - Needed if we want all token claims from the IdP in the ClaimsPrincipal, 
 // not filtered or transformed by ASP.NET Core default claim mapping
@@ -65,10 +66,8 @@ builder.Services.AddAuthorization(options =>
     // we should also verify this basic access as early as possible, e g by using ASP.NET Core policies.
     // This could also be done in a API-gateway in front of us, but the core domain should not 
     // assume any of this. Defence in depth and Zero trust!
-    options.AddPolicy(ClaimSettings.ProductsRead, policy =>
-        policy.RequireClaim("scope", ClaimSettings.ProductsRead));
-    options.AddPolicy(ClaimSettings.ProductsWrite, policy =>
-        policy.RequireClaim("scope", ClaimSettings.ProductsWrite));
+    options.AddPolicy(ClaimSettings.ProductsRead, policyBuilder => policyBuilder.RequireClaim("scope", ClaimSettings.ProductsRead));
+    options.AddPolicy(ClaimSettings.ProductsWrite, policyBuilder => policyBuilder.RequireClaim("scope", ClaimSettings.ProductsWrite));
 });
 
 builder.Services.AddTransient<IProductService, ProductService>();
@@ -78,8 +77,6 @@ builder.Services.AddTransient<IAuditService, LoggerAuditService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddPermissionService();
 
-builder.Services.AddControllers();
-
 var app = builder.Build();
 
 // Demo 1 - Force https, this is done in the NGINX reverse proxy.
@@ -87,7 +84,7 @@ var app = builder.Build();
 //app.UseHsts();
     
 // Demo 1 - TLS is terminated before our application and we need to handle forwarded headers
-// in order to support more advanced features like certificate bound tokens, se e g
+// in order to support more advanced features like certificate bound tokens, see e g
 // https://docs.duendesoftware.com/identityserver/v5/apis/aspnetcore/confirmation 
 // Note that this code should be removed if the API does not have a reverse proxy or API-gateway in-front (which terminates TLS). 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
@@ -95,12 +92,8 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
-app.UseRouting();
-app.UseAuthorization();
+app.RegisterProductEndpoints();
+app.RegisterErrorEndpoints();
+app.RegisterHealthEndpoints();
 
-// Demo 2 - Even if we have the fallback policy it is a good practice to set a explicit policy
-// for each mapped route (with RequireAuthorization we apply the Default policy).
-// With this code it takes two mistakes get a public endpoint.
-app.MapControllers().RequireAuthorization();
-    
 app.Run();
