@@ -1,4 +1,3 @@
-using Defence.In.Depth.DataContracts;
 using Defence.In.Depth.Domain.Models;
 using Defence.In.Depth.Domain.Services;
 
