@@ -10,7 +10,7 @@ public static class ClaimSettings
 
     //Authorization server AMR values 
     public const string AuthenticationMethodPassword = "pwd";
-    public const string AuthenticationMethodMFA = "mfa";
+    public const string AuthenticationMethodMfa = "mfa";
 
     //Authorization server scope values
     public const string ProductsRead = "products.read";

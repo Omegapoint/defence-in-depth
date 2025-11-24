@@ -8,12 +8,24 @@ namespace CompleteWithAllDefenceLayers.Tests.System;
 // The Health controller tests verify that we run the correct version, has mandatory JWT access control,
 // handle exceptions and return recommended security headers.
 [Trait("Category", "System")]
-public class HealthTests : BaseTests
+public class HealthTests(ITestOutputHelper output) : BaseTests(output)
 {
-    public HealthTests(ITestOutputHelper output) : base(output)
+    public static IEnumerable<object[]> AuthenticatedEndpoints => new List<object[]>
     {
-    }
+        new object[]
+        {
+            "/api/health/ready"
+        }
+    };
 
+    public static IEnumerable<object[]> AnonymousEndpoints => new List<object[]>
+    {
+        new object[]
+        {
+            "/api/health/live"
+        }
+    };
+    
     [Fact]
     public async Task LivenessAnonymous_ShouldReturn200AndCorrectVersion()
     {
@@ -27,7 +39,7 @@ public class HealthTests : BaseTests
     }
 
     [Fact]
-    public async Task ReadynessWithValidToken_ShouldReturn200()
+    public async Task ReadinessWithValidToken_ShouldReturn200()
     {
         var httpClient = CreateAuthenticatedHttpClient();
 
@@ -37,7 +49,7 @@ public class HealthTests : BaseTests
     }
 
     [Fact]
-    public async Task ReadynessWithNoToken_ShouldReturn401()
+    public async Task ReadinessWithNoToken_ShouldReturn401()
     {
         var httpClient = CreateAnonymousHttpClient();
 
@@ -81,8 +93,8 @@ public class HealthTests : BaseTests
     public async Task Endpoints_Should_RequireTls13(string path)
     {
         // Since we only allow TLS 1.3 we only need to verify that we only accept TLS 1.3 and 
-        // there are no validation errors (accroding to .NET default policy) to assert sufficient TLS quality. 
-        // For TLS 1.2 we should also verify strong chiphers according to e g 
+        // there are no validation errors (according to .NET default policy) to assert sufficient TLS quality. 
+        // For TLS 1.2 we should also verify strong ciphers according to e g 
         // https://openid.bitbucket.io/fapi/fapi-2_0-security-profile.html#section-5.2.2
         #pragma warning disable //Disable warnings for deprecated TLS and SSL versions
         var handler13 = new HttpClientHandler();
@@ -124,7 +136,7 @@ public class HealthTests : BaseTests
         var response = await httpClient.GetAsync(path);
 
         // Verify according to https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html#security-headers
-        // The sanbox directive has been addeed according to recommendations from Philippe De Ryck, 
+        // The sandbox directive has been added according to recommendations from Philippe De Ryck, 
         // see e g https://auth0.com/blog/from-zero-to-hero-with-csp/ 
         // Note that this will fail when running without NGINX 
         Assert.Contains(response.Headers, h => h.Key == "Cache-Control" && h.Value.ToString() == "no-store");
@@ -134,20 +146,4 @@ public class HealthTests : BaseTests
         Assert.Contains(response.Headers, h => h.Key == "X-Content-Type-Options" && h.Value.ToString() == "nosniff");
         Assert.Contains(response.Headers, h => h.Key == "X-Frame-Options" && h.Value.ToString() == "DENY");
     }
-
-    public static IEnumerable<object[]> AuthenticatedEndpoints => new List<object[]>
-    {
-        new object[]
-        {
-            "/api/health/ready"
-        }
-    };
-
-    public static IEnumerable<object[]> AnonymousEndpoints => new List<object[]>
-    {
-        new object[]
-        {
-            "/api/health/live"
-        }
-    };
 }

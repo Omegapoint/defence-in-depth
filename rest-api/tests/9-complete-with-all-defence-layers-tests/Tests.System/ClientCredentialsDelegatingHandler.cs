@@ -1,7 +1,6 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
-using System.Web;
 using Microsoft.Extensions.Configuration;
 
 namespace CompleteWithAllDefenceLayers.Tests.System;
@@ -16,7 +15,7 @@ public class ClientCredentialsDelegatingHandler : DelegatingHandler
     private string? accessToken;
 
     public ClientCredentialsDelegatingHandler(IConfiguration configuration)
-    : this(configuration,  new[] {"products.read"})
+    : this(configuration, ["products.read"])
     {
     }
     

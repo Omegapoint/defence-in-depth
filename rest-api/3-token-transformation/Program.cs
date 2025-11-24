@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using Defence.In.Depth;
+using Defence.In.Depth.Endpoints;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -12,9 +13,9 @@ JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => {
-        // TokenValidationParameters not not currently supported in appsettings.config for .NET 7
-        // Note that type validation might differ, depending on token serivce (IdP)
-        options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+        // TokenValidationParameters are not currently supported in appsettings.config for .NET 10
+        // Note that type validation might differ, depending on token service (IdP)
+        options.TokenValidationParameters.ValidTypes = ["at+jwt"];
     });
 
 builder.Services.AddAuthorization(options =>
@@ -30,10 +31,8 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddSingleton<IClaimsTransformation, ClaimsTransformation>();
 
-builder.Services.AddControllers();
-
 var app = builder.Build();
-app.UseRouting();
-app.UseAuthorization();
-app.MapControllers().RequireAuthorization();
+
+app.RegisterProductEndpoints();
+
 app.Run();
