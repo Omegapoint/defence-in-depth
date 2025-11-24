@@ -7,7 +7,8 @@ public static class ProductEndpoints
 {
     public static void RegisterProductEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/api/products/{id}", GetById);
+        app.MapGet("/api/products/{id}", GetById)
+            .RequireAuthorization();
     }
 
     private static async Task<IResult> GetById(string id, IProductService productService)

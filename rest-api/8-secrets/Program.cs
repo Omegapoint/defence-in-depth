@@ -10,6 +10,7 @@ builder.Configuration.AddAzureAppConfiguration(options => options
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/", () => "Hello World!")
+            .RequireAuthorization();
 
 app.Run();

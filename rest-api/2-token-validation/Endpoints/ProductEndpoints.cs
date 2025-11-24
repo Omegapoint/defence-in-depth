@@ -6,6 +6,7 @@ public static class ProductEndpoints
 {
     public static void RegisterProductEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/api/products/{id}", ([FromRoute] string id) => Results.Ok("product"));
+        app.MapGet("/api/products/{id}", ([FromRoute] string id) => Results.Ok("product"))
+            .RequireAuthorization();
     }
 }
