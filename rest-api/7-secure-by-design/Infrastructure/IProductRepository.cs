@@ -4,5 +4,5 @@ namespace Defence.In.Depth.Infrastructure;
 
 public interface IProductRepository
 {
-    Task<Product> GetById(ProductId productId);
+    Task<Product?> GetById(ProductId productId);
 }

@@ -2,12 +2,11 @@ using System.Runtime.Serialization;
 
 namespace Defence.In.Depth.DataContracts;
 
-[DataContract]
-public record ProductDataContract
+public interface IDataContract;
+
+public record ProductDataContract : IDataContract
 {
-    [DataMember]
-    public string? Id { get; init; }
-        
-    [DataMember]
-    public string? Name { get; init; }
+    public required string Id { get; init; }
+
+    public required string Name { get; init; }
 }

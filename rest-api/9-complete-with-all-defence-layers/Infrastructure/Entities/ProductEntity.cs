@@ -1,10 +1,10 @@
 namespace Defence.In.Depth.Infrastructure.Entities;
 
-public class ProductEntity
+public record ProductEntity
 {
-    public string? Id { get; set; }
+    public required string Id { get; init; }
 
-    public string? Name { get; set; }
+    public required string Name { get; init; }
         
-    public string? MarketId { get; set; }
+    public required string MarketId { get; init; }
 }

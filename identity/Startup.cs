@@ -4,6 +4,8 @@
 
 using Duende.IdentityServer;
 using IdentityServerHost;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
 
 namespace identity
 {
