@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace Defence.In.Depth.Endpoints;
 
 public static class ProductEndpoints
@@ -8,7 +10,7 @@ public static class ProductEndpoints
             .RequireAuthorization();
     }
 
-    private static IResult GetById(string id)
+    private static IResult GetById([FromRoute] string id)
     {
         if (string.IsNullOrEmpty(id) || id.Length > 10 || !id.All(char.IsLetterOrDigit))
         {
