@@ -24,6 +24,9 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.RegisterProductEndpoints();
 
 app.Run();

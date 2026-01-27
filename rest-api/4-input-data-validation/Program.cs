@@ -28,6 +28,9 @@ builder.Services.AddSingleton<IClaimsTransformation, ClaimsTransformation>();
 
 var app = builder.Build();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.RegisterProductEndpoints();
 
 app.Run();

@@ -1,4 +1,6 @@
 using Azure.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +10,28 @@ builder.Configuration.AddAzureAppConfiguration(options => options
         new DefaultAzureCredential())
     .ConfigureKeyVault(c => c.SetCredential(new DefaultAzureCredential())));
 
+builder.Services.AddAuthentication()
+    .AddJwtBearer(options => {
+        // TokenValidationParameters are not currently supported in appsettings.config for .NET 10
+        // Note that type validation might differ, depending on token service (IdP)
+        options.TokenValidationParameters.ValidTypes = ["at+jwt"];
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+        .Build();
+
+    options.DefaultPolicy = policy;
+    options.FallbackPolicy = policy;
+});
+
 var app = builder.Build();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGet("/", () => "Hello World!")
             .RequireAuthorization();
