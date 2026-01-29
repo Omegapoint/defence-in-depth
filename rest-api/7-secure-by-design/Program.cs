@@ -34,6 +34,9 @@ builder.Services.AddPermissionService();
 
 var app = builder.Build();
 
+// Note that with minimal APIs, UseAuthentication and UseAuthorization is called automatically from AddAuthentication and AddAuthorization.
+// See https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/middleware?view=aspnetcore-10.0
+
 app.RegisterProductEndpoints();
 
 app.Run();

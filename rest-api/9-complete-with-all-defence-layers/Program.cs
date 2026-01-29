@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.HttpOverrides;
 using System.IdentityModel.Tokens.Jwt;
-using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Defence.In.Depth.Endpoints;
 
 // Demo 1 - The default configuration will on Windows, where IIS is available,
@@ -41,6 +40,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         // TokenValidationParameters are not currently supported in appsettings.config for .NET 10
         // Note that type validation might differ, depending on token service (IdP)
         options.TokenValidationParameters.ValidTypes = ["at+jwt"];
+        // If sub is present in the token, uncomment this line to map the sub claim to the User.Identity.Name property
+        // options.TokenValidationParameters.NameClaimType = "sub";
+        
 
         // If we can restrict algorithms, the current recommendation is to only support PS256
         // See e g https://42crunch.com/7-ways-to-avoid-jwt-pitfalls/
@@ -91,6 +93,9 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
+
+// Note that with minimal APIs, UseAuthentication and UseAuthorization is called automatically from AddAuthentication and AddAuthorization.
+// See https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/middleware?view=aspnetcore-10.0
 
 app.RegisterProductEndpoints();
 app.RegisterErrorEndpoints();

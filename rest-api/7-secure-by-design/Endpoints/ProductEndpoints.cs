@@ -1,5 +1,6 @@
 using Defence.In.Depth.Domain.Models;
 using Defence.In.Depth.Domain.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Defence.In.Depth.Endpoints;
 
@@ -11,7 +12,7 @@ public static class ProductEndpoints
             .RequireAuthorization();
     }
 
-    private static async Task<IResult> GetById(string id, IProductService productService)
+    private static async Task<IResult> GetById([FromRoute] string id, IProductService productService)
     {
         if (!ProductId.IsValidId(id))
         {
