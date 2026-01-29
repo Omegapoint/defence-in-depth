@@ -40,7 +40,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         // TokenValidationParameters are not currently supported in appsettings.config for .NET 10
         // Note that type validation might differ, depending on token service (IdP)
         options.TokenValidationParameters.ValidTypes = ["at+jwt"];
-        // If sub is present in the token, uncommnet this line to map sub to then Name property of ClaimsPrincipal
+        // If sub is present in the token, uncomment this line to map the sub claim to the User.Identity.Name property
         // options.TokenValidationParameters.NameClaimType = "sub";
         
 
