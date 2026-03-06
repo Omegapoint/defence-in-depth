@@ -28,3 +28,14 @@ https://www.manning.com/books/secure-by-design
 The repo also contains a token service for demo and education purposes built with Duende Identity Server:
 
 https://github.com/DuendeSoftware/IdentityServer
+
+
+## AI Agent Instructions
+
+This repo contains instructions for reviewing the security posture, both using GitHub Pull Request review agents and from the IDE prompt.
+
+Agent instructions can be added in many ways, this is just a POC to show that we can use agents to identify security issues in this repo, according to implemented secure by design principles, not for any code.
+
+Other copilot-instructions can be found at 
+https://github.com/github/awesome-copilot  
+
