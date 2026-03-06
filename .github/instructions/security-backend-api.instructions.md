@@ -71,7 +71,7 @@ Copilot must verify:
 ### 3.2 Output encoding
 - Ensure that any data returned to clients is properly encoded according to trust boundaries and applicable output context to prevent injection attacks.
 - Always use response data contracts, never return domain entities or database models directly.  
-- Never returning sensitive identifiers or internal state, no leakage of internal implementation details in error messages.
+- Never return sensitive identifiers or internal state, no leakage of internal implementation details in error messages.
 
 ---
 
