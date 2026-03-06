@@ -131,7 +131,7 @@ _Reference: Defense-in-Depth, Secure Architecture_
 Copilot must enforce:
 
 - Apply the defensive in depth model: do not rely on a single control. In example, require that the Default and FallbackPolicy requires authentacted users, a Authorization attribute per endpoint, and authorization checks in the domain service layer. Never assume that authentication, authorization or important validation logic is done by an upstream component only. 
-- Fail securely: default should deny access and never leak internal informations such as serialized exception objects.  
+- Fail securely: default should deny access and never leak internal information such as serialized exception objects.  
 - Validate assumptions explicitly in code (argument checks, null checks, type checks).  
 - Reject needless complexity that increases attack surface.
 
