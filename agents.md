@@ -12,7 +12,8 @@ Any code (or configuration, IaC, pipelines, scripts, documentation with security
 - Run `security_qa` to review security posture.
 - Run `compliance_qa` to retrieve and cite relevant references for Omegapoint verifications. For compliance the most significant control is 16 Application Security.
 -->
-- Add all references at the end.
+
+All references should be added at the end of the pull request description.
 ### Pull request expectation
 
 PRs that contain agent-generated changes should explicitly mention that the changes were reviewed against the Copilot instructions and security requirements.
