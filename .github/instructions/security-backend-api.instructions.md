@@ -63,7 +63,7 @@ Copilot must verify:
 - Input must be validated according to strict schemas (length, type, format).
 - Input must be validated according to domain logic using domain primitives.
 - Input validation must must be applied according to trust boundaries, as early as possible, both at the API boundary and when entering the domain service layer.  
-- Prefer whitelisting over blacklisting, in example any input url must be validated using exact string matching against a whitelist.
+- Prefer whitelisting over blacklisting, for example any input URL must be validated using exact string matching against a whitelist.
 - All strings must be validated against expected formats and lengths
 - No dynamic or unbounded deserialization.
 - If input validation errors occur they must result in a 400 response code without reflecting the raw input value (mitigating reflected XSS).   
