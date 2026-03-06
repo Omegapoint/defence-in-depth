@@ -32,7 +32,7 @@ https://github.com/DuendeSoftware/IdentityServer
 
 ## AI Agent Instructions
 
-This repo contains instructions for reviewing the security posture, both using Github Pull Reqeust review agents and from the IDE prompt.
+This repo contains instructions for reviewing the security posture, both using GitHub Pull Request review agents and from the IDE prompt.
 
 Agent instuctions can be added in many ways, this is just a POC to show that we can use agents to identify security issues in this repo, according to implemented secure by design principles, not for any code.
 
