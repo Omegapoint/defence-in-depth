@@ -34,7 +34,7 @@ https://github.com/DuendeSoftware/IdentityServer
 
 This repo contains instructions for reviewing the security posture, both using GitHub Pull Request review agents and from the IDE prompt.
 
-Agent instuctions can be added in many ways, this is just a POC to show that we can use agents to identify security issues in this repo, according to implemented secure by design principles, not for any code.
+Agent instructions can be added in many ways, this is just a POC to show that we can use agents to identify security issues in this repo, according to implemented secure by design principles, not for any code.
 
 Other copilot-instructions can be found at 
 https://github.com/github/awesome-copilot  
