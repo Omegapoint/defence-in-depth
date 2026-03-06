@@ -41,15 +41,15 @@ Copilot must verify:
 - Assert that when sub, client_id and scope claims are present they are input to the permission service logic.  
 
 ### 2.3 Authorize access to the operation
-- Assert that access to the operation is verified both at the API endpoint, using .NET authorization attribute with named policies, and in the domain service layer, mitigating any BFLA vulnerablities.
+- Assert that access to the operation is verified both at the API endpoint, using .NET authorization attribute with named policies, and in the domain service layer, mitigating any BFLA vulnerabilities.
 - If authorization to the operation fails it must result in a 403 response.
 
 ### 2.4 Authorize access to the data object
-- Assert that access to the requested data object is verified, mitigating any BOLA/IDOR vulnerablities.
+- Assert that access to the requested data object is verified, mitigating any BOLA/IDOR vulnerabilities.
 - If authorization to the data object fails it must result in a 404. 
 
 ### 2.5 Authorize access to the data object field
-- Assert that access to the requested data object field is verified, mitigating any BOPLA vulnerablities. This is typically impleneted by using data transfer objects (DTOs) that only include fields the caller is authorized to access (also know as request-response models or data contracts). 
+- Assert that access to the requested data object field is verified, mitigating any BOPLA vulnerabilities. This is typically impleneted by using data transfer objects (DTOs) that only include fields the caller is authorized to access (also know as request-response models or data contracts). 
 
 ---
 ## 3. Input Validation and Output Encoding
