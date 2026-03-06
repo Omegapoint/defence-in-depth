@@ -5,7 +5,7 @@ For any new or changed code, Copilot MUST:
 3. Require tests for all security-relevant logic. In particular negative tests concering authorization logic and input validation.
 
 Copilot should also warn and explain when security posture is weakened. 
-Thus, the followinhg questions (when applicable) should be investigated and explained:
+Thus, the following questions (when applicable) should be investigated and explained:
 
 - Is authentication and proper authorization enforced according to the principles of least privilege and zero trust?
 - Is input validation applied according to trust boundaries and domain logic?
