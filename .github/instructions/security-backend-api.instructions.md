@@ -12,11 +12,11 @@ _Reference: Identity Modelling, Clients & Sessions_
 
 Copilot must verify:
 
-## 1.1 Identity
+### 1.1 Identity
 - Identity must be based on the JWT claim sub or, when sub is not present, client_id.
 - If the act claim is present it must be used to represent the acting party on behalf of whom the request is made.  
 
-## 1.2 Authentication
+### 1.2 Authentication
 - All requests must be authenticated using trusted JWTs from the Authorization header.
 - Any endpoints allowing anonymous access must be explicitly defined with AllowAnonymous attribute for the specific endpoint, NEVER allow AllowAnonymous at class level.
 - JWTs must be validated, in particular (but not limited to): Signature (only accept secure methods according to OWASP ASVS), issuer, audience, expiration.
