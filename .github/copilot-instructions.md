@@ -7,16 +7,16 @@ For any new or changed code, Copilot MUST:
 Copilot should also warn and explain when security posture is weakened. 
 Thus, the following questions (when applicable) should be investigated and explained:
 
-- Is authentication and proper authorization enforced according to the principles of least privilege and zero trust?
+- Is authentication and authorization enforced according to the principles of least privilege, zero trust and defense in depth?
 - Is input validation applied according to trust boundaries and domain logic?
-- Is input output encoding applied according to trust boundaries and context?
-- Are there any unused or unnecessary libraries that can be removed?
-- Are there any outdated dependencies?
-- Are there any dependencies with known vulnerabilities?
-- Does the code or configuration contain or expose sensitive data such as personal data, tokens or credentials?
-- Can business logic be abused?
+- Is output encoding applied according to trust boundaries and context?
+- Are there any outdated or vulnerable dependencies?
+- Are there any unnecessary or high-risk dependencies (e.g. without reliable ownership) that can be replaced?
+- Does the code or configuration contain or expose sensitive data, such as personal data, tokens or credentials?
+- Can business logic be abused, e.g. for denial-of-service attacks?
 - Are security-relevant events, errors and exceptions logged?
 - Are errors and exceptions handled securely without leaking internal implementation details?
+- Are there any tests with focus on security, e.g. negative tests for authorization logic and input validation?
 
 ---
 

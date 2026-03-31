@@ -12,7 +12,7 @@ DEMO:
 8. Secrets
 9. Complete + Tests
 
-Note that test in this repo aims to highlight that security is part of your domain and non-functional requirements. Thus we should identify requirements, test cases and add tests to prove that our defence layers works as expected.
+Note that test in this repo aims to highlight that security is part of your domain and non-functional requirements. Thus we should identify requirements, test cases and add tests to prove that our defence layers works as expected, according to the simple access model requirement "All Product API endpoints require that a client shall only access products for a given market". 
 
 In this repo we have added tests in two projects, one for unit tests with all dependencies mocked and the other for complete system tests where no dependencies are mocked. Larger projects would most likely require more structure and test on different levels of integrations. The important part is what kind of tests we added to verify step 2-6 in our model for secure API:s, this is not at complete test suite for a real-world product API.
 
