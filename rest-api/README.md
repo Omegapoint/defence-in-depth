@@ -45,5 +45,5 @@ Note that for system test the token service (at https://localhost:4000) and the 
 
 Start with: dotnet `dotnet run --urls https://*:4000` and `dotnet run --urls https://*:5000`
 
-The .NET development certificate must be trusted, run
+For localhost, the .NET development certificate needs be trusted, run
 `dotnet dev-certs https --trust`
