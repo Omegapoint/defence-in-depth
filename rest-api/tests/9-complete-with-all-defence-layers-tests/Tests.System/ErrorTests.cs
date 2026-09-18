@@ -16,9 +16,6 @@ public class ErrorTests(ITestOutputHelper output) : BaseTests(output)
         var responseContent = await response.Content.ReadAsStringAsync();
 
         Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
-
-        // Note that this will fail when running localhost (in development), 
-        // since ASP.NET Core will return exception details when ASPNETCORE_ENVIRONMENT=Development
-        Assert.True(string.IsNullOrEmpty(responseContent));
+        Assert.Contains("https://tools.ietf.org/html/rfc9110#section-15.6.1", responseContent);
     }
 }
