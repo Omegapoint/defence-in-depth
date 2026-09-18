@@ -9,8 +9,8 @@ using System.IdentityModel.Tokens.Jwt;
 using Defence.In.Depth.Endpoints;
 
 // Demo 1 - The default configuration will on Windows, where IIS is available,
-// run Kestrel in-process hosted by the IIS with the IIS ASP.NET Core module as a reverse proxy. 
-// On e g Linux it will be hosted out-of process in Kestrel, and you need a reverse proxy like NGINX in front
+// run Kestrel in-process hosted by IIS with the IIS ASP.NET Core module as a reverse proxy. 
+// On e g Linux it will be hosted out-of-process in Kestrel, and you need a reverse proxy like NGINX in front
 var builder = WebApplication.CreateBuilder(args);
 
 // Register ProblemDetails so the global exception handler returns a standardized,
@@ -18,8 +18,8 @@ var builder = WebApplication.CreateBuilder(args);
 // This adds value for e.g. Open Telemetry and monitoring clients.
 builder.Services.AddProblemDetails();
 
-// Demo 8 - Handle secretes using App Configuration and Key Vault
-// Note that MSI needs to be set up and secrets needs to reference key vault
+// Demo 8 - Handle secrets using App Configuration and Key Vault
+// Note that MSI needs to be set up and secrets need to reference key vault
 // https://docs.microsoft.com/en-us/azure/app-service/app-service-key-vault-references
 var azureAppConfigurationUrl =  builder.Configuration["AzureAppConfiguration:Url"];
 if(!string.IsNullOrEmpty(azureAppConfigurationUrl))
@@ -71,7 +71,7 @@ builder.Services.AddAuthorization(options =>
 
     // Even if we validate permission to perform the operation in the domain layer,
     // we should also verify this basic access as early as possible, e g by using ASP.NET Core policies.
-    // This could also be done in a API-gateway in front of us, but the core domain should not 
+    // This could also be done in an API-gateway in front of us, but the core domain should not 
     // assume any of this. Defence in depth and Zero trust!
     options.AddPolicy(ClaimSettings.ProductsRead, policyBuilder => policyBuilder.RequireClaim("scope", ClaimSettings.ProductsRead));
     options.AddPolicy(ClaimSettings.ProductsWrite, policyBuilder => policyBuilder.RequireClaim("scope", ClaimSettings.ProductsWrite));
@@ -111,7 +111,7 @@ app.UseExceptionHandler(exceptionHandlerApp =>
 // Demo 1 - TLS is terminated before our application and we need to handle forwarded headers
 // in order to support more advanced features like certificate bound tokens, see e g
 // https://docs.duendesoftware.com/identityserver/v5/apis/aspnetcore/confirmation 
-// Note that this code should be removed if the API does not have a reverse proxy or API-gateway in-front (which terminates TLS). 
+// Note that this code should be removed if the API does not have a reverse proxy or API-gateway in front (which terminates TLS). 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto

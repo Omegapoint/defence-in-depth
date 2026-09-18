@@ -7,11 +7,11 @@ that follows the series of articles found at:
 
 https://securityblog.omegapoint.se
 
-Presentations on YouTube besed on this material are linked from
+Presentations on YouTube based on this material are linked from
 
 https://securityblog.omegapoint.se/en/defense-in-depth
 
-Articles that covers these concepts exactly can be found at:
+Articles that cover these concepts exactly can be found at:
 
 https://securityblog.omegapoint.se/en/secure-apis-by-design
 

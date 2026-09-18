@@ -13,7 +13,7 @@ public class ProductService(
     // keep a clear pattern with access control and input validation as early as possible, 
     // before any business logic and data processing.
     // Verify access to operation should always be done first in any service method, but 
-    // sometimes access to data need to be after intial data lookup or even after the 
+    // sometimes access to data needs to be after initial data lookup or even after the 
     // business logic (e g for a search function).  
     public async Task<ServiceResult<Product>> GetById(ProductId productId)
     {
