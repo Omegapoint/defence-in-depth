@@ -14,7 +14,8 @@ using Defence.In.Depth.Endpoints;
 var builder = WebApplication.CreateBuilder(args);
 
 // Register ProblemDetails so the global exception handler returns a standardized,
-// generic RFC 7807 body to clients without leaking internal details
+// generic RFC 7807 body to clients without leaking internal details.
+// This adds value for e.g. Open Telemetry and monitoring clients.
 builder.Services.AddProblemDetails();
 
 // Demo 8 - Handle secretes using App Configuration and Key Vault
@@ -88,6 +89,7 @@ var app = builder.Build();
 // Last-resort exception handler. Must be registered first. 
 // The client receives a ProblemDetails response or a fallback message.
 // This disables the default DeveloperExceptionPage (in all environments).
+// From https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling-api
 app.UseExceptionHandler(exceptionHandlerApp =>
 {
     exceptionHandlerApp.Run(async httpContext =>
@@ -97,7 +99,7 @@ app.UseExceptionHandler(exceptionHandlerApp =>
             || !await pds.TryWriteAsync(new() { HttpContext = httpContext }))
         {
             // Fallback behavior
-            await httpContext.Response.WriteAsync("An error occurred.");
+            await httpContext.Response.WriteAsync("RFC 7807-compliant Problem Details not available: An error occurred.");
         }
     });
 });
@@ -113,7 +115,7 @@ app.UseExceptionHandler(exceptionHandlerApp =>
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-    //If Production, set KnownProxies or KnownNetworks to the IP address of the reverse proxy or API-gateway.
+    //When in a private networking environment, set KnownProxies or KnownNetworks to the IP address of the reverse proxy or API-gateway. 
 });
 
 // Note that with minimal APIs, UseAuthentication and UseAuthorization is called automatically from AddAuthentication and AddAuthorization.
