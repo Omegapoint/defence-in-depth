@@ -1,6 +1,8 @@
 # Agents policy
 
-This repository uses GitHub Copilot / AI agents.
+This repository uses GitHub Copilot / AI agents, e.g. GitHub Copilot and Claude Code.
+
+The instruction files under `.github/` are shared by all agents. Claude Code loads them through `CLAUDE.md`, which imports them. Where they say "Copilot", the rule applies to any AI agent.
 
 ## Mandatory review of agent-created code
 
