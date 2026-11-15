@@ -14,8 +14,8 @@ using Defence.In.Depth.Endpoints;
 var builder = WebApplication.CreateBuilder(args);
 
 // Register ProblemDetails so the global exception handler returns a standardized,
-// generic RFC 7807 body to clients without leaking internal details.
-// This adds value for e.g. Open Telemetry and monitoring clients.
+// generic RFC 9457 (formerly RFC 7807) body to clients without leaking internal details.
+// The traceId in the body lets a client report be correlated with the server-side log entry.
 builder.Services.AddProblemDetails();
 
 // Demo 8 - Handle secrets using App Configuration and Key Vault
@@ -86,23 +86,13 @@ builder.Services.AddPermissionService();
 
 var app = builder.Build();
 
-// Last-resort exception handler. Must be registered first. 
-// The client receives a ProblemDetails response or a fallback message.
-// This disables the default DeveloperExceptionPage (in all environments).
-// From https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling-api
-app.UseExceptionHandler(exceptionHandlerApp =>
-{
-    exceptionHandlerApp.Run(async httpContext =>
-    {
-        var pds = httpContext.RequestServices.GetService<IProblemDetailsService>();
-        if (pds == null
-            || !await pds.TryWriteAsync(new() { HttpContext = httpContext }))
-        {
-            // Fallback behavior
-            await httpContext.Response.WriteAsync("RFC 7807-compliant Problem Details not available: An error occurred.");
-        }
-    });
-});
+// Last-resort exception handler, registered first so it wraps the whole pipeline.
+// The exception is logged, and the client gets a generic ProblemDetails response (via AddProblemDetails above).
+// If the client does not accept JSON, the exception is rethrown and the server returns an empty 500.
+// Since this handler catches exceptions before the DeveloperExceptionPage sees them, no exception
+// details are returned to clients in any environment, including Development.
+// See https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling-api
+app.UseExceptionHandler();
 
 // Demo 1 - Force https, this is done in the NGINX reverse proxy.
 //app.UseHttpsRedirection();
