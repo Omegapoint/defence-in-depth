@@ -1,0 +1,22 @@
+#!/bin/sh
+# Blocks commits of threat model files and security review reports.
+# These folders may only contain a tracked README.md and .gitignore,
+# see .github/instructions/threat-model.instructions.md section 4.
+#
+# Enable once per clone:  git config core.hooksPath .githooks
+
+blocked=$(git diff --cached --name-only --diff-filter=ACMRT -z -- threat-model reports \
+    | tr '\0' '\n' \
+    | grep -E '^(threat-model|reports)/' \
+    | grep -v -E '^(threat-model|reports)/(README\.md|\.gitignore)$')
+
+if [ -n "$blocked" ]; then
+    echo "pre-commit: commit blocked. Threat model files and security review reports must not be committed:" >&2
+    echo "$blocked" | sed 's/^/  /' >&2
+    echo "" >&2
+    echo "Unstage them with: git restore --staged <file>" >&2
+    echo "See .github/instructions/threat-model.instructions.md section 4." >&2
+    exit 1
+fi
+
+exit 0

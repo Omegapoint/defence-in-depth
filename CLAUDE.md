@@ -8,6 +8,7 @@ This repository keeps its AI agent instructions in the GitHub Copilot format. Th
 - Files under `.github/instructions/` start with `applyTo:` frontmatter, a glob that says which files the instructions cover. Apply each file's rules when you create, change or review files that match its glob:
   - `security-requirements.instructions.md`: `**/*.*` (all files)
   - `security-backend-api.instructions.md`: `**/*.cs` (.NET backend code)
+  - `threat-model.instructions.md`: `**/*.*` (all files; reads the threat model in `threat-model/`)
 - If you add a new `*.instructions.md` file under `.github/instructions/`, also add an import for it below. Otherwise Claude will not see it.
 - When you write chat answers, review comments or pull request descriptions, cite the relevant instruction section and references, as the instruction files require.
 
@@ -24,3 +25,5 @@ This repository keeps its AI agent instructions in the GitHub Copilot format. Th
 @.github/instructions/security-requirements.instructions.md
 
 @.github/instructions/security-backend-api.instructions.md
+
+@.github/instructions/threat-model.instructions.md
