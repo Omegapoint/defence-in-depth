@@ -3,6 +3,7 @@ For any new or changed code, Copilot MUST:
 1. Detect violations of Omegapoint’s secure design principles, including relevant verifications in OWASP ASVS v5.0.0. 
 2. Suggest corrections that strengthen defense-in-depth, such as the 6-step model for secure API design or other relevant reference architecture.  
 3. Require tests for all security-relevant logic. In particular negative tests concering authorization logic and input validation.
+4. Read the threat model in the `threat-model/` folder and use it in the security review, according to `.github/instructions/threat-model.instructions.md`.
 
 Copilot should also warn and explain when security posture is weakened. 
 Thus, the following questions (when applicable) should be investigated and explained:
@@ -17,6 +18,8 @@ Thus, the following questions (when applicable) should be investigated and expla
 - Are security-relevant events, errors and exceptions logged?
 - Are errors and exceptions handled securely without leaking internal implementation details?
 - Are there any tests with focus on security, e.g. negative tests for authorization logic and input validation?
+- Which threats in the threat model does the change affect, and are their mitigations still in place?
+- Does the change add assets, entry points, data flows or trust boundaries that the threat model does not cover?
 
 ---
 

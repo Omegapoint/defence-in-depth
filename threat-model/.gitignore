@@ -1,0 +1,5 @@
+# Threat model files are kept locally and must not be committed.
+# Only this file and the README are tracked.
+*
+!.gitignore
+!README.md
